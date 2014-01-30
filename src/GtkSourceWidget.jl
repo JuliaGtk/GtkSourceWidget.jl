@@ -2,7 +2,7 @@ module GtkSourceWidget
 
 
 export GtkSourceLanguage, GtkSourceLanguageManager, GtkSourceBuffer,
-       GtkSourceView
+       GtkSourceView, GtkSourceCompletionItem
 
 using Gtk
 
@@ -51,5 +51,41 @@ GtkSourceView(buffer=GtkSourceBuffer()) = GtkSourceView(
 show_line_numbers!(view::GtkSourceView, show::Bool) = 
   ccall((:gtk_source_view_set_show_line_numbers,libgtksourceview),Ptr{GObject},
         (Ptr{GObject},Cint),view,int32(show))
+        
+auto_indent!(view::GtkSourceView, auto::Bool) = 
+  ccall((:gtk_source_view_set_auto_indent,libgtksourceview),Ptr{GObject},
+        (Ptr{GObject},Cint),view,int32(auto))
+
+### GtkSourceCompletionContext
+
+baremodule GtkSourceCompletionActivation
+    const GTK_SOURCE_COMPLETION_ACTIVATION_NONE = 0
+    const GTK_SOURCE_COMPLETION_ACTIVATION_INTERACTIVE = 1 << 0
+    const GTK_SOURCE_COMPLETION_ACTIVATION_USER_REQUESTED = 1 << 1
+end
+
+Gtk.@Gtype GtkSourceCompletionContext libgtksourceview gtk_source_completion_context
+
+function add_proposals(context::GtkSourceCompletionContext, provider::GtkSourceCompletionProvider,
+                       proposals::GList, finished::Bool)
+  ccall((:gtk_source_completion_context_add_proposals,libgtksourceview),Void,
+        (Ptr{GObject},Ptr{GObject}, Ptr{GList},Cint),context, provider, &proposals, finished)                       
+end
+
+void                gtk_source_completion_context_get_iter
+                                                        (GtkSourceCompletionContext *context,
+                                                         GtkTextIter *iter);
+GtkSourceCompletionActivation gtk_source_completion_context_get_activation
+                                                        (GtkSourceCompletionContext *context);
+
+### GtkSourceCompletionItem
+
+Gtk.@Gtype GtkSourceCompletionItem libgtksourceview gtk_source_completion_item
+GtkSourceCompletionItem(label::String, text::String) = GtkSourceCompletionItem(
+    ccall((:gtk_source_completion_item_new,libgtksourceview),Ptr{GObject},
+          (Ptr{Uint8},Ptr{Uint8},Ptr{Void},Ptr{Uint8}),
+           bytestring(label),bytestring(text),C_NULL,C_NULL))
+
+
 
 end # module
