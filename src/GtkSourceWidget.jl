@@ -13,7 +13,7 @@ const GObject = Gtk.GObject
 
 if Gtk.gtk_version == 3
     if OS_NAME == :Windows
-        const libgtksourceview = "libgtksourceview-3.0"
+        const libgtksourceview = "libgtksourceview-3.0-0"
 	else
         const libgtksourceview = "libgtksourceview-3.0"
     end
