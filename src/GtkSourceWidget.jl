@@ -5,7 +5,8 @@ export GtkSourceLanguage, GtkSourceLanguageManager, GtkSourceBuffer,
        GtkSourceView, GtkSourceCompletionItem,
        GtkSourceStyleSchemeManager, GtkSourceStyleScheme
 
-export scheme, language, show_line_numbers!, auto_indent!, style_scheme, style_scheme!
+export scheme, language, show_line_numbers!, auto_indent!, style_scheme, style_scheme!,
+       max_undo_levels, max_undo_levels!, undo!, redo!, canundo, canredo, undomanager
 
 using Gtk
 
@@ -63,6 +64,28 @@ style_scheme(manager::GtkSourceStyleSchemeManager, scheme_id::String) = GtkSourc
     ccall((:gtk_source_style_scheme_manager_get_scheme,libgtksourceview),Ptr{GObject},
           (Ptr{GObject},Ptr{Uint8}),manager,bytestring(scheme_id)))
 
+### GtkSourceUndoManager
+
+### This is a hack!!!
+type GtkSourceUndoManagerI
+  handle::Ptr{Void}
+end
+
+undo!(manager::GtkSourceUndoManagerI) =
+  ccall((:gtk_source_undo_manager_undo,libgtksourceview),Void,
+        (Ptr{Void},),manager.handle)
+        
+redo!(manager::GtkSourceUndoManagerI) =
+  ccall((:gtk_source_undo_manager_redo,libgtksourceview),Void,
+        (Ptr{Void},),manager.handle)
+        
+canundo(manager::GtkSourceUndoManagerI) = bool(
+  ccall((:gtk_source_undo_manager_can_undo,libgtksourceview),Cint,
+        (Ptr{Void},),manager.handle))
+        
+canredo(manager::GtkSourceUndoManagerI) = bool(
+  ccall((:gtk_source_undo_manager_can_redo,libgtksourceview),Cint,
+        (Ptr{Void},),manager.handle))
 
 ### GtkSourceBuffer
 
@@ -81,6 +104,34 @@ highlight_syntax(buffer::GtkSourceBuffer, highlight::Bool) =
 style_scheme!(buffer::GtkSourceBuffer, scheme::GtkSourceStyleScheme) =
   ccall((:gtk_source_buffer_set_style_scheme,libgtksourceview),Void,
         (Ptr{GObject},Ptr{GObject}),buffer,scheme)
+
+max_undo_levels(buffer::GtkSourceBuffer) =
+  ccall((:gtk_source_buffer_get_max_undo_levels,libgtksourceview),Cint,
+        (Ptr{GObject},),buffer)
+        
+max_undo_levels!(buffer::GtkSourceBuffer, levels::Integer) =
+  ccall((:gtk_source_buffer_set_max_undo_levels,libgtksourceview),Void,
+        (Ptr{GObject},Cint),buffer,levels)
+        
+undo!(buffer::GtkSourceBuffer) =
+  ccall((:gtk_source_buffer_undo,libgtksourceview),Void,
+        (Ptr{GObject},),buffer)
+        
+redo!(buffer::GtkSourceBuffer) =
+  ccall((:gtk_source_buffer_redo,libgtksourceview),Void,
+        (Ptr{GObject},),buffer)
+        
+canundo(buffer::GtkSourceBuffer) = bool(
+  ccall((:gtk_source_buffer_can_undo,libgtksourceview),Cint,
+        (Ptr{GObject},),buffer))
+        
+canredo(buffer::GtkSourceBuffer) = bool(
+  ccall((:gtk_source_buffer_can_redo,libgtksourceview),Cint,
+        (Ptr{GObject},),buffer))
+        
+undomanager(buffer::GtkSourceBuffer) = GtkSourceUndoManagerI(
+  ccall((:gtk_source_buffer_get_undo_manager,libgtksourceview),Ptr{Void},
+        (Ptr{GObject},),buffer))
 
 ### GtkSourceView
 
