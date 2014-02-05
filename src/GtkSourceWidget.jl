@@ -6,7 +6,8 @@ export GtkSourceLanguage, GtkSourceLanguageManager, GtkSourceBuffer,
        GtkSourceStyleSchemeManager, GtkSourceStyleScheme
 
 export scheme, language, show_line_numbers!, auto_indent!, style_scheme, style_scheme!,
-       max_undo_levels, max_undo_levels!, undo!, redo!, canundo, canredo, undomanager
+       max_undo_levels, max_undo_levels!, undo!, redo!, canundo, canredo, undomanager,
+       highlight_current_line!
 
 using Gtk
 
@@ -147,6 +148,10 @@ show_line_numbers!(view::GtkSourceView, show::Bool) =
 auto_indent!(view::GtkSourceView, auto::Bool) = 
   ccall((:gtk_source_view_set_auto_indent,libgtksourceview),Ptr{GObject},
         (Ptr{GObject},Cint),view,int32(auto))
+        
+highlight_current_line!(view::GtkSourceView, hl::Bool) = 
+  ccall((:gtk_source_view_set_highlight_current_line,libgtksourceview),Ptr{GObject},
+        (Ptr{GObject},Cint),view,int32(hl))
 
 ### GtkSourceCompletionContext
 
