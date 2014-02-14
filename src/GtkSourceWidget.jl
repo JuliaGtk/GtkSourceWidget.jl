@@ -7,7 +7,7 @@ export GtkSourceLanguage, GtkSourceLanguageManager, GtkSourceBuffer,
 
 export scheme, language, show_line_numbers!, auto_indent!, style_scheme, style_scheme!,
        max_undo_levels, max_undo_levels!, undo!, redo!, canundo, canredo, undomanager,
-       highlight_current_line!
+       highlight_current_line!, highlight_matching_brackets
 
 using Gtk
 
@@ -100,7 +100,11 @@ GtkSourceBuffer(lang::GtkSourceLanguage) = GtkSourceBuffer(
 
 highlight_syntax(buffer::GtkSourceBuffer, highlight::Bool) = 
   ccall((:gtk_source_buffer_set_highlight_syntax,libgtksourceview),Ptr{GObject},
-        (Ptr{GObject},Cint),view,int32(highlight))
+        (Ptr{GObject},Cint),buffer,int32(highlight))
+        
+highlight_matching_brackets(buffer::GtkSourceBuffer, highlight::Bool) = 
+  ccall((:gtk_source_buffer_set_highlight_matching_brackets,libgtksourceview),Ptr{GObject},
+        (Ptr{GObject},Cint),buffer,int32(highlight))
         
 style_scheme!(buffer::GtkSourceBuffer, scheme::GtkSourceStyleScheme) =
   ccall((:gtk_source_buffer_set_style_scheme,libgtksourceview),Void,
