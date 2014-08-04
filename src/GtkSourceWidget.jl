@@ -5,11 +5,18 @@ export GtkSourceLanguage, GtkSourceLanguageManager, GtkSourceBuffer,
        GtkSourceView, GtkSourceCompletionItem,
        GtkSourceStyleSchemeManager, GtkSourceStyleScheme
 
+export @GtkSourceLanguage, @GtkSourceLanguageManager, @GtkSourceBuffer,
+       @GtkSourceView, @GtkSourceCompletionItem,
+       @GtkSourceStyleSchemeManager, @GtkSourceStyleScheme
+
+
 export scheme, language, show_line_numbers!, auto_indent!, style_scheme, style_scheme!,
        max_undo_levels, max_undo_levels!, undo!, redo!, canundo, canredo, undomanager,
        highlight_current_line!, highlight_matching_brackets
 
 using Gtk
+
+import ..Gtk: suffix
 
 const GObject = Gtk.GObject
 
@@ -30,17 +37,17 @@ Gtk.@Gtype GtkSourceLanguage libgtksourceview gtk_source_language
 ### GtkSourceLanguageManager
 
 Gtk.@Gtype GtkSourceLanguageManager libgtksourceview gtk_source_language_manager
-function GtkSourceLanguageManager(default=true) 
+function GtkSourceLanguageManagerLeaf(default=true) 
   if default
-    GtkSourceLanguageManager(
+    GtkSourceLanguageManagerLeaf(
       ccall((:gtk_source_language_manager_get_default,libgtksourceview),Ptr{GObject},()))
   else
-    GtkSourceLanguageManager(
+    GtkSourceLanguageManagerLeaf(
       ccall((:gtk_source_language_manager_new,libgtksourceview),Ptr{GObject},()))
   end
 end
 
-language(manager::GtkSourceLanguageManager, id::String) = GtkSourceLanguage(
+language(manager::GtkSourceLanguageManager, id::String) = @GtkSourceLanguage(
     ccall((:gtk_source_language_manager_get_language,libgtksourceview),Ptr{GObject},
           (Ptr{GObject},Ptr{Uint8}),manager,bytestring(id)))
 
@@ -51,17 +58,17 @@ Gtk.@Gtype GtkSourceStyleScheme libgtksourceview gtk_source_style_scheme
 ### GtkSourceStyleSchemeManager
 
 Gtk.@Gtype GtkSourceStyleSchemeManager libgtksourceview gtk_source_style_scheme_manager
-function GtkSourceStyleSchemeManager(default=true) 
+function GtkSourceStyleSchemeManagerLeaf(default=true) 
   if default
-    GtkSourceStyleSchemeManager(
+    GtkSourceStyleSchemeManagerLeaf(
       ccall((:gtk_source_style_scheme_manager_get_default,libgtksourceview),Ptr{GObject},()))
   else
-    GtkSourceStyleSchemeManager(
+    GtkSourceStyleSchemeManagerLeaf(
       ccall((:gtk_source_style_scheme_manager_get_new,libgtksourceview),Ptr{GObject},()))
   end
 end
 
-style_scheme(manager::GtkSourceStyleSchemeManager, scheme_id::String) = GtkSourceStyleScheme(
+style_scheme(manager::GtkSourceStyleSchemeManager, scheme_id::String) = @GtkSourceStyleScheme(
     ccall((:gtk_source_style_scheme_manager_get_scheme,libgtksourceview),Ptr{GObject},
           (Ptr{GObject},Ptr{Uint8}),manager,bytestring(scheme_id)))
 
@@ -91,10 +98,10 @@ canredo(manager::GtkSourceUndoManagerI) = bool(
 ### GtkSourceBuffer
 
 Gtk.@Gtype GtkSourceBuffer libgtksourceview gtk_source_buffer
-GtkSourceBuffer() = GtkSourceBuffer(
+GtkSourceBufferLeaf() = GtkSourceBufferLeaf(
      ccall((:gtk_source_buffer_new,libgtksourceview),Ptr{GObject}, (Ptr{Void},), C_NULL) )
      
-GtkSourceBuffer(lang::GtkSourceLanguage) = GtkSourceBuffer(
+GtkSourceBufferLeaf(lang::GtkSourceLanguage) = GtkSourceBufferLeaf(
      ccall((:gtk_source_buffer_new_with_language,libgtksourceview),Ptr{GObject}, 
            (Ptr{GObject},), lang) ) 
 
@@ -141,7 +148,7 @@ undomanager(buffer::GtkSourceBuffer) = GtkSourceUndoManagerI(
 ### GtkSourceView
 
 Gtk.@Gtype GtkSourceView libgtksourceview gtk_source_view
-GtkSourceView(buffer=GtkSourceBuffer()) = GtkSourceView(
+GtkSourceViewLeaf(buffer=@GtkSourceBuffer()) = @GtkSourceView(
     ccall((:gtk_source_view_new_with_buffer,libgtksourceview),Ptr{GObject},(Ptr{GObject},),buffer))
     
 
@@ -184,7 +191,7 @@ getactivation(context::GtkSourceCompletionContext) =
 ### GtkSourceCompletionItem
 
 Gtk.@Gtype GtkSourceCompletionItem libgtksourceview gtk_source_completion_item
-GtkSourceCompletionItem(label::String, text::String) = GtkSourceCompletionItem(
+GtkSourceCompletionItemLeaf(label::String, text::String) = GtkSourceCompletionItemLeaf(
     ccall((:gtk_source_completion_item_new,libgtksourceview),Ptr{GObject},
           (Ptr{Uint8},Ptr{Uint8},Ptr{Void},Ptr{Uint8}),
            bytestring(label),bytestring(text),C_NULL,C_NULL))
