@@ -31,7 +31,7 @@ if Gtk.gtk_version == 3
     if OS_NAME == :Windows
         const libgtksourceview = Pkg.dir() * "\\GtkSourceWidget\\bin\\libgtksourceview-3.0-1.dll"
 	else
-        const libgtksourceview = "libgtksourceview-3.0"
+        const libgtksourceview = Pkg.dir() * "/Homebrew/deps/usr/lib/libgtksourceview-3.0"
     end
 else
     error("Unsupported Gtk version $gtk_version")
@@ -55,7 +55,7 @@ function GtkSourceLanguageManagerLeaf(default=true)
   end
 end
 
-get_search_path(manager::GtkSourceLanguageManager) = ccall((:gtk_source_language_manager_get_search_path,libgtksourceview),Ptr{Ptr{Uint8}},
+get_search_path(manager::GtkSourceLanguageManager) = ccall((:gtk_source_language_manager_get_search_path,libgtksourceview),Ptr{Ptr{UInt8}},
     (Ptr{GObject},),manager)
 
     # getting the result:
@@ -67,7 +67,7 @@ get_search_path(manager::GtkSourceLanguageManager) = ccall((:gtk_source_language
     # julia> bytestring(pointer_to_array(p,2)[1])
 
 set_search_path(manager::GtkSourceLanguageManager,dir)  = ccall((:gtk_source_language_manager_set_search_path,libgtksourceview),Void,
-    (Ptr{GObject}, Ptr{Ptr{Uint8}}),manager, dir)
+    (Ptr{GObject}, Ptr{Ptr{UInt8}}),manager, dir)
 
 # Use: GtkSourceWidget.set_search_path(m,Any["c:/ad","yp",C_NULL])
 
@@ -95,6 +95,9 @@ end
 style_scheme(manager::GtkSourceStyleSchemeManager, scheme_id::String) = @GtkSourceStyleScheme(
     ccall((:gtk_source_style_scheme_manager_get_scheme,libgtksourceview),Ptr{GObject},
           (Ptr{GObject},Ptr{Uint8}),manager,bytestring(scheme_id)))
+
+set_search_path(manager::GtkSourceStyleSchemeManager,dir)  = ccall((:gtk_source_style_scheme_manager_set_search_path,libgtksourceview),Void,
+    (Ptr{GObject}, Ptr{Ptr{UInt8}}),manager, dir)
 
 ### GtkSourceUndoManager
 
