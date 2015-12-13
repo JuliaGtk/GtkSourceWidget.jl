@@ -263,7 +263,7 @@ GtkSourceSearchContextLeaf(buffer::GtkSourceBuffer,settings::GtkSourceSearchSett
 
 search_context_forward(search::GtkSourceSearchContext, iter::GtkTextIter,match_start::MutableGtkTextIter,match_end::MutableGtkTextIter) =
     convert(Bool,ccall((:gtk_source_search_context_forward,libgtksourceview),Cint,
-        (Ptr{GObject},GtkTextIter,Ptr{MutableGtkTextIter},Ptr{MutableGtkTextIter}),
+        (Ptr{GObject},Ref{GtkTextIter},Ptr{MutableGtkTextIter},Ptr{MutableGtkTextIter}),
         search,iter,match_start,match_end))
 
 function search_context_forward(search::GtkSourceSearchContext, iter::GtkTextIter)
