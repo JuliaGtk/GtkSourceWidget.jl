@@ -13,8 +13,8 @@ GtkSourceWidget.jl requires that a GtkSourceView is installed and in the library
 ### OSX
 Use Julia's Homebrew to install the library:
 
-  using Homebrew
-  Homebrew.add("gtksourceview3")
+    using Homebrew
+    Homebrew.add("gtksourceview3")
 
 ### Windows
 
