@@ -31,13 +31,13 @@ if Gtk.gtk_version == 3
     if OS_NAME == :Windows
         const libgtksourceview = Pkg.dir() * "/GtkSourceWidget/bin/libgtksourceview-3.0-1.dll"
     elseif OS_NAME == :Linux
-        
-        try 
+
+        try
             strip(readall(pipeline(`ldconfig -p`, `grep libgtksourceview-3`, `cut -d'>' -f2`)))
         catch
             run(`sudo apt-get install libgtksourceview-3.0-1`)
         end
-    
+
         const libgtksourceview = strip(readall(pipeline(`ldconfig -p`, `grep libgtksourceview-3`, `cut -d'>' -f2`)))
 	else
         const libgtksourceview = Pkg.dir() * "/Homebrew/deps/usr/lib/libgtksourceview-3.0"
@@ -297,6 +297,10 @@ source_view_get_gutter(view::GtkSourceView) =  ccall((:gtk_source_view_get_gutte
 
 SOURCE_MAP = false
 try
+    ccall((:gtk_source_map_new,libgtksourceview),Ptr{GObject},())
+    SOURCE_MAP  = true
+end
+if SOURCE_MAP
     Gtk.@Gtype GtkSourceMap libgtksourceview gtk_source_map
 
     GtkSourceMapLeaf() = GtkSourceMapLeaf( ccall((:gtk_source_map_new,libgtksourceview),Ptr{GObject},()) )
@@ -308,8 +312,6 @@ try
     set_view(map::GtkSourceMap,view::GtkSourceView) =
         ccall((:gtk_source_map_set_view,libgtksourceview),Void,
             (Ptr{GObject},Ptr{GObject}),map,view)
-            
-    SOURCE_MAP  = true
 end
 
 ## GtkSourceStyleSchemeChooserWidget
