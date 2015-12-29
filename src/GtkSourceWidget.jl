@@ -58,7 +58,7 @@ end
 get_search_path(manager::GtkSourceLanguageManager) = ccall((:gtk_source_language_manager_get_search_path,libgtksourceview),Ptr{Ptr{UInt8}},
     (Ptr{GObject},),manager)
 
-    # getting the result:
+
     # 3-element Array{Ptr{UInt8},1}:
     # Ptr{UInt8} @0x000000001bb85ac0
     # Ptr{UInt8} @0x000000001bb84e70
@@ -255,6 +255,7 @@ set_search_text(settings::GtkSourceSearchSettings, text::AbstractString) =
         (Ptr{GObject},Ptr{UInt8}),settings,text)
 
 ## GtkSourceSearchContext
+
 
 Gtk.@Gtype GtkSourceSearchContext libgtksourceview gtk_source_search_context
 
