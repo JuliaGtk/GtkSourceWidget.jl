@@ -4,6 +4,10 @@ GtkSourceWidget.jl is a Julia wrapper for the Gtk library GtkSourceView that all
 
 ## Installation
 
+Install Gtk.jl.
+
+    Pkg.clone("https://github.com/jonathanBieler/GtkSourceWidget.jl.git")
+
 GtkSourceWidget.jl requires that a GtkSourceView is installed and in the library path. 
 
 ### Linux
