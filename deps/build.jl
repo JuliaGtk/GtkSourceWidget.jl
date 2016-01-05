@@ -7,7 +7,7 @@ println("checking for libgtksourceview...")
     end
 end
 @osx_only begin
-    if !isfile( Pkg.dir() * "/Homebrew/deps/usr/lib/libgtksourceview-3.0" )
+    if !isfile( Pkg.dir() * "/Homebrew/deps/usr/lib/libgtksourceview-3.0.dylib" )
         using Homebrew
         Homebrew.add("gtksourceview3")
     end
