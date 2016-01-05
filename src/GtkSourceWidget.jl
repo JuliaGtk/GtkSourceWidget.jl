@@ -28,27 +28,24 @@ typealias MutableGtkTextIter Gtk.GLib.MutableTypes.Mutable{GtkTextIter}
 mutable(it::GtkTextIter) = Gtk.GLib.MutableTypes.mutable(it)
 
 if Gtk.gtk_version == 3
-    if OS_NAME == :Windows
+    @osx_only begin
         const libgtksourceview = Pkg.dir() * "/GtkSourceWidget/bin/libgtksourceview-3.0-1.dll"
-    elseif OS_NAME == :Linux
-
+    end
+    @linux_only begin
         try
             strip(readall(pipeline(`ldconfig -p`, `grep libgtksourceview-3`, `cut -d'>' -f2`)))
         catch
             run(`sudo apt-get install libgtksourceview-3.0-1`)
         end
-
         const libgtksourceview = strip(readall(pipeline(`ldconfig -p`, `grep libgtksourceview-3`, `cut -d'>' -f2`)))
-	else
-
+	end
+    @osx_only begin
         if !isfile( Pkg.dir() * "/Homebrew/deps/usr/lib/libgtksourceview-3.0" )
             using Homebrew
             Homebrew.add("gtksourceview3")
         end
-
         const libgtksourceview = Pkg.dir() * "/Homebrew/deps/usr/lib/libgtksourceview-3.0"
     end
-
 else
     error("Unsupported Gtk version $gtk_version")
 end

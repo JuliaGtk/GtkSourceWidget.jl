@@ -8,11 +8,11 @@ Install Gtk.jl.
 
     Pkg.clone("https://github.com/jonathanBieler/GtkSourceWidget.jl.git")
 
-GtkSourceWidget.jl requires that a GtkSourceView is installed and in the library path. 
+GtkSourceWidget.jl requires that a GtkSourceView is installed and in the library path.
 
 ### Linux
 
-?
+libgtksourceview should get install via apt-get
 
 ### OSX
 Use Julia's Homebrew to install the library:
