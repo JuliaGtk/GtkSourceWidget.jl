@@ -5,12 +5,10 @@ println("checking for libgtksourceview...")
     catch
         run(`sudo apt-get install libgtksourceview-3.0-1`)
     end
-    const libgtksourceview = strip(readall(pipeline(`ldconfig -p`, `grep libgtksourceview-3`, `cut -d'>' -f2`)))
 end
 @osx_only begin
     if !isfile( Pkg.dir() * "/Homebrew/deps/usr/lib/libgtksourceview-3.0" )
         using Homebrew
         Homebrew.add("gtksourceview3")
     end
-    const libgtksourceview = Pkg.dir() * "/Homebrew/deps/usr/lib/libgtksourceview-3.0"
 end
