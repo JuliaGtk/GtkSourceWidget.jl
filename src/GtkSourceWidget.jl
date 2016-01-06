@@ -28,7 +28,7 @@ typealias MutableGtkTextIter Gtk.GLib.MutableTypes.Mutable{GtkTextIter}
 mutable(it::GtkTextIter) = Gtk.GLib.MutableTypes.mutable(it)
 
 if Gtk.gtk_version == 3
-    @osx_only begin
+    @windows_only begin
         const libgtksourceview = Pkg.dir() * "/GtkSourceWidget/bin/libgtksourceview-3.0-1.dll"
     end
     @linux_only begin
