@@ -261,7 +261,7 @@
       <keyword>SparseMatrixCSC</keyword>
       <keyword>(D|Sub((Or)?D)?)Array</keyword>
       <keyword>Chars?</keyword>
-      <keyword>(ASCII|Byte|Char|DirectIndex|Generic|Rep|Rev|Rope|Sub|UTF8)?String</keyword>
+      <keyword>(ASCII|Byte|Char|DirectIndex|Generic|Rep|Rev|Rope|Sub|UTF8|Abstract)?String</keyword>
       <keyword>Bool</keyword>
       <keyword>Number</keyword>
       <keyword>Real</keyword>
@@ -279,6 +279,7 @@
       <keyword>Algorithm</keyword>
       <keyword>Associative</keyword>
       <keyword>AsyncStream</keyword>
+      <keyword>AbstractFloat</keyword>
       <keyword>Box</keyword>
       <keyword>BunchKaufman</keyword>
       <keyword>CPUinfo</keyword>
