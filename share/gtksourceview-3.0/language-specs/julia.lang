@@ -326,6 +326,7 @@
       <keyword>PollingFileWatcher</keyword>
       <keyword>Process(Chain(OrNot)?|Group)?</keyword>
       <keyword>Ptr</keyword>
+      <keyword>Ref</keyword>
       <keyword>QR(Pivoted)?</keyword>
       <keyword>Range(s|1|Index|VecIntList)?</keyword>
       <keyword>RawOrBoxedHandle</keyword>
