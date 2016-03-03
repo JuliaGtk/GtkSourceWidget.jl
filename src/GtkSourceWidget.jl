@@ -1,3 +1,5 @@
+__precompile__()
+
 module GtkSourceWidget
 
 export GtkSourceLanguage, GtkSourceLanguageManager, GtkSourceBuffer,
@@ -15,7 +17,7 @@ export scheme, language, show_line_numbers!, auto_indent!, style_scheme, style_s
        max_undo_levels, max_undo_levels!, undo!, redo!, canundo, canredo, undomanager,
        highlight_current_line!, highlight_matching_brackets, source_view_get_gutter,
        reset_undomanager, set_view, get_view, style_scheme_chooser, style_scheme_chooser_button,
-       set_search_text, search_context_forward, highlight
+       set_search_text, get_search_text, search_context_forward, highlight, search_context_replace
 
 using Gtk
 
@@ -84,7 +86,7 @@ set_search_path(manager::GtkSourceLanguageManager,dir)  = ccall((:gtk_source_lan
 
 # Use: GtkSourceWidget.set_search_path(m,Any["c:/ad","yp",C_NULL])
 
-language(manager::GtkSourceLanguageManager, id::String) = @GtkSourceLanguage(
+language(manager::GtkSourceLanguageManager, id::AbstractString) = @GtkSourceLanguage(
     ccall((:gtk_source_language_manager_get_language,libgtksourceview),Ptr{GObject},
           (Ptr{GObject},Ptr{Uint8}),manager,bytestring(id)))
 
@@ -105,7 +107,7 @@ function GtkSourceStyleSchemeManagerLeaf(default=true)
   end
 end
 
-style_scheme(manager::GtkSourceStyleSchemeManager, scheme_id::String) = @GtkSourceStyleScheme(
+style_scheme(manager::GtkSourceStyleSchemeManager, scheme_id::AbstractString) = @GtkSourceStyleScheme(
     ccall((:gtk_source_style_scheme_manager_get_scheme,libgtksourceview),Ptr{GObject},
           (Ptr{GObject},Ptr{Uint8}),manager,bytestring(scheme_id)))
 
@@ -267,6 +269,14 @@ set_search_text(settings::GtkSourceSearchSettings, text::AbstractString) =
     ccall((:gtk_source_search_settings_set_search_text,libgtksourceview),Void,
         (Ptr{GObject},Ptr{UInt8}),settings,text)
 
+function get_search_text(settings::GtkSourceSearchSettings) 
+    
+    s = ccall((:gtk_source_search_settings_get_search_text,libgtksourceview),Ptr{UInt8},
+    (Ptr{GObject},),settings)
+
+    return s == C_NULL ? "" : bytestring(s)
+end
+
 ## GtkSourceSearchContext
 
 
@@ -287,6 +297,27 @@ function search_context_forward(search::GtkSourceSearchContext, iter::GtkTextIte
 
     found = search_context_forward(search,iter,match_start,match_end)
     return (found,match_start,match_end)
+end
+
+function search_context_replace(
+    search::GtkSourceSearchContext,
+    match_start::MutableGtkTextIter, match_end::MutableGtkTextIter,
+    replace::AbstractString)
+
+    out = ccall((:gtk_source_search_context_replace,libgtksourceview),Cint,
+        (Ptr{GObject},Ptr{MutableGtkTextIter},Ptr{MutableGtkTextIter},Ptr{UInt8},Cint,Ptr{Void}),
+        search,match_start,match_end,bytestring(replace),-1,C_NULL)
+    
+    return convert(Bool,out)
+end
+
+function search_context_replace_all(search::GtkSourceSearchContext, replace::AbstractString)
+
+    out = ccall((:gtk_source_search_context_replace_all,libgtksourceview),Cint,
+        (Ptr{GObject},Ptr{UInt8},Cint,Ptr{Void}),
+        search,bytestring(replace),-1,C_NULL)
+    
+    return out
 end
 
 highlight(search::GtkSourceSearchContext, highlight::Bool) =
