@@ -20,6 +20,7 @@ export scheme, language, show_line_numbers!, auto_indent!, style_scheme, style_s
        set_search_text, get_search_text, search_context_forward, highlight, search_context_replace
 
 using Gtk
+using Compat
 
 import ..Gtk: suffix
 
@@ -39,7 +40,7 @@ if Gtk.gtk_version == 3
         catch
             run(`sudo apt-get install libgtksourceview-3.0-1`)
         end
-        const libgtksourceview = strip(readall(pipeline(`ldconfig -p`, `grep libgtksourceview-3`, `cut -d'>' -f2`, `head -1`)))
+        const libgtksourceview = strip(readstring(pipeline(`ldconfig -p`, `grep libgtksourceview-3`, `cut -d'>' -f2`, `head -1`)))
 	end
     @osx_only begin
         if !isfile( Pkg.dir() * "/Homebrew/deps/usr/lib/libgtksourceview-3.0.dylib" )
