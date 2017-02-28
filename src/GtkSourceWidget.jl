@@ -1,5 +1,4 @@
 __precompile__()
-
 module GtkSourceWidget
 
 export GtkSourceLanguage, GtkSourceLanguageManager, GtkSourceBuffer,
@@ -31,10 +30,10 @@ typealias MutableGtkTextIter Gtk.GLib.MutableTypes.Mutable{GtkTextIter}
 mutable(it::GtkTextIter) = Gtk.GLib.MutableTypes.mutable(it)
 
 if Gtk.gtk_version == 3
-    @windows_only begin
+    @static if is_windows()
         const libgtksourceview = Pkg.dir() * "/GtkSourceWidget/bin/libgtksourceview-3.0-1.dll"
     end
-    @linux_only begin
+    @static if is_linux()
         try
             strip(readall(pipeline(`ldconfig -p`, `grep libgtksourceview-3`, `cut -d'>' -f2`)))
         catch
@@ -42,7 +41,7 @@ if Gtk.gtk_version == 3
         end
         const libgtksourceview = strip(readstring(pipeline(`ldconfig -p`, `grep libgtksourceview-3`, `cut -d'>' -f2`, `head -1`)))
 	end
-    @osx_only begin
+    @static if is_apple()
         if !isfile( Pkg.dir() * "/Homebrew/deps/usr/lib/libgtksourceview-3.0.dylib" )
             using Homebrew
             Homebrew.add("gtksourceview3")
@@ -89,7 +88,7 @@ set_search_path(manager::GtkSourceLanguageManager,dir)  = ccall((:gtk_source_lan
 
 language(manager::GtkSourceLanguageManager, id::AbstractString) = @GtkSourceLanguage(
     ccall((:gtk_source_language_manager_get_language,libgtksourceview),Ptr{GObject},
-          (Ptr{GObject},Ptr{Uint8}),manager,bytestring(id)))
+          (Ptr{GObject},Ptr{UInt8}),manager,string(id)))
 
 ### GtkSourceStyleScheme
 
@@ -110,7 +109,7 @@ end
 
 style_scheme(manager::GtkSourceStyleSchemeManager, scheme_id::AbstractString) = @GtkSourceStyleScheme(
     ccall((:gtk_source_style_scheme_manager_get_scheme,libgtksourceview),Ptr{GObject},
-          (Ptr{GObject},Ptr{Uint8}),manager,bytestring(scheme_id)))
+          (Ptr{GObject},Ptr{UInt8}),manager,string(scheme_id)))
 
 set_search_path(manager::GtkSourceStyleSchemeManager,dir)  = ccall((:gtk_source_style_scheme_manager_set_search_path,libgtksourceview),Void,
     (Ptr{GObject}, Ptr{Ptr{UInt8}}),manager, dir)
@@ -130,11 +129,11 @@ redo!(manager::GtkSourceUndoManagerI) =
   ccall((:gtk_source_undo_manager_redo,libgtksourceview),Void,
         (Ptr{Void},),manager.handle)
 
-canundo(manager::GtkSourceUndoManagerI) = bool(
+canundo(manager::GtkSourceUndoManagerI) = Bool(
   ccall((:gtk_source_undo_manager_can_undo,libgtksourceview),Cint,
         (Ptr{Void},),manager.handle))
 
-canredo(manager::GtkSourceUndoManagerI) = bool(
+canredo(manager::GtkSourceUndoManagerI) = Bool(
   ccall((:gtk_source_undo_manager_can_redo,libgtksourceview),Cint,
         (Ptr{Void},),manager.handle))
 
@@ -176,11 +175,11 @@ redo!(buffer::GtkSourceBuffer) =
   ccall((:gtk_source_buffer_redo,libgtksourceview),Void,
         (Ptr{GObject},),buffer)
 
-canundo(buffer::GtkSourceBuffer) = bool(
+canundo(buffer::GtkSourceBuffer) = Bool(
   ccall((:gtk_source_buffer_can_undo,libgtksourceview),Cint,
         (Ptr{GObject},),buffer))
 
-canredo(buffer::GtkSourceBuffer) = bool(
+canredo(buffer::GtkSourceBuffer) = Bool(
   ccall((:gtk_source_buffer_can_redo,libgtksourceview),Cint,
         (Ptr{GObject},),buffer))
 
@@ -250,8 +249,8 @@ Gtk.@Gtype GtkSourceCompletionItem libgtksourceview gtk_source_completion_item
 
 GtkSourceCompletionItemLeaf(label::AbstractString, text::AbstractString) = GtkSourceCompletionItemLeaf(
     ccall((:gtk_source_completion_item_new,libgtksourceview),Ptr{GObject},
-        (Ptr{Uint8},Ptr{Uint8},Ptr{Void},Ptr{Uint8}),
-        bytestring(label),bytestring(text),C_NULL,C_NULL))
+        (Ptr{UInt8},Ptr{UInt8},Ptr{Void},Ptr{UInt8}),
+        string(label),string(text),C_NULL,C_NULL))
 
 
 ### GtkSourceCompletionProvider
@@ -270,16 +269,15 @@ set_search_text(settings::GtkSourceSearchSettings, text::AbstractString) =
     ccall((:gtk_source_search_settings_set_search_text,libgtksourceview),Void,
         (Ptr{GObject},Ptr{UInt8}),settings,text)
 
-function get_search_text(settings::GtkSourceSearchSettings) 
-    
+function get_search_text(settings::GtkSourceSearchSettings)
+
     s = ccall((:gtk_source_search_settings_get_search_text,libgtksourceview),Ptr{UInt8},
     (Ptr{GObject},),settings)
 
-    return s == C_NULL ? "" : bytestring(s)
+    return s == C_NULL ? "" : string(s)
 end
 
 ## GtkSourceSearchContext
-
 
 Gtk.@Gtype GtkSourceSearchContext libgtksourceview gtk_source_search_context
 
@@ -307,8 +305,8 @@ function search_context_replace(
 
     out = ccall((:gtk_source_search_context_replace,libgtksourceview),Cint,
         (Ptr{GObject},Ptr{MutableGtkTextIter},Ptr{MutableGtkTextIter},Ptr{UInt8},Cint,Ptr{Void}),
-        search,match_start,match_end,bytestring(replace),-1,C_NULL)
-    
+        search,match_start,match_end,string(replace),-1,C_NULL)
+
     return convert(Bool,out)
 end
 
@@ -316,8 +314,8 @@ function search_context_replace_all(search::GtkSourceSearchContext, replace::Abs
 
     out = ccall((:gtk_source_search_context_replace_all,libgtksourceview),Cint,
         (Ptr{GObject},Ptr{UInt8},Cint,Ptr{Void}),
-        search,bytestring(replace),-1,C_NULL)
-    
+        search,string(replace),-1,C_NULL)
+
     return out
 end
 
@@ -360,5 +358,14 @@ style_scheme(chooser::Gtk.GtkWidget) = GtkSourceStyleScheme(
         (Ptr{GObject},),chooser)  )
 
 #? https://github.com/JuliaLang/Gtk.jl/blob/40f7442dea20919c5a7b137594fb6d7636fa2329/src/selectors.jl
+
+
+function __init__()
+
+    global const sourceLanguageManager = @GtkSourceLanguageManager()
+    GtkSourceWidget.set_search_path(sourceLanguageManager,
+      Any[Pkg.dir() * "/GtkSourceWidget/share/gtksourceview-3.0/language-specs/",C_NULL])
+end
+
 
 end # module
