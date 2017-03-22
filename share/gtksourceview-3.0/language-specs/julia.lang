@@ -47,20 +47,15 @@
     <style id="builtin-function" _name="Built-in Function" map-to="def:builtin" />
     <style id="module"           _name="Module"            map-to="def:builtin" />
     <style id="type"             _name="Type"              map-to="def:type" />
-    <style id="function-name"    _name="Function Name"     map-to="def:type"/>
+    <style id="function-name"    _name="Function Name"     map-to="def:function"/>
+    <style id="statement"        _name="Statement"         map-to="def:statement"/>
+    <style id="note"             _name="Note"              map-to="def:note"/>
   </styles>
 
   <definitions>
 
-      <define-regex id="string-prefix">(b|B)?</define-regex>
+    <define-regex id="string-prefix">(b|B)?</define-regex>
 
-      <context id="function-name" style-ref="function-name" style-inside="true">
-          <start>\%{string-prefix}def\ </start>
-          <end>\(</end>
-          <include>
-              <context ref="def:escape"/>
-          </include>
-      </context>
 
     <context id="string" style-ref="string" class="string" class-disabled="no-spell-check">
       <start>"</start>
@@ -68,6 +63,14 @@
       <include>
         <context ref="def:escape" />
       </include>
+    </context>
+
+    <context id="function-name" > 
+      <match>([a-zA-Z0-9_\.!]+)(\()</match>
+        <include>
+          <context sub-pattern="1" style-ref="function-name"/>
+          <context sub-pattern="2" style-ref="operator"/>
+        </include>
     </context>
 
     <!--
@@ -365,8 +368,16 @@
       <keyword>Zip</keyword>
     </context>
 
+
+    <!-- A line comment starting with ## -->
+    <context id="double-comment" style-ref="note" end-at-line-end="true" >
+      <start>##</start>
+    </context>
+    
     <context id="julia" class="no-spell-check">
       <include>
+        <context ref="double-comment" />
+        <context ref="function-name" />
         <context ref="def:shebang" />
         <context ref="def:shell-like-comment" />
         <context ref="string" />
