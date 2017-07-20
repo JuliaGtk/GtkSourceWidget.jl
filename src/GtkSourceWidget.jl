@@ -21,12 +21,10 @@ export scheme, language, show_line_numbers!, auto_indent!, style_scheme, style_s
 using Gtk
 using Compat
 
-import ..Gtk: suffix
+import ..Gtk: suffix, GObject, GtkTextIter
 
-const GObject = Gtk.GObject
+const MutableGtkTextIter = Gtk.GLib.MutableTypes.Mutable{GtkTextIter}
 
-typealias GtkTextIter Gtk.GtkTextIter
-typealias MutableGtkTextIter Gtk.GLib.MutableTypes.Mutable{GtkTextIter}
 mutable(it::GtkTextIter) = Gtk.GLib.MutableTypes.mutable(it)
 
 if Gtk.gtk_version == 3
@@ -86,7 +84,7 @@ set_search_path(manager::GtkSourceLanguageManager,dir)  = ccall((:gtk_source_lan
 
 # Use: GtkSourceWidget.set_search_path(m,Any["c:/ad","yp",C_NULL])
 
-language(manager::GtkSourceLanguageManager, id::AbstractString) = @GtkSourceLanguage(
+language(manager::GtkSourceLanguageManager, id::AbstractString) = GtkSourceLanguage(
     ccall((:gtk_source_language_manager_get_language,libgtksourceview),Ptr{GObject},
           (Ptr{GObject},Ptr{UInt8}),manager,string(id)))
 
@@ -107,7 +105,7 @@ function GtkSourceStyleSchemeManagerLeaf(default=true)
   end
 end
 
-style_scheme(manager::GtkSourceStyleSchemeManager, scheme_id::AbstractString) = @GtkSourceStyleScheme(
+style_scheme(manager::GtkSourceStyleSchemeManager, scheme_id::AbstractString) = GtkSourceStyleScheme(
     ccall((:gtk_source_style_scheme_manager_get_scheme,libgtksourceview),Ptr{GObject},
           (Ptr{GObject},Ptr{UInt8}),manager,string(scheme_id)))
 
@@ -194,7 +192,7 @@ reset_undomanager(buffer::GtkSourceBuffer) = ccall((:gtk_source_buffer_set_undo_
 ### GtkSourceView
 
 Gtk.@Gtype GtkSourceView libgtksourceview gtk_source_view
-GtkSourceViewLeaf(buffer=@GtkSourceBuffer()) = @GtkSourceView(
+GtkSourceViewLeaf(buffer=GtkSourceBuffer()) = GtkSourceView(
     ccall((:gtk_source_view_new_with_buffer,libgtksourceview),Ptr{GObject},(Ptr{GObject},),buffer))
 
 
@@ -210,13 +208,13 @@ highlight_current_line!(view::GtkSourceView, hl::Bool) =
   ccall((:gtk_source_view_set_highlight_current_line,libgtksourceview),Void,
         (Ptr{GObject},Cint),view,Int32(hl))
 
-get_completion(view::GtkSourceView) =
-    ccall((:gtk_source_view_get_completion,libgtksourceview),Ptr{GtkSourceCompletion},
-        (Ptr{GObject},),view)
-
 ### GtkSourceCompletion
 
 Gtk.@Gtype GtkSourceCompletion libgtksourceview gtk_source_completion
+
+get_completion(view::GtkSourceView) =
+    ccall((:gtk_source_view_get_completion,libgtksourceview),Ptr{GtkSourceCompletion},
+        (Ptr{GObject},),view)
 
 
 ### GtkSourceCompletionContext
@@ -362,7 +360,7 @@ style_scheme(chooser::Gtk.GtkWidget) = GtkSourceStyleScheme(
 
 function __init__()
 
-    global const sourceLanguageManager = @GtkSourceLanguageManager()
+    global const sourceLanguageManager = GtkSourceLanguageManager()
     GtkSourceWidget.set_search_path(sourceLanguageManager,
       Any[Pkg.dir() * "/GtkSourceWidget/share/gtksourceview-3.0/language-specs/",C_NULL])
 end
