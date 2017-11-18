@@ -6,12 +6,6 @@ export GtkSourceLanguage, GtkSourceLanguageManager, GtkSourceBuffer,
        GtkSourceStyleSchemeManager, GtkSourceStyleScheme, GtkSourceMap,
        GtkSourceSearchContext, GtkSourceSearchSettings
 
-export @GtkSourceLanguage, @GtkSourceLanguageManager, @GtkSourceBuffer,
-       @GtkSourceView, @GtkSourceCompletionItem,
-       @GtkSourceStyleSchemeManager, @GtkSourceStyleScheme, @GtkSourceMap,
-       @GtkSourceSearchContext, @GtkSourceSearchSettings
-
-
 export scheme, language, show_line_numbers!, auto_indent!, style_scheme, style_scheme!,
        max_undo_levels, max_undo_levels!, undo!, redo!, canundo, canredo, undomanager,
        highlight_current_line!, highlight_matching_brackets, source_view_get_gutter,
@@ -33,7 +27,7 @@ if Gtk.gtk_version == 3
     end
     @static if is_linux()
         try
-            strip(readall(pipeline(`ldconfig -p`, `grep libgtksourceview-3`, `cut -d'>' -f2`)))
+            strip(readstring(pipeline(`ldconfig -p`, `grep libgtksourceview-3`, `cut -d'>' -f2`)))
         catch
             run(`sudo apt-get install libgtksourceview-3.0-1`)
         end
@@ -328,22 +322,28 @@ source_view_get_gutter(view::GtkSourceView) =  ccall((:gtk_source_view_get_gutte
 ### GtkSourceMap
 
 SOURCE_MAP = false
-try
-    ccall((:gtk_source_map_new,libgtksourceview),Ptr{GObject},())
-    SOURCE_MAP  = true
-end
-if SOURCE_MAP
-    Gtk.@Gtype GtkSourceMap libgtksourceview gtk_source_map
 
-    GtkSourceMapLeaf() = GtkSourceMapLeaf( ccall((:gtk_source_map_new,libgtksourceview),Ptr{GObject},()) )
+@static if !is_linux() #GtkSourceCompletionInfo issue on ubuntu
 
-    get_view(map::GtkSourceMap) =
-        ccall((:gtk_source_map_get_view,libgtksourceview),Ptr{GtkSourceView},
-            (Ptr{GObject},),map)
+	try
+		ccall((:gtk_source_map_new,libgtksourceview),Ptr{GObject},())
+		SOURCE_MAP  = true
+	end
 
-    set_view(map::GtkSourceMap,view::GtkSourceView) =
-        ccall((:gtk_source_map_set_view,libgtksourceview),Void,
-            (Ptr{GObject},Ptr{GObject}),map,view)
+	if SOURCE_MAP
+		Gtk.@Gtype GtkSourceMap libgtksourceview gtk_source_map
+
+		GtkSourceMapLeaf() = GtkSourceMapLeaf( ccall((:gtk_source_map_new,libgtksourceview),Ptr{GObject},()) )
+
+		get_view(map::GtkSourceMap) =
+		    ccall((:gtk_source_map_get_view,libgtksourceview),Ptr{GtkSourceView},
+		        (Ptr{GObject},),map)
+
+		set_view(map::GtkSourceMap,view::GtkSourceView) =
+		    ccall((:gtk_source_map_set_view,libgtksourceview),Void,
+		        (Ptr{GObject},Ptr{GObject}),map,view)
+	end
+
 end
 
 ## GtkSourceStyleSchemeChooserWidget
