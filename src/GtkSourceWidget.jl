@@ -321,30 +321,32 @@ source_view_get_gutter(view::GtkSourceView) =  ccall((:gtk_source_view_get_gutte
 
 ### GtkSourceMap
 
-SOURCE_MAP = false
+function _define_source_map()
+    if is_linux()
+        return :(
+            global const SOURCE_MAP = false
+        )
+    else
+        return quote
+            global const SOURCE_MAP  = true
+            Gtk.@Gtype GtkSourceMap libgtksourceview gtk_source_map
 
-@static if !is_linux() #GtkSourceCompletionInfo issue on ubuntu
+    		GtkSourceMapLeaf() = GtkSourceMapLeaf( ccall((:gtk_source_map_new,libgtksourceview),Ptr{GObject},()) )
 
-	try
-		ccall((:gtk_source_map_new,libgtksourceview),Ptr{GObject},())
-		SOURCE_MAP  = true
-	end
+    		get_view(map::GtkSourceMap) =
+    		    ccall((:gtk_source_map_get_view,libgtksourceview),Ptr{GtkSourceView},
+    		        (Ptr{GObject},),map)
 
-	if SOURCE_MAP
-		Gtk.@Gtype GtkSourceMap libgtksourceview gtk_source_map
-
-		GtkSourceMapLeaf() = GtkSourceMapLeaf( ccall((:gtk_source_map_new,libgtksourceview),Ptr{GObject},()) )
-
-		get_view(map::GtkSourceMap) =
-		    ccall((:gtk_source_map_get_view,libgtksourceview),Ptr{GtkSourceView},
-		        (Ptr{GObject},),map)
-
-		set_view(map::GtkSourceMap,view::GtkSourceView) =
-		    ccall((:gtk_source_map_set_view,libgtksourceview),Void,
-		        (Ptr{GObject},Ptr{GObject}),map,view)
-	end
-
+    		set_view(map::GtkSourceMap,view::GtkSourceView) =
+    		    ccall((:gtk_source_map_set_view,libgtksourceview),Void,
+    		        (Ptr{GObject},Ptr{GObject}),map,view)
+        end
+    end
 end
+
+macro define_source_map() esc(_define_source_map()) end
+
+@define_source_map()
 
 ## GtkSourceStyleSchemeChooserWidget
 
