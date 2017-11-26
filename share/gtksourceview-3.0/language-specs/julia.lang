@@ -171,10 +171,12 @@
       <keyword>function</keyword>
       <keyword>if</keyword>
       <keyword>immutable</keyword>
+      <keyword>mutable</keyword>
       <keyword>let</keyword>
       <keyword>quote</keyword>
       <keyword>try</keyword>
       <keyword>type</keyword>
+      <keyword>struct</keyword>
       <keyword>while</keyword>
       <keyword>catch</keyword>
       <keyword>finally</keyword>
