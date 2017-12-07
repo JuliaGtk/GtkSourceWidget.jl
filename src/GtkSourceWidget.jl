@@ -78,13 +78,22 @@ set_search_path(manager::GtkSourceLanguageManager,dir)  = ccall((:gtk_source_lan
 
 # Use: GtkSourceWidget.set_search_path(m,Any["c:/ad","yp",C_NULL])
 
-language(manager::GtkSourceLanguageManager, id::AbstractString) = GtkSourceLanguage(
+language(manager::GtkSourceLanguageManager, id::String) = GtkSourceLanguage(
     ccall((:gtk_source_language_manager_get_language,libgtksourceview),Ptr{GObject},
           (Ptr{GObject},Ptr{UInt8}),manager,string(id)))
+          
+### GtkSourceStyle
+          
+Gtk.@Gtype GtkSourceStyle libgtksourceview gtk_source_style
 
 ### GtkSourceStyleScheme
 
 Gtk.@Gtype GtkSourceStyleScheme libgtksourceview gtk_source_style_scheme
+
+
+style(scheme::GtkSourceStyleScheme, style_id::String)  = GtkSourceStyle(
+    ccall((:gtk_source_style_scheme_get_style,libgtksourceview),Ptr{GObject},
+    (Ptr{GObject}, Ptr{UInt8}), scheme, string(style_id)))
 
 ### GtkSourceStyleSchemeManager
 
@@ -99,7 +108,7 @@ function GtkSourceStyleSchemeManagerLeaf(default=true)
   end
 end
 
-style_scheme(manager::GtkSourceStyleSchemeManager, scheme_id::AbstractString) = GtkSourceStyleScheme(
+style_scheme(manager::GtkSourceStyleSchemeManager, scheme_id::String) = GtkSourceStyleScheme(
     ccall((:gtk_source_style_scheme_manager_get_scheme,libgtksourceview),Ptr{GObject},
           (Ptr{GObject},Ptr{UInt8}),manager,string(scheme_id)))
 
@@ -239,7 +248,7 @@ getactivation(context::GtkSourceCompletionContext) =
 
 Gtk.@Gtype GtkSourceCompletionItem libgtksourceview gtk_source_completion_item
 
-GtkSourceCompletionItemLeaf(label::AbstractString, text::AbstractString) = GtkSourceCompletionItemLeaf(
+GtkSourceCompletionItemLeaf(label::String, text::String) = GtkSourceCompletionItemLeaf(
     ccall((:gtk_source_completion_item_new,libgtksourceview),Ptr{GObject},
         (Ptr{UInt8},Ptr{UInt8},Ptr{Void},Ptr{UInt8}),
         string(label),string(text),C_NULL,C_NULL))
@@ -257,7 +266,7 @@ GtkSourceSearchSettingsLeaf() = GtkSourceSearchSettingsLeaf(
     ccall((:gtk_source_search_settings_new,libgtksourceview),Ptr{GObject},())
 )
 
-set_search_text(settings::GtkSourceSearchSettings, text::AbstractString) =
+set_search_text(settings::GtkSourceSearchSettings, text::String) =
     ccall((:gtk_source_search_settings_set_search_text,libgtksourceview),Void,
         (Ptr{GObject},Ptr{UInt8}),settings,text)
 
@@ -293,7 +302,7 @@ end
 function search_context_replace(
     search::GtkSourceSearchContext,
     match_start::MutableGtkTextIter, match_end::MutableGtkTextIter,
-    replace::AbstractString)
+    replace::String)
 
     out = ccall((:gtk_source_search_context_replace,libgtksourceview),Cint,
         (Ptr{GObject},Ptr{MutableGtkTextIter},Ptr{MutableGtkTextIter},Ptr{UInt8},Cint,Ptr{Void}),
@@ -302,7 +311,7 @@ function search_context_replace(
     return convert(Bool,out)
 end
 
-function search_context_replace_all(search::GtkSourceSearchContext, replace::AbstractString)
+function search_context_replace_all(search::GtkSourceSearchContext, replace::String)
 
     out = ccall((:gtk_source_search_context_replace_all,libgtksourceview),Cint,
         (Ptr{GObject},Ptr{UInt8},Cint,Ptr{Void}),
