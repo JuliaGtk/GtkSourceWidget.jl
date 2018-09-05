@@ -23,7 +23,7 @@ mutable(it::GtkTextIter) = Gtk.GLib.MutableTypes.mutable(it)
 
 if Gtk.gtk_version == 3
     @static if is_windows()
-        const libgtksourceview = Pkg.dir() * "/GtkSourceWidget/bin/libgtksourceview-3.0-1.dll"
+        const libgtksourceview = joinpath(@__DIR__, "/bin/libgtksourceview-3.0-1.dll")
     end
     @static if is_linux()
         try
@@ -34,11 +34,8 @@ if Gtk.gtk_version == 3
         const libgtksourceview = strip(readstring(pipeline(`ldconfig -p`, `grep libgtksourceview-3`, `cut -d'>' -f2`, `head -1`)))
 	end
     @static if is_apple()
-        if !isfile( Pkg.dir() * "/Homebrew/deps/usr/lib/libgtksourceview-3.0.dylib" )
-            using Homebrew
-            Homebrew.add("gtksourceview3")
-        end
-        const libgtksourceview = Pkg.dir() * "/Homebrew/deps/usr/lib/libgtksourceview-3.0"
+        using Homebrew
+        const libgtksourceview = joinpath(Homebrew.prefix(),"lib/libgtksourceview-3.0")
     end
 else
     error("Unsupported Gtk version $gtk_version")
@@ -47,7 +44,7 @@ end
 
 ### GtkSourceLanguage
 
-Gtk.@Gtype GtkSourceLanguage libgtksourceview gtk_source_language
+Gtk.@Gtype GtkSourceLanguage libgtksourceview gtk_source_language false
 
 ### GtkSourceLanguageManager
 
