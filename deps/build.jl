@@ -22,5 +22,5 @@ if Sys.iswindows()
 end
 
 @BinDeps.install Dict(
-    "libgtksourceview" => "libgtksourceview",
+    :libgtksourceview => :libgtksourceview,
 )

@@ -1,6 +1,8 @@
 __precompile__()
 module GtkSourceWidget
 
+using Gtk, Compat
+
 export GtkSourceLanguage, GtkSourceLanguageManager, GtkSourceBuffer,
        GtkSourceView, GtkSourceCompletionItem,
        GtkSourceStyleSchemeManager, GtkSourceStyleScheme, GtkSourceMap,
@@ -11,9 +13,6 @@ export scheme, language, show_line_numbers!, auto_indent!, style_scheme, style_s
        highlight_current_line!, highlight_matching_brackets, source_view_get_gutter,
        reset_undomanager, set_view, get_view, style_scheme_chooser, style_scheme_chooser_button,
        set_search_text, get_search_text, search_context_forward, highlight, search_context_replace
-
-using Gtk
-using Compat
 
 import ..Gtk: suffix, GObject, GtkTextIter
 
@@ -43,7 +42,6 @@ if Gtk.gtk_version == 3
 else
     error("Unsupported Gtk version $gtk_version")
 end
-
 
 ### GtkSourceLanguage
 
