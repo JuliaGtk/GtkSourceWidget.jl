@@ -2,7 +2,10 @@ using BinDeps, Compat
 
 @BinDeps.setup
 
-libgtksourceview = library_dependency("gtksourceview3", aliases = ["libgtksourceview-3.0-1"])
+libgtksourceview = library_dependency(
+    "gtksourceview3", 
+    aliases = ["libgtksourceview-3.0-1","libgtksourceview-3.0","libgtksourceview-3.0.1"]
+)
 
 if Sys.isapple()
     using Homebrew

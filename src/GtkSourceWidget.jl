@@ -17,6 +17,9 @@ using Compat
 
 import ..Gtk: suffix, GObject, GtkTextIter
 
+Gtk.curr_module() = @__MODULE__
+Gtk.GLib.curr_module() = @__MODULE__
+
 const MutableGtkTextIter = Gtk.GLib.MutableTypes.Mutable{GtkTextIter}
 
 mutable(it::GtkTextIter) = Gtk.GLib.MutableTypes.mutable(it)
@@ -44,7 +47,7 @@ end
 
 ### GtkSourceLanguage
 
-Gtk.@Gtype GtkSourceLanguage libgtksourceview gtk_source_language false
+Gtk.@Gtype GtkSourceLanguage libgtksourceview gtk_source_language
 
 ### GtkSourceLanguageManager
 
@@ -370,8 +373,10 @@ function __init__()
 
     global const sourceLanguageManager = GtkSourceLanguageManager()
     GtkSourceWidget.set_search_path(sourceLanguageManager,
-      Any[Pkg.dir() * "/GtkSourceWidget/share/gtksourceview-3.0/language-specs/",C_NULL])
+      Any[joinpath(@__DIR__,"../share/gtksourceview-3.0/language-specs/"),C_NULL])
 end
 
+Gtk.curr_module() = Gtk
+Gtk.GLib.curr_module() = Gtk.GLib
 
 end # module
