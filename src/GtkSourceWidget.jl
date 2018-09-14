@@ -16,9 +16,6 @@ export scheme, language, show_line_numbers!, auto_indent!, style_scheme, style_s
 
 import ..Gtk: suffix, GObject, GtkTextIter
 
-Gtk.curr_module() = @__MODULE__
-Gtk.GLib.curr_module() = @__MODULE__
-
 const MutableGtkTextIter = Gtk.GLib.MutableTypes.Mutable{GtkTextIter}
 
 mutable(it::GtkTextIter) = Gtk.GLib.MutableTypes.mutable(it)
@@ -366,15 +363,10 @@ style_scheme(chooser::Gtk.GtkWidget) = GtkSourceStyleScheme(
 
 #? https://github.com/JuliaLang/Gtk.jl/blob/40f7442dea20919c5a7b137594fb6d7636fa2329/src/selectors.jl
 
-
 function __init__()
-
     global const sourceLanguageManager = GtkSourceLanguageManager()
     GtkSourceWidget.set_search_path(sourceLanguageManager,
       Any[joinpath(@__DIR__,"../share/gtksourceview-3.0/language-specs/"),C_NULL])
 end
-
-Gtk.curr_module() = Gtk
-Gtk.GLib.curr_module() = Gtk.GLib
 
 end # module
