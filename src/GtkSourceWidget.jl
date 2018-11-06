@@ -1,4 +1,3 @@
-__precompile__()
 module GtkSourceWidget
 
 using Gtk, Compat
@@ -105,7 +104,7 @@ set_search_path(manager::GtkSourceStyleSchemeManager,dir)  = ccall((:gtk_source_
 ### GtkSourceUndoManager
 
 ### This is a hack!!!
-struct GtkSourceUndoManagerI
+struct GtkSourceUndoManagerI end
 
 undo!(manager::GtkSourceUndoManagerI) =
   ccall((:gtk_source_undo_manager_undo,libgtksourceview),Nothing,
