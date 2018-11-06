@@ -1,9 +1,0 @@
-name = "GtkSourceWidget"
-uuid = "c2b0df9c-a940-11e8-0e06-c19614853720"
-authors = ["Jonathan Bieler <jonathan.bieler@alumni.epfl.ch>"]
-version = "0.1.0"
-
-[deps]
-Compat = "34da2185-b29b-5c13-b0c7-acf172513d20"
-Gtk = "4c0ca9eb-093a-5379-98c5-f87ac0bbbf44"
-Homebrew = "d9be37ee-ecc9-5288-90f1-b9ca67657a75"
