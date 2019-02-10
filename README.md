@@ -4,18 +4,6 @@ GtkSourceWidget.jl is a Julia wrapper for the Gtk library GtkSourceView that all
 
 ## Installation
 
-GtkSourceWidget.jl requires that a GtkSourceView is installed and in the library path.
+Install Gtk.jl.
 
-### Linux
-
-On linux GtkSourceView should be installed using the package manager
-
-### OSX
-
-It works when using MacPorts:
-
-1. `port install gtksourceview3 +no_x11 +quartz -x11`
-
-### Windows
-
-This is the most tricky thing. GtkSourceView3 seems to be not be installable via WinRPM. When using 32bit I had success using the binaries from http://www.tarnyko.net/repo/vala/vala0.20.1-glib2.34.3/ together with the official Gtk+3 binaries (version 3.6) from the Gtk website.
+    Pkg.clone("https://github.com/jonathanBieler/GtkSourceWidget.jl.git")
