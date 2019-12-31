@@ -1,6 +1,6 @@
 module GtkSourceWidget
 
-using Gtk, Compat
+using Gtk, GtkSourceView_jll
 
 export GtkSourceLanguage, GtkSourceLanguageManager, GtkSourceBuffer,
        GtkSourceView, GtkSourceCompletionItem,
@@ -18,18 +18,6 @@ import ..Gtk: suffix, GObject, GtkTextIter
 const MutableGtkTextIter = Gtk.GLib.MutableTypes.Mutable{GtkTextIter}
 
 mutable(it::GtkTextIter) = Gtk.GLib.MutableTypes.mutable(it)
-
-if Gtk.gtk_version == 3
-
-    const depsfile = joinpath(dirname(@__FILE__), "..", "deps", "deps.jl")
-    if isfile(depsfile)
-        include(depsfile)
-    else
-        error("GtkSourceWidget not properly installed. Please run Pkg.build(\"GtkSourceWidget\") then restart Julia.")
-    end
-else
-    error("Unsupported Gtk version $gtk_version")
-end
 
 ### GtkSourceLanguage
 
@@ -355,7 +343,7 @@ style_scheme(chooser::Gtk.GtkWidget) = GtkSourceStyleScheme(
 function __init__()
     global sourceLanguageManager = GtkSourceLanguageManager()
     GtkSourceWidget.set_search_path(sourceLanguageManager,
-      Any[joinpath(@__DIR__,"../share/gtksourceview-3.0/language-specs/"),C_NULL])
+      Any[joinpath(GtkSourceView_jll.artifact_dir, "share", "gtksourceview-4", "language-specs"), C_NULL])
 end
 
 end # module
