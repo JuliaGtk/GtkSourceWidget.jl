@@ -6,4 +6,4 @@ GtkSourceWidget.jl is a Julia wrapper for the Gtk library GtkSourceView that all
 
 ## Installation
 
-    ]dev https://github.com/jonathanBieler/GtkSourceWidget.jl.git
+    ]dev https://github.com/JuliaGtk/GtkSourceWidget.jl.git
