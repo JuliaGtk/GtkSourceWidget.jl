@@ -39,19 +39,23 @@ end
 get_search_path(manager::GtkSourceLanguageManager) = ccall((:gtk_source_language_manager_get_search_path,libgtksourceview),Ptr{Ptr{UInt8}},
     (Ptr{GObject},),manager)
 
+"""
+    set_search_path(manager::GtkSourceLanguageManager, dir)
 
-    # 3-element Array{Ptr{UInt8},1}:
-    # Ptr{UInt8} @0x000000001bb85ac0
-    # Ptr{UInt8} @0x000000001bb84e70
-    # Ptr{UInt8} @0x0000000000000000
-    #
-    # julia> bytestring(pointer_to_array(p,2)[1])
+Implements `gtk_source_language_manager_set_search_path`.
 
-set_search_path(manager::GtkSourceLanguageManager,dir)  = ccall((:gtk_source_language_manager_set_search_path,libgtksourceview),Nothing,
+Example : 
+    `GtkSourceWidget.set_search_path(sourceStyleManager, Any[path, C_NULL])`
+"""
+set_search_path(manager::GtkSourceLanguageManager, dir)  = ccall((:gtk_source_language_manager_set_search_path,libgtksourceview),Nothing,
     (Ptr{GObject}, Ptr{Ptr{UInt8}}),manager, dir)
 
-# Use: GtkSourceWidget.set_search_path(m,Any["c:/ad","yp",C_NULL])
 
+"""
+    language(manager::GtkSourceLanguageManager, id::String)
+
+Implements `gtk_source_language_manager_get_language`.
+"""
 language(manager::GtkSourceLanguageManager, id::String) = GtkSourceLanguage(
     ccall((:gtk_source_language_manager_get_language,libgtksourceview),Ptr{GObject},
           (Ptr{GObject},Ptr{UInt8}),manager,string(id)))
@@ -64,7 +68,11 @@ Gtk.@Gtype GtkSourceStyle libgtksourceview gtk_source_style
 
 Gtk.@Gtype GtkSourceStyleScheme libgtksourceview gtk_source_style_scheme
 
+"""
+    style(scheme::GtkSourceStyleScheme, style_id::String)
 
+Implements `gtk_source_style_scheme_get_style`.
+"""
 style(scheme::GtkSourceStyleScheme, style_id::String)  = GtkSourceStyle(
     ccall((:gtk_source_style_scheme_get_style,libgtksourceview),Ptr{GObject},
     (Ptr{GObject}, Ptr{UInt8}), scheme, string(style_id)))
@@ -75,18 +83,28 @@ Gtk.@Gtype GtkSourceStyleSchemeManager libgtksourceview gtk_source_style_scheme_
 function GtkSourceStyleSchemeManagerLeaf(default=true)
   if default
     GtkSourceStyleSchemeManagerLeaf(
-      ccall((:gtk_source_style_scheme_manager_get_default,libgtksourceview),Ptr{GObject},()))
+      ccall((:gtk_source_style_scheme_manager_get_default, libgtksourceview), Ptr{GObject},()))
   else
     GtkSourceStyleSchemeManagerLeaf(
-      ccall((:gtk_source_style_scheme_manager_get_new,libgtksourceview),Ptr{GObject},()))
+      ccall((:gtk_source_style_scheme_manager_get_new, libgtksourceview), Ptr{GObject},()))
   end
 end
 
+"""
+    style_scheme(manager::GtkSourceStyleSchemeManager, scheme_id::String)
+
+Implements `gtk_source_style_scheme_manager_get_scheme`.
+"""
 style_scheme(manager::GtkSourceStyleSchemeManager, scheme_id::String) = GtkSourceStyleScheme(
     ccall((:gtk_source_style_scheme_manager_get_scheme,libgtksourceview),Ptr{GObject},
           (Ptr{GObject},Ptr{UInt8}),manager,string(scheme_id)))
 
-set_search_path(manager::GtkSourceStyleSchemeManager,dir)  = ccall((:gtk_source_style_scheme_manager_set_search_path,libgtksourceview),Nothing,
+"""
+    set_search_path(manager::GtkSourceStyleSchemeManager, dir)
+
+Implements `gtk_source_style_scheme_manager_set_search_path`.
+"""
+set_search_path(manager::GtkSourceStyleSchemeManager, dir)  = ccall((:gtk_source_style_scheme_manager_set_search_path,libgtksourceview),Nothing,
     (Ptr{GObject}, Ptr{Ptr{UInt8}}),manager, dir)
 
 ### GtkSourceUndoManager
@@ -116,18 +134,38 @@ Gtk.@Gtype GtkSourceBuffer libgtksourceview gtk_source_buffer
 GtkSourceBufferLeaf() = GtkSourceBufferLeaf(
      ccall((:gtk_source_buffer_new,libgtksourceview),Ptr{GObject}, (Ptr{Nothing},), C_NULL) )
 
+"""
+    GtkSourceBuffer(lang::GtkSourceLanguage)
+
+Implements `gtk_source_buffer_new_with_language`.
+"""
 GtkSourceBufferLeaf(lang::GtkSourceLanguage) = GtkSourceBufferLeaf(
-     ccall((:gtk_source_buffer_new_with_language,libgtksourceview),Ptr{GObject},
+     ccall((:gtk_source_buffer_new_with_language, libgtksourceview), Ptr{GObject},
            (Ptr{GObject},), lang) )
 
+"""
+    highlight_syntax(buffer::GtkSourceBuffer, highlight::Bool)
+
+Implements `gtk_source_buffer_set_highlight_syntax`.
+"""
 highlight_syntax(buffer::GtkSourceBuffer, highlight::Bool) =
   ccall((:gtk_source_buffer_set_highlight_syntax,libgtksourceview),Ptr{GObject},
         (Ptr{GObject},Cint),buffer,Int32(highlight))
 
+"""
+    highlight_matching_brackets(buffer::GtkSourceBuffer, highlight::Bool)
+
+Implements `gtk_source_buffer_set_highlight_matching_brackets`.
+"""
 highlight_matching_brackets(buffer::GtkSourceBuffer, highlight::Bool) =
   ccall((:gtk_source_buffer_set_highlight_matching_brackets,libgtksourceview),Ptr{GObject},
         (Ptr{GObject},Cint),buffer,Int32(highlight))
 
+"""
+    style_scheme!(buffer::GtkSourceBuffer, scheme::GtkSourceStyleScheme)
+
+Implements `gtk_source_buffer_set_style_scheme`.
+"""
 style_scheme!(buffer::GtkSourceBuffer, scheme::GtkSourceStyleScheme) =
   ccall((:gtk_source_buffer_set_style_scheme,libgtksourceview),Nothing,
         (Ptr{GObject},Ptr{GObject}),buffer,scheme)
@@ -140,10 +178,20 @@ max_undo_levels!(buffer::GtkSourceBuffer, levels::Integer) =
   ccall((:gtk_source_buffer_set_max_undo_levels,libgtksourceview),Nothing,
         (Ptr{GObject},Cint),buffer,levels)
 
+"""
+    undo!(buffer::GtkSourceBuffer)
+
+Implements `gtk_source_buffer_undo`.
+"""
 undo!(buffer::GtkSourceBuffer) =
   ccall((:gtk_source_buffer_undo,libgtksourceview),Nothing,
         (Ptr{GObject},),buffer)
 
+"""
+    redo!(buffer::GtkSourceBuffer)
+
+Implements `gtk_source_buffer_redo`.
+"""
 redo!(buffer::GtkSourceBuffer) =
   ccall((:gtk_source_buffer_redo,libgtksourceview),Nothing,
         (Ptr{GObject},),buffer)
@@ -171,6 +219,11 @@ GtkSourceViewLeaf(buffer=GtkSourceBuffer()) = GtkSourceView(
     ccall((:gtk_source_view_new_with_buffer,libgtksourceview),Ptr{GObject},(Ptr{GObject},),buffer))
 
 
+"""
+    show_line_numbers!(view::GtkSourceView, show::Bool)
+
+Implements `gtk_source_view_set_show_line_numbers`.
+"""
 show_line_numbers!(view::GtkSourceView, show::Bool) =
   ccall((:gtk_source_view_set_show_line_numbers,libgtksourceview),Nothing,
         (Ptr{GObject},Cint),view,Int32(show))
@@ -179,6 +232,11 @@ auto_indent!(view::GtkSourceView, auto::Bool) =
   ccall((:gtk_source_view_set_auto_indent,libgtksourceview),Nothing,
         (Ptr{GObject},Cint),view,Int32(auto))
 
+"""
+    highlight_current_line!(view::GtkSourceView, hl::Bool)
+
+Implements `gtk_source_view_set_highlight_current_line`.
+"""
 highlight_current_line!(view::GtkSourceView, hl::Bool) =
   ccall((:gtk_source_view_set_highlight_current_line,libgtksourceview),Nothing,
         (Ptr{GObject},Cint),view,Int32(hl))
