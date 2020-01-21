@@ -13,9 +13,7 @@ export scheme, language, show_line_numbers!, auto_indent!, style_scheme, style_s
        reset_undomanager, set_view, get_view, style_scheme_chooser, style_scheme_chooser_button,
        set_search_text, get_search_text, search_context_forward, highlight, search_context_replace
 
-import ..Gtk: suffix, GObject, GtkTextIter
-
-const MutableGtkTextIter = Gtk.GLib.MutableTypes.Mutable{GtkTextIter}
+import ..Gtk: suffix, GObject, GtkTextIter, Mutable
 
 mutable(it::GtkTextIter) = Gtk.GLib.MutableTypes.mutable(it)
 
@@ -315,27 +313,30 @@ Gtk.@Gtype GtkSourceSearchContext libgtksourceview gtk_source_search_context
 GtkSourceSearchContextLeaf(buffer::GtkSourceBuffer,settings::GtkSourceSearchSettings) = GtkSourceSearchContextLeaf(
     ccall((:gtk_source_search_context_new,libgtksourceview),Ptr{GObject},(Ptr{GObject},Ptr{GObject}),buffer,settings))
 
-search_context_forward(search::GtkSourceSearchContext, iter::GtkTextIter,match_start::MutableGtkTextIter,match_end::MutableGtkTextIter) =
-    convert(Bool,ccall((:gtk_source_search_context_forward,libgtksourceview),Cint,
-        (Ptr{GObject},Ref{GtkTextIter},Ptr{MutableGtkTextIter},Ptr{MutableGtkTextIter}),
-        search,iter,match_start,match_end))
+search_context_forward(search::GtkSourceSearchContext, iter::Mutable{GtkTextIter}, match_start::Mutable{GtkTextIter}, match_end::Mutable{GtkTextIter}) =
+    Bool(ccall((:gtk_source_search_context_forward,libgtksourceview),
+        Cint,
+        (Ptr{GObject},Ptr{GtkTextIter},Ptr{GtkTextIter},Ptr{GtkTextIter}),
+        search,iter,match_start,match_end
+    ))
 
 function search_context_forward(search::GtkSourceSearchContext, iter::GtkTextIter)
 
-    match_start = mutable(GtkTextIter())
-    match_end   = mutable(GtkTextIter())
+    buffer = search.buffer[GtkSourceBuffer]
+    match_start = mutable(GtkTextIter(buffer))
+    match_end   = mutable(GtkTextIter(buffer))
 
-    found = search_context_forward(search,iter,match_start,match_end)
+    found = search_context_forward(search,mutable(iter),match_start,match_end)
     return (found,match_start,match_end)
 end
 
 function search_context_replace(
     search::GtkSourceSearchContext,
-    match_start::MutableGtkTextIter, match_end::MutableGtkTextIter,
+    match_start::Mutable{GtkTextIter}, match_end::Mutable{GtkTextIter},
     replace::String)
 
     out = ccall((:gtk_source_search_context_replace,libgtksourceview),Cint,
-        (Ptr{GObject},Ptr{MutableGtkTextIter},Ptr{MutableGtkTextIter},Ptr{UInt8},Cint,Ptr{Nothing}),
+        (Ptr{GObject},Ptr{Mutable{GtkTextIter}},Ptr{Mutable{GtkTextIter}},Ptr{UInt8},Cint,Ptr{Nothing}),
         search,match_start,match_end,string(replace),-1,C_NULL)
 
     return convert(Bool,out)
