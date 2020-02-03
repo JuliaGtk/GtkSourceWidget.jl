@@ -321,12 +321,12 @@ GtkSourceSearchContextLeaf(buffer::GtkSourceBuffer, settings::GtkSourceSearchSet
         buffer, settings)
     )
 
-function search_context_forward(search::GtkSourceSearchContext, iter::GtkTextIter, 
+function search_context_forward(search::GtkSourceSearchContext, iter::Mutable{GtkTextIter}, 
                                 match_start::Mutable{GtkTextIter}, match_end::Mutable{GtkTextIter})
 
     Bool(ccall((:gtk_source_search_context_forward, libgtksourceview),
         Cint,
-        (Ptr{GObject}, Ref{GtkTextIter}, Ptr{GtkTextIter}, Ptr{GtkTextIter}),
+        (Ptr{GObject}, Ptr{GtkTextIter}, Ptr{GtkTextIter}, Ptr{GtkTextIter}),
         search, iter, match_start, match_end
     ))
 end
@@ -337,7 +337,7 @@ function search_context_forward(search::GtkSourceSearchContext, iter::GtkTextIte
     match_start = mutable(GtkTextIter(buffer))
     match_end   = mutable(GtkTextIter(buffer))
 
-    found = search_context_forward(search, iter, match_start, match_end)
+    found = search_context_forward(search, mutable(iter), match_start, match_end)
     return (found, match_start, match_end)
 end
 
