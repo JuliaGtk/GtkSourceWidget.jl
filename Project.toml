@@ -1,6 +1,6 @@
 name = "GtkSourceWidget"
 uuid = "6ceb4976-07da-5329-b1cb-20978726f1f4"
-version = "1.0.0"
+version = "1.0.1"
 
 [deps]
 Gtk = "4c0ca9eb-093a-5379-98c5-f87ac0bbbf44"

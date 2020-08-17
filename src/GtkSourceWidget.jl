@@ -244,6 +244,7 @@ highlight_current_line!(view::GtkSourceView, hl::Bool) =
   ccall((:gtk_source_view_set_highlight_current_line, libgtksourceview), Nothing,
         (Ptr{GObject}, Cint), view, Int32(hl))
 
+
 ### GtkSourceCompletion
 
 Gtk.@Gtype GtkSourceCompletion libgtksourceview gtk_source_completion
@@ -251,6 +252,12 @@ Gtk.@Gtype GtkSourceCompletion libgtksourceview gtk_source_completion
 get_completion(view::GtkSourceView) =
     ccall((:gtk_source_view_get_completion, libgtksourceview), Ptr{GtkSourceCompletion},
         (Ptr{GObject}, ), view)
+
+# Gtk.create_mark(buffer::GtkSourceBuffer, mark_name, it, left_gravity::Bool)  = 
+#     GtkTextMarkLeaf(ccall((:gtk_text_buffer_create_mark, Gtk.libgtk), Ptr{GObject},
+#     (Ptr{Gtk.GObject}, Ptr{UInt8}, Ref{GtkTextIter}, Cint), buffer, mark_name, it, left_gravity))
+
+# Gtk.create_mark(buffer::GtkTextBuffer, it)  = create_mark(buffer, C_NULL, it, false)
 
 
 ### GtkSourceCompletionContext
@@ -321,12 +328,12 @@ GtkSourceSearchContextLeaf(buffer::GtkSourceBuffer, settings::GtkSourceSearchSet
         buffer, settings)
     )
 
-function search_context_forward(search::GtkSourceSearchContext, iter::Mutable{GtkTextIter}, 
+function search_context_forward(search::GtkSourceSearchContext, iter::GtkTextIter, 
                                 match_start::Mutable{GtkTextIter}, match_end::Mutable{GtkTextIter})
 
     Bool(ccall((:gtk_source_search_context_forward, libgtksourceview),
         Cint,
-        (Ptr{GObject}, Ptr{GtkTextIter}, Ptr{GtkTextIter}, Ptr{GtkTextIter}),
+        (Ptr{GObject}, Ref{GtkTextIter}, Ptr{GtkTextIter}, Ptr{GtkTextIter}),
         search, iter, match_start, match_end
     ))
 end
@@ -337,7 +344,7 @@ function search_context_forward(search::GtkSourceSearchContext, iter::GtkTextIte
     match_start = mutable(GtkTextIter(buffer))
     match_end   = mutable(GtkTextIter(buffer))
 
-    found = search_context_forward(search, mutable(iter), match_start, match_end)
+    found = search_context_forward(search, iter, match_start, match_end)
     return (found, match_start, match_end)
 end
 
@@ -347,11 +354,16 @@ function search_context_replace(
     replace::String)
 
     out = ccall((:gtk_source_search_context_replace, libgtksourceview), Cint,
-        (Ptr{GObject}, Ptr{Mutable{GtkTextIter}}, Ptr{Mutable{GtkTextIter}}, Ptr{UInt8}, Cint, Ptr{Nothing}),
+        (Ptr{GObject}, Ref{GtkTextIter}, Ref{GtkTextIter}, Ptr{UInt8}, Cint, Ptr{Nothing}),
         search, match_start, match_end, string(replace), -1, C_NULL)
 
     return convert(Bool, out)
 end
+
+search_context_replace(
+    search::GtkSourceSearchContext,
+    match_start::GtkTextIter, match_end::GtkTextIter,
+    replace::String) = search_context_replace(search, mutable(match_start), mutable(match_end), replace)
 
 function search_context_replace_all(search::GtkSourceSearchContext, replace::String)
 
