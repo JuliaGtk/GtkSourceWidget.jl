@@ -1,0 +1,84 @@
+quote
+$(Expr(:toplevel, quote
+    function check_version(_major::Integer, _minor::Integer, _micro::Integer)
+        ret = ccall(("gtk_source_check_version", libgtksourceview), Cint, (UInt32, UInt32, UInt32), _major, _minor, _micro)
+        ret2 = convert(Bool, ret)
+        ret2
+    end
+    function encoding_get_all()
+        ret = ccall(("gtk_source_encoding_get_all", libgtksourceview), Ptr{GLib._GSList{GtkSourceEncoding}}, ())
+        ret2 = GLib.GList(ret, false)
+        ret2
+    end
+    function encoding_get_current()
+        ret = ccall(("gtk_source_encoding_get_current", libgtksourceview), Ptr{GtkSourceEncoding}, ())
+        ret2 = convert(GtkSourceEncoding, ret, false)
+        ret2
+    end
+    function encoding_get_default_candidates()
+        ret = ccall(("gtk_source_encoding_get_default_candidates", libgtksourceview), Ptr{GLib._GSList{GtkSourceEncoding}}, ())
+        ret2 = GLib.GList(ret, false)
+        ret2
+    end
+    function encoding_get_from_charset(_charset::Union{AbstractString, Symbol})
+        ret = ccall(("gtk_source_encoding_get_from_charset", libgtksourceview), Ptr{GtkSourceEncoding}, (Cstring,), _charset)
+        ret2 = convert_if_not_null(GtkSourceEncoding, ret, false)
+        ret2
+    end
+    function encoding_get_utf8()
+        ret = ccall(("gtk_source_encoding_get_utf8", libgtksourceview), Ptr{GtkSourceEncoding}, ())
+        ret2 = convert(GtkSourceEncoding, ret, false)
+        ret2
+    end
+    function file_loader_error_quark()
+        ret = ccall(("gtk_source_file_loader_error_quark", libgtksourceview), UInt32, ())
+        ret
+    end
+    function file_saver_error_quark()
+        ret = ccall(("gtk_source_file_saver_error_quark", libgtksourceview), UInt32, ())
+        ret
+    end
+    function finalize()
+        ret = ccall(("gtk_source_finalize", libgtksourceview), Nothing, ())
+        nothing
+    end
+    function get_major_version()
+        ret = ccall(("gtk_source_get_major_version", libgtksourceview), UInt32, ())
+        ret
+    end
+    function get_micro_version()
+        ret = ccall(("gtk_source_get_micro_version", libgtksourceview), UInt32, ())
+        ret
+    end
+    function get_minor_version()
+        ret = ccall(("gtk_source_get_minor_version", libgtksourceview), UInt32, ())
+        ret
+    end
+    function init()
+        ret = ccall(("gtk_source_init", libgtksourceview), Nothing, ())
+        nothing
+    end
+    function scheduler_add(_callback::Function)
+        begin
+            _callback_cfunc = @cfunction(GtkSourceSchedulerCallback, Cint, (Int64, Ref{Function}))
+            _callback_closure = GLib.gc_ref(_callback)
+        end
+        ret = ccall(("gtk_source_scheduler_add", libgtksourceview), UInt64, (Ptr{Cvoid}, Ptr{Nothing}), _callback_cfunc, _callback_closure)
+        ret
+    end
+    function scheduler_remove(_handler_id::Integer)
+        ret = ccall(("gtk_source_scheduler_remove", libgtksourceview), Nothing, (UInt64,), _handler_id)
+        nothing
+    end
+    function utils_escape_search_text(_text::Union{AbstractString, Symbol})
+        ret = ccall(("gtk_source_utils_escape_search_text", libgtksourceview), Cstring, (Cstring,), _text)
+        ret2 = string_or_nothing(ret, true)
+        ret2
+    end
+    function utils_unescape_search_text(_text::Union{AbstractString, Symbol})
+        ret = ccall(("gtk_source_utils_unescape_search_text", libgtksourceview), Cstring, (Cstring,), _text)
+        ret2 = string_or_nothing(ret, true)
+        ret2
+    end
+end))
+end

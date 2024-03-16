@@ -1,0 +1,2189 @@
+quote
+$(Expr(:toplevel, quote
+    function copy(instance::GtkSourceEncoding)
+        ret = ccall(("gtk_source_encoding_copy", libgtksourceview), Ptr{GtkSourceEncoding}, (Ptr{GtkSourceEncoding},), instance)
+        ret2 = convert(GtkSourceEncoding, ret, true)
+        ret2
+    end
+    function free(instance::GtkSourceEncoding)
+        ret = ccall(("gtk_source_encoding_free", libgtksourceview), Nothing, (Ptr{GtkSourceEncoding},), instance)
+        nothing
+    end
+    function get_charset(instance::GtkSourceEncoding)
+        ret = ccall(("gtk_source_encoding_get_charset", libgtksourceview), Cstring, (Ptr{GtkSourceEncoding},), instance)
+        ret2 = string_or_nothing(ret, false)
+        ret2
+    end
+    function get_name(instance::GtkSourceEncoding)
+        ret = ccall(("gtk_source_encoding_get_name", libgtksourceview), Cstring, (Ptr{GtkSourceEncoding},), instance)
+        ret2 = string_or_nothing(ret, false)
+        ret2
+    end
+    function to_string(instance::GtkSourceEncoding)
+        ret = ccall(("gtk_source_encoding_to_string", libgtksourceview), Cstring, (Ptr{GtkSourceEncoding},), instance)
+        ret2 = string_or_nothing(ret, true)
+        ret2
+    end
+    function get_subregion(instance::Union{GtkSourceRegionIter, Ref{_GtkSourceRegionIter}})
+        m_start = Ref{_GtkTextIter}()
+        m_end = Ref{_GtkTextIter}()
+        ret = ccall(("gtk_source_region_iter_get_subregion", libgtksourceview), Cint, (Ptr{_GtkSourceRegionIter}, Ptr{_GtkTextIter}, Ptr{_GtkTextIter}), instance, m_start, m_end)
+        ret2 = convert(Bool, ret)
+        _start = m_start[]
+        _end = m_end[]
+        (ret2, _start, _end)
+    end
+    function is_end(instance::Union{GtkSourceRegionIter, Ref{_GtkSourceRegionIter}})
+        ret = ccall(("gtk_source_region_iter_is_end", libgtksourceview), Cint, (Ptr{_GtkSourceRegionIter},), instance)
+        ret2 = convert(Bool, ret)
+        ret2
+    end
+    function next(instance::Union{GtkSourceRegionIter, Ref{_GtkSourceRegionIter}})
+        ret = ccall(("gtk_source_region_iter_next", libgtksourceview), Cint, (Ptr{_GtkSourceRegionIter},), instance)
+        ret2 = convert(Bool, ret)
+        ret2
+    end
+    function Buffer_new(_table::Maybe(GtkTextTagTable))
+        _table_maybe = nothing_to_null(_table)
+        ret = ccall(("gtk_source_buffer_new", libgtksourceview), Ptr{GObject}, (Ptr{GObject},), _table_maybe)
+        ret2 = GtkSourceBufferLeaf(ret, true)
+        ret2
+    end
+    function Buffer_new_with_language(_language::GtkSourceLanguage)
+        ret = ccall(("gtk_source_buffer_new_with_language", libgtksourceview), Ptr{GObject}, (Ptr{GObject},), _language)
+        ret2 = GtkSourceBufferLeaf(ret, true)
+        ret2
+    end
+    function backward_iter_to_source_mark(instance::GtkSourceBuffer, _iter::Union{GtkTextIter, Ref{_GtkTextIter}}, _category::Maybe(Union{AbstractString, Symbol}))
+        m_iter = Ref{_GtkTextIter}()
+        m_iter[] = Base.cconvert(_GtkTextIter, _iter)
+        _category_maybe = nothing_to_null(_category)
+        ret = ccall(("gtk_source_buffer_backward_iter_to_source_mark", libgtksourceview), Cint, (Ptr{GObject}, Ptr{_GtkTextIter}, Cstring), instance, m_iter, _category_maybe)
+        ret2 = convert(Bool, ret)
+        _iter = m_iter[]
+        (ret2, _iter)
+    end
+    function change_case(instance::GtkSourceBuffer, _case_type, _start::Union{GtkTextIter, Ref{_GtkTextIter}}, _end::Union{GtkTextIter, Ref{_GtkTextIter}})
+        ret = ccall(("gtk_source_buffer_change_case", libgtksourceview), Nothing, (Ptr{GObject}, UInt32, Ptr{_GtkTextIter}, Ptr{_GtkTextIter}), instance, _case_type, _start, _end)
+        nothing
+    end
+    function create_source_mark(instance::GtkSourceBuffer, _name::Maybe(Union{AbstractString, Symbol}), _category::Union{AbstractString, Symbol}, _where::Union{GtkTextIter, Ref{_GtkTextIter}})
+        _name_maybe = nothing_to_null(_name)
+        ret = ccall(("gtk_source_buffer_create_source_mark", libgtksourceview), Ptr{GObject}, (Ptr{GObject}, Cstring, Cstring, Ptr{_GtkTextIter}), instance, _name_maybe, _category, _where)
+        ret2 = convert(GtkSourceMark, ret, false)
+        ret2
+    end
+    function ensure_highlight(instance::GtkSourceBuffer, _start::Union{GtkTextIter, Ref{_GtkTextIter}}, _end::Union{GtkTextIter, Ref{_GtkTextIter}})
+        ret = ccall(("gtk_source_buffer_ensure_highlight", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{_GtkTextIter}, Ptr{_GtkTextIter}), instance, _start, _end)
+        nothing
+    end
+    function forward_iter_to_source_mark(instance::GtkSourceBuffer, _iter::Union{GtkTextIter, Ref{_GtkTextIter}}, _category::Maybe(Union{AbstractString, Symbol}))
+        m_iter = Ref{_GtkTextIter}()
+        m_iter[] = Base.cconvert(_GtkTextIter, _iter)
+        _category_maybe = nothing_to_null(_category)
+        ret = ccall(("gtk_source_buffer_forward_iter_to_source_mark", libgtksourceview), Cint, (Ptr{GObject}, Ptr{_GtkTextIter}, Cstring), instance, m_iter, _category_maybe)
+        ret2 = convert(Bool, ret)
+        _iter = m_iter[]
+        (ret2, _iter)
+    end
+    function get_context_classes_at_iter(instance::GtkSourceBuffer, _iter::Union{GtkTextIter, Ref{_GtkTextIter}})
+        ret = ccall(("gtk_source_buffer_get_context_classes_at_iter", libgtksourceview), Ptr{Cstring}, (Ptr{GObject}, Ptr{_GtkTextIter}), instance, _iter)
+        ret2 = begin
+                _len = length_zt(ret)
+                arrtemp = bytestring.(unsafe_wrap(Vector{Cstring}, ret, _len))
+                GLib.g_strfreev(ret)
+                arrtemp
+            end
+        ret2
+    end
+    function get_highlight_matching_brackets(instance::GtkSourceBuffer)
+        ret = ccall(("gtk_source_buffer_get_highlight_matching_brackets", libgtksourceview), Cint, (Ptr{GObject},), instance)
+        ret2 = convert(Bool, ret)
+        ret2
+    end
+    function get_highlight_syntax(instance::GtkSourceBuffer)
+        ret = ccall(("gtk_source_buffer_get_highlight_syntax", libgtksourceview), Cint, (Ptr{GObject},), instance)
+        ret2 = convert(Bool, ret)
+        ret2
+    end
+    function get_implicit_trailing_newline(instance::GtkSourceBuffer)
+        ret = ccall(("gtk_source_buffer_get_implicit_trailing_newline", libgtksourceview), Cint, (Ptr{GObject},), instance)
+        ret2 = convert(Bool, ret)
+        ret2
+    end
+    function get_language(instance::GtkSourceBuffer)
+        ret = ccall(("gtk_source_buffer_get_language", libgtksourceview), Ptr{GObject}, (Ptr{GObject},), instance)
+        ret2 = convert_if_not_null(GtkSourceLanguage, ret, false)
+        ret2
+    end
+    function get_loading(instance::GtkSourceBuffer)
+        ret = ccall(("gtk_source_buffer_get_loading", libgtksourceview), Cint, (Ptr{GObject},), instance)
+        ret2 = convert(Bool, ret)
+        ret2
+    end
+    function get_source_marks_at_iter(instance::GtkSourceBuffer, _iter::Union{GtkTextIter, Ref{_GtkTextIter}}, _category::Maybe(Union{AbstractString, Symbol}))
+        _category_maybe = nothing_to_null(_category)
+        ret = ccall(("gtk_source_buffer_get_source_marks_at_iter", libgtksourceview), Ptr{GLib._GSList{Ptr{GObject}}}, (Ptr{GObject}, Ptr{_GtkTextIter}, Cstring), instance, _iter, _category_maybe)
+        ret2 = GLib.GList(ret, false)
+        ret2
+    end
+    function get_source_marks_at_line(instance::GtkSourceBuffer, _line::Integer, _category::Maybe(Union{AbstractString, Symbol}))
+        _category_maybe = nothing_to_null(_category)
+        ret = ccall(("gtk_source_buffer_get_source_marks_at_line", libgtksourceview), Ptr{GLib._GSList{Ptr{GObject}}}, (Ptr{GObject}, Int32, Cstring), instance, _line, _category_maybe)
+        ret2 = GLib.GList(ret, false)
+        ret2
+    end
+    function get_style_scheme(instance::GtkSourceBuffer)
+        ret = ccall(("gtk_source_buffer_get_style_scheme", libgtksourceview), Ptr{GObject}, (Ptr{GObject},), instance)
+        ret2 = convert_if_not_null(GtkSourceStyleScheme, ret, false)
+        ret2
+    end
+    function iter_backward_to_context_class_toggle(instance::GtkSourceBuffer, _iter::Union{GtkTextIter, Ref{_GtkTextIter}}, _context_class::Union{AbstractString, Symbol})
+        m_iter = Ref{_GtkTextIter}()
+        m_iter[] = Base.cconvert(_GtkTextIter, _iter)
+        ret = ccall(("gtk_source_buffer_iter_backward_to_context_class_toggle", libgtksourceview), Cint, (Ptr{GObject}, Ptr{_GtkTextIter}, Cstring), instance, m_iter, _context_class)
+        ret2 = convert(Bool, ret)
+        _iter = m_iter[]
+        (ret2, _iter)
+    end
+    function iter_forward_to_context_class_toggle(instance::GtkSourceBuffer, _iter::Union{GtkTextIter, Ref{_GtkTextIter}}, _context_class::Union{AbstractString, Symbol})
+        m_iter = Ref{_GtkTextIter}()
+        m_iter[] = Base.cconvert(_GtkTextIter, _iter)
+        ret = ccall(("gtk_source_buffer_iter_forward_to_context_class_toggle", libgtksourceview), Cint, (Ptr{GObject}, Ptr{_GtkTextIter}, Cstring), instance, m_iter, _context_class)
+        ret2 = convert(Bool, ret)
+        _iter = m_iter[]
+        (ret2, _iter)
+    end
+    function iter_has_context_class(instance::GtkSourceBuffer, _iter::Union{GtkTextIter, Ref{_GtkTextIter}}, _context_class::Union{AbstractString, Symbol})
+        ret = ccall(("gtk_source_buffer_iter_has_context_class", libgtksourceview), Cint, (Ptr{GObject}, Ptr{_GtkTextIter}, Cstring), instance, _iter, _context_class)
+        ret2 = convert(Bool, ret)
+        ret2
+    end
+    function join_lines(instance::GtkSourceBuffer, _start::Union{GtkTextIter, Ref{_GtkTextIter}}, _end::Union{GtkTextIter, Ref{_GtkTextIter}})
+        ret = ccall(("gtk_source_buffer_join_lines", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{_GtkTextIter}, Ptr{_GtkTextIter}), instance, _start, _end)
+        nothing
+    end
+    function remove_source_marks(instance::GtkSourceBuffer, _start::Union{GtkTextIter, Ref{_GtkTextIter}}, _end::Union{GtkTextIter, Ref{_GtkTextIter}}, _category::Maybe(Union{AbstractString, Symbol}))
+        _category_maybe = nothing_to_null(_category)
+        ret = ccall(("gtk_source_buffer_remove_source_marks", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{_GtkTextIter}, Ptr{_GtkTextIter}, Cstring), instance, _start, _end, _category_maybe)
+        nothing
+    end
+    function set_highlight_matching_brackets(instance::GtkSourceBuffer, _highlight::Bool)
+        ret = ccall(("gtk_source_buffer_set_highlight_matching_brackets", libgtksourceview), Nothing, (Ptr{GObject}, Cint), instance, _highlight)
+        nothing
+    end
+    function set_highlight_syntax(instance::GtkSourceBuffer, _highlight::Bool)
+        ret = ccall(("gtk_source_buffer_set_highlight_syntax", libgtksourceview), Nothing, (Ptr{GObject}, Cint), instance, _highlight)
+        nothing
+    end
+    function set_implicit_trailing_newline(instance::GtkSourceBuffer, _implicit_trailing_newline::Bool)
+        ret = ccall(("gtk_source_buffer_set_implicit_trailing_newline", libgtksourceview), Nothing, (Ptr{GObject}, Cint), instance, _implicit_trailing_newline)
+        nothing
+    end
+    function set_language(instance::GtkSourceBuffer, _language::Maybe(GtkSourceLanguage))
+        _language_maybe = nothing_to_null(_language)
+        ret = ccall(("gtk_source_buffer_set_language", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{GObject}), instance, _language_maybe)
+        nothing
+    end
+    function set_style_scheme(instance::GtkSourceBuffer, _scheme::Maybe(GtkSourceStyleScheme))
+        _scheme_maybe = nothing_to_null(_scheme)
+        ret = ccall(("gtk_source_buffer_set_style_scheme", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{GObject}), instance, _scheme_maybe)
+        nothing
+    end
+    function sort_lines(instance::GtkSourceBuffer, _start::Union{GtkTextIter, Ref{_GtkTextIter}}, _end::Union{GtkTextIter, Ref{_GtkTextIter}}, _flags, _column::Integer)
+        ret = ccall(("gtk_source_buffer_sort_lines", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{_GtkTextIter}, Ptr{_GtkTextIter}, UInt32, Int32), instance, _start, _end, _flags, _column)
+        nothing
+    end
+    function fuzzy_highlight(_haystack::Union{AbstractString, Symbol}, _casefold_query::Union{AbstractString, Symbol})
+        ret = ccall(("gtk_source_completion_fuzzy_highlight", libgtksourceview), Ptr{PangoAttrList}, (Cstring, Cstring), _haystack, _casefold_query)
+        ret2 = convert_if_not_null(PangoAttrList, ret, true)
+        ret2
+    end
+    function fuzzy_match(_haystack::Maybe(Union{AbstractString, Symbol}), _casefold_needle::Union{AbstractString, Symbol})
+        _haystack_maybe = nothing_to_null(_haystack)
+        m_priority = Ref{UInt32}()
+        ret = ccall(("gtk_source_completion_fuzzy_match", libgtksourceview), Cint, (Cstring, Cstring, Ptr{UInt32}), _haystack_maybe, _casefold_needle, m_priority)
+        ret2 = convert(Bool, ret)
+        _priority = m_priority[]
+        (ret2, _priority)
+    end
+    function add_provider(instance::GtkSourceCompletion, _provider::GtkSourceCompletionProvider)
+        ret = ccall(("gtk_source_completion_add_provider", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{GObject}), instance, _provider)
+        nothing
+    end
+    function block_interactive(instance::GtkSourceCompletion)
+        ret = ccall(("gtk_source_completion_block_interactive", libgtksourceview), Nothing, (Ptr{GObject},), instance)
+        nothing
+    end
+    function get_buffer(instance::GtkSourceCompletion)
+        ret = ccall(("gtk_source_completion_get_buffer", libgtksourceview), Ptr{GObject}, (Ptr{GObject},), instance)
+        ret2 = convert(GtkSourceBuffer, ret, false)
+        ret2
+    end
+    function get_page_size(instance::GtkSourceCompletion)
+        ret = ccall(("gtk_source_completion_get_page_size", libgtksourceview), UInt32, (Ptr{GObject},), instance)
+        ret
+    end
+    function get_view(instance::GtkSourceCompletion)
+        ret = ccall(("gtk_source_completion_get_view", libgtksourceview), Ptr{GObject}, (Ptr{GObject},), instance)
+        ret2 = convert(GtkSourceView, ret, false)
+        ret2
+    end
+    function hide(instance::GtkSourceCompletion)
+        ret = ccall(("gtk_source_completion_hide", libgtksourceview), Nothing, (Ptr{GObject},), instance)
+        nothing
+    end
+    function remove_provider(instance::GtkSourceCompletion, _provider::GtkSourceCompletionProvider)
+        ret = ccall(("gtk_source_completion_remove_provider", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{GObject}), instance, _provider)
+        nothing
+    end
+    function set_page_size(instance::GtkSourceCompletion, _page_size::Integer)
+        ret = ccall(("gtk_source_completion_set_page_size", libgtksourceview), Nothing, (Ptr{GObject}, UInt32), instance, _page_size)
+        nothing
+    end
+    function show(instance::GtkSourceCompletion)
+        ret = ccall(("gtk_source_completion_show", libgtksourceview), Nothing, (Ptr{GObject},), instance)
+        nothing
+    end
+    function unblock_interactive(instance::GtkSourceCompletion)
+        ret = ccall(("gtk_source_completion_unblock_interactive", libgtksourceview), Nothing, (Ptr{GObject},), instance)
+        nothing
+    end
+    function get_column(instance::GtkSourceCompletionCell)
+        ret = ccall(("gtk_source_completion_cell_get_column", libgtksourceview), UInt32, (Ptr{GObject},), instance)
+        ret2 = CompletionColumn(ret)
+        ret2
+    end
+    function get_widget(instance::GtkSourceCompletionCell)
+        ret = ccall(("gtk_source_completion_cell_get_widget", libgtksourceview), Ptr{GObject}, (Ptr{GObject},), instance)
+        ret2 = convert_if_not_null(GtkWidget, ret, false)
+        ret2
+    end
+    function set_gicon(instance::GtkSourceCompletionCell, _gicon::GIcon)
+        ret = ccall(("gtk_source_completion_cell_set_gicon", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{GObject}), instance, _gicon)
+        nothing
+    end
+    function set_icon_name(instance::GtkSourceCompletionCell, _icon_name::Union{AbstractString, Symbol})
+        ret = ccall(("gtk_source_completion_cell_set_icon_name", libgtksourceview), Nothing, (Ptr{GObject}, Cstring), instance, _icon_name)
+        nothing
+    end
+    function set_markup(instance::GtkSourceCompletionCell, _markup::Union{AbstractString, Symbol})
+        ret = ccall(("gtk_source_completion_cell_set_markup", libgtksourceview), Nothing, (Ptr{GObject}, Cstring), instance, _markup)
+        nothing
+    end
+    function set_paintable(instance::GtkSourceCompletionCell, _paintable::GdkPaintable)
+        ret = ccall(("gtk_source_completion_cell_set_paintable", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{GObject}), instance, _paintable)
+        nothing
+    end
+    function set_text(instance::GtkSourceCompletionCell, _text::Maybe(Union{AbstractString, Symbol}))
+        _text_maybe = nothing_to_null(_text)
+        ret = ccall(("gtk_source_completion_cell_set_text", libgtksourceview), Nothing, (Ptr{GObject}, Cstring), instance, _text_maybe)
+        nothing
+    end
+    function set_text_with_attributes(instance::GtkSourceCompletionCell, _text::Union{AbstractString, Symbol}, _attrs::PangoAttrList)
+        ret = ccall(("gtk_source_completion_cell_set_text_with_attributes", libgtksourceview), Nothing, (Ptr{GObject}, Cstring, Ptr{PangoAttrList}), instance, _text, _attrs)
+        nothing
+    end
+    function set_widget(instance::GtkSourceCompletionCell, _child::GtkWidget)
+        ret = ccall(("gtk_source_completion_cell_set_widget", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{GObject}), instance, _child)
+        nothing
+    end
+    function get_activation(instance::GtkSourceCompletionContext)
+        ret = ccall(("gtk_source_completion_context_get_activation", libgtksourceview), UInt32, (Ptr{GObject},), instance)
+        ret2 = CompletionActivation(ret)
+        ret2
+    end
+    function get_bounds(instance::GtkSourceCompletionContext)
+        m_begin = Ref{_GtkTextIter}()
+        m_end = Ref{_GtkTextIter}()
+        ret = ccall(("gtk_source_completion_context_get_bounds", libgtksourceview), Cint, (Ptr{GObject}, Ptr{_GtkTextIter}, Ptr{_GtkTextIter}), instance, m_begin, m_end)
+        ret2 = convert(Bool, ret)
+        _begin = m_begin[]
+        _end = m_end[]
+        (ret2, _begin, _end)
+    end
+    function get_buffer(instance::GtkSourceCompletionContext)
+        ret = ccall(("gtk_source_completion_context_get_buffer", libgtksourceview), Ptr{GObject}, (Ptr{GObject},), instance)
+        ret2 = convert_if_not_null(GtkSourceBuffer, ret, false)
+        ret2
+    end
+    function get_busy(instance::GtkSourceCompletionContext)
+        ret = ccall(("gtk_source_completion_context_get_busy", libgtksourceview), Cint, (Ptr{GObject},), instance)
+        ret2 = convert(Bool, ret)
+        ret2
+    end
+    function get_completion(instance::GtkSourceCompletionContext)
+        ret = ccall(("gtk_source_completion_context_get_completion", libgtksourceview), Ptr{GObject}, (Ptr{GObject},), instance)
+        ret2 = convert_if_not_null(GtkSourceCompletion, ret, false)
+        ret2
+    end
+    function get_empty(instance::GtkSourceCompletionContext)
+        ret = ccall(("gtk_source_completion_context_get_empty", libgtksourceview), Cint, (Ptr{GObject},), instance)
+        ret2 = convert(Bool, ret)
+        ret2
+    end
+    function get_language(instance::GtkSourceCompletionContext)
+        ret = ccall(("gtk_source_completion_context_get_language", libgtksourceview), Ptr{GObject}, (Ptr{GObject},), instance)
+        ret2 = convert_if_not_null(GtkSourceLanguage, ret, false)
+        ret2
+    end
+    function get_proposals_for_provider(instance::GtkSourceCompletionContext, _provider::GtkSourceCompletionProvider)
+        ret = ccall(("gtk_source_completion_context_get_proposals_for_provider", libgtksourceview), Ptr{GObject}, (Ptr{GObject}, Ptr{GObject}), instance, _provider)
+        ret2 = GLib.find_leaf_type_if_not_null(ret, false)
+        ret2
+    end
+    function get_view(instance::GtkSourceCompletionContext)
+        ret = ccall(("gtk_source_completion_context_get_view", libgtksourceview), Ptr{GObject}, (Ptr{GObject},), instance)
+        ret2 = convert_if_not_null(GtkSourceView, ret, false)
+        ret2
+    end
+    function get_word(instance::GtkSourceCompletionContext)
+        ret = ccall(("gtk_source_completion_context_get_word", libgtksourceview), Cstring, (Ptr{GObject},), instance)
+        ret2 = string_or_nothing(ret, true)
+        ret2
+    end
+    function list_providers(instance::GtkSourceCompletionContext)
+        ret = ccall(("gtk_source_completion_context_list_providers", libgtksourceview), Ptr{GObject}, (Ptr{GObject},), instance)
+        ret2 = begin
+                leaftype = GLib.find_leaf_type(ret)
+                convert(leaftype, ret, true)
+            end
+        ret2
+    end
+    function set_proposals_for_provider(instance::GtkSourceCompletionContext, _provider::GtkSourceCompletionProvider, _results::Maybe(GListModel))
+        _results_maybe = nothing_to_null(_results)
+        ret = ccall(("gtk_source_completion_context_set_proposals_for_provider", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{GObject}, Ptr{GObject}), instance, _provider, _results_maybe)
+        nothing
+    end
+    function CompletionSnippets_new()
+        ret = ccall(("gtk_source_completion_snippets_new", libgtksourceview), Ptr{GObject}, ())
+        ret2 = GtkSourceCompletionSnippetsLeaf(ret, true)
+        ret2
+    end
+    function CompletionWords_new(_title::Maybe(Union{AbstractString, Symbol}))
+        _title_maybe = nothing_to_null(_title)
+        ret = ccall(("gtk_source_completion_words_new", libgtksourceview), Ptr{GObject}, (Cstring,), _title_maybe)
+        ret2 = GtkSourceCompletionWordsLeaf(ret, true)
+        ret2
+    end
+    function register(instance::GtkSourceCompletionWords, _buffer::GtkTextBuffer)
+        ret = ccall(("gtk_source_completion_words_register", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{GObject}), instance, _buffer)
+        nothing
+    end
+    function unregister(instance::GtkSourceCompletionWords, _buffer::GtkTextBuffer)
+        ret = ccall(("gtk_source_completion_words_unregister", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{GObject}), instance, _buffer)
+        nothing
+    end
+    function File_new()
+        ret = ccall(("gtk_source_file_new", libgtksourceview), Ptr{GObject}, ())
+        ret2 = GtkSourceFileLeaf(ret, true)
+        ret2
+    end
+    function check_file_on_disk(instance::GtkSourceFile)
+        ret = ccall(("gtk_source_file_check_file_on_disk", libgtksourceview), Nothing, (Ptr{GObject},), instance)
+        nothing
+    end
+    function get_compression_type(instance::GtkSourceFile)
+        ret = ccall(("gtk_source_file_get_compression_type", libgtksourceview), UInt32, (Ptr{GObject},), instance)
+        ret2 = CompressionType(ret)
+        ret2
+    end
+    function get_encoding(instance::GtkSourceFile)
+        ret = ccall(("gtk_source_file_get_encoding", libgtksourceview), Ptr{GtkSourceEncoding}, (Ptr{GObject},), instance)
+        ret2 = convert(GtkSourceEncoding, ret, false)
+        ret2
+    end
+    function get_location(instance::GtkSourceFile)
+        ret = ccall(("gtk_source_file_get_location", libgtksourceview), Ptr{GObject}, (Ptr{GObject},), instance)
+        ret2 = begin
+                leaftype = GLib.find_leaf_type(ret)
+                convert(leaftype, ret, false)
+            end
+        ret2
+    end
+    function get_newline_type(instance::GtkSourceFile)
+        ret = ccall(("gtk_source_file_get_newline_type", libgtksourceview), UInt32, (Ptr{GObject},), instance)
+        ret2 = NewlineType(ret)
+        ret2
+    end
+    function is_deleted(instance::GtkSourceFile)
+        ret = ccall(("gtk_source_file_is_deleted", libgtksourceview), Cint, (Ptr{GObject},), instance)
+        ret2 = convert(Bool, ret)
+        ret2
+    end
+    function is_externally_modified(instance::GtkSourceFile)
+        ret = ccall(("gtk_source_file_is_externally_modified", libgtksourceview), Cint, (Ptr{GObject},), instance)
+        ret2 = convert(Bool, ret)
+        ret2
+    end
+    function is_local(instance::GtkSourceFile)
+        ret = ccall(("gtk_source_file_is_local", libgtksourceview), Cint, (Ptr{GObject},), instance)
+        ret2 = convert(Bool, ret)
+        ret2
+    end
+    function is_readonly(instance::GtkSourceFile)
+        ret = ccall(("gtk_source_file_is_readonly", libgtksourceview), Cint, (Ptr{GObject},), instance)
+        ret2 = convert(Bool, ret)
+        ret2
+    end
+    function set_location(instance::GtkSourceFile, _location::Maybe(GFile))
+        _location_maybe = nothing_to_null(_location)
+        ret = ccall(("gtk_source_file_set_location", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{GObject}), instance, _location_maybe)
+        nothing
+    end
+    function FileLoader_new(_buffer::GtkSourceBuffer, _file::GtkSourceFile)
+        ret = ccall(("gtk_source_file_loader_new", libgtksourceview), Ptr{GObject}, (Ptr{GObject}, Ptr{GObject}), _buffer, _file)
+        ret2 = GtkSourceFileLoaderLeaf(ret, true)
+        ret2
+    end
+    function FileLoader_new_from_stream(_buffer::GtkSourceBuffer, _file::GtkSourceFile, _stream::GInputStream)
+        ret = ccall(("gtk_source_file_loader_new_from_stream", libgtksourceview), Ptr{GObject}, (Ptr{GObject}, Ptr{GObject}, Ptr{GObject}), _buffer, _file, _stream)
+        ret2 = GtkSourceFileLoaderLeaf(ret, true)
+        ret2
+    end
+    function get_buffer(instance::GtkSourceFileLoader)
+        ret = ccall(("gtk_source_file_loader_get_buffer", libgtksourceview), Ptr{GObject}, (Ptr{GObject},), instance)
+        ret2 = convert(GtkSourceBuffer, ret, false)
+        ret2
+    end
+    function get_compression_type(instance::GtkSourceFileLoader)
+        ret = ccall(("gtk_source_file_loader_get_compression_type", libgtksourceview), UInt32, (Ptr{GObject},), instance)
+        ret2 = CompressionType(ret)
+        ret2
+    end
+    function get_encoding(instance::GtkSourceFileLoader)
+        ret = ccall(("gtk_source_file_loader_get_encoding", libgtksourceview), Ptr{GtkSourceEncoding}, (Ptr{GObject},), instance)
+        ret2 = convert(GtkSourceEncoding, ret, false)
+        ret2
+    end
+    function get_file(instance::GtkSourceFileLoader)
+        ret = ccall(("gtk_source_file_loader_get_file", libgtksourceview), Ptr{GObject}, (Ptr{GObject},), instance)
+        ret2 = convert(GtkSourceFile, ret, false)
+        ret2
+    end
+    function get_input_stream(instance::GtkSourceFileLoader)
+        ret = ccall(("gtk_source_file_loader_get_input_stream", libgtksourceview), Ptr{GObject}, (Ptr{GObject},), instance)
+        ret2 = convert_if_not_null(GInputStream, ret, false)
+        ret2
+    end
+    function get_location(instance::GtkSourceFileLoader)
+        ret = ccall(("gtk_source_file_loader_get_location", libgtksourceview), Ptr{GObject}, (Ptr{GObject},), instance)
+        ret2 = GLib.find_leaf_type_if_not_null(ret, false)
+        ret2
+    end
+    function get_newline_type(instance::GtkSourceFileLoader)
+        ret = ccall(("gtk_source_file_loader_get_newline_type", libgtksourceview), UInt32, (Ptr{GObject},), instance)
+        ret2 = NewlineType(ret)
+        ret2
+    end
+    function load_finish(instance::GtkSourceFileLoader, _result::GAsyncResult)
+        err = err_buf()
+        ret = ccall(("gtk_source_file_loader_load_finish", libgtksourceview), Cint, (Ptr{GObject}, Ptr{GObject}, Ptr{Ptr{GError}}), instance, _result, err)
+        check_err(err)
+        ret2 = convert(Bool, ret)
+        ret2
+    end
+    function set_candidate_encodings(instance::GtkSourceFileLoader, _candidate_encodings::GLib.LList{GLib._GSList{GtkSourceEncoding}})
+        ret = ccall(("gtk_source_file_loader_set_candidate_encodings", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{GLib._GSList{GtkSourceEncoding}}), instance, _candidate_encodings)
+        nothing
+    end
+    function FileSaver_new(_buffer::GtkSourceBuffer, _file::GtkSourceFile)
+        ret = ccall(("gtk_source_file_saver_new", libgtksourceview), Ptr{GObject}, (Ptr{GObject}, Ptr{GObject}), _buffer, _file)
+        ret2 = GtkSourceFileSaverLeaf(ret, true)
+        ret2
+    end
+    function FileSaver_new_with_target(_buffer::GtkSourceBuffer, _file::GtkSourceFile, _target_location::GFile)
+        ret = ccall(("gtk_source_file_saver_new_with_target", libgtksourceview), Ptr{GObject}, (Ptr{GObject}, Ptr{GObject}, Ptr{GObject}), _buffer, _file, _target_location)
+        ret2 = GtkSourceFileSaverLeaf(ret, true)
+        ret2
+    end
+    function get_buffer(instance::GtkSourceFileSaver)
+        ret = ccall(("gtk_source_file_saver_get_buffer", libgtksourceview), Ptr{GObject}, (Ptr{GObject},), instance)
+        ret2 = convert(GtkSourceBuffer, ret, false)
+        ret2
+    end
+    function get_compression_type(instance::GtkSourceFileSaver)
+        ret = ccall(("gtk_source_file_saver_get_compression_type", libgtksourceview), UInt32, (Ptr{GObject},), instance)
+        ret2 = CompressionType(ret)
+        ret2
+    end
+    function get_encoding(instance::GtkSourceFileSaver)
+        ret = ccall(("gtk_source_file_saver_get_encoding", libgtksourceview), Ptr{GtkSourceEncoding}, (Ptr{GObject},), instance)
+        ret2 = convert(GtkSourceEncoding, ret, false)
+        ret2
+    end
+    function get_file(instance::GtkSourceFileSaver)
+        ret = ccall(("gtk_source_file_saver_get_file", libgtksourceview), Ptr{GObject}, (Ptr{GObject},), instance)
+        ret2 = convert(GtkSourceFile, ret, false)
+        ret2
+    end
+    function get_flags(instance::GtkSourceFileSaver)
+        ret = ccall(("gtk_source_file_saver_get_flags", libgtksourceview), UInt32, (Ptr{GObject},), instance)
+        ret2 = FileSaverFlags(ret)
+        ret2
+    end
+    function get_location(instance::GtkSourceFileSaver)
+        ret = ccall(("gtk_source_file_saver_get_location", libgtksourceview), Ptr{GObject}, (Ptr{GObject},), instance)
+        ret2 = begin
+                leaftype = GLib.find_leaf_type(ret)
+                convert(leaftype, ret, false)
+            end
+        ret2
+    end
+    function get_newline_type(instance::GtkSourceFileSaver)
+        ret = ccall(("gtk_source_file_saver_get_newline_type", libgtksourceview), UInt32, (Ptr{GObject},), instance)
+        ret2 = NewlineType(ret)
+        ret2
+    end
+    function save_finish(instance::GtkSourceFileSaver, _result::GAsyncResult)
+        err = err_buf()
+        ret = ccall(("gtk_source_file_saver_save_finish", libgtksourceview), Cint, (Ptr{GObject}, Ptr{GObject}, Ptr{Ptr{GError}}), instance, _result, err)
+        check_err(err)
+        ret2 = convert(Bool, ret)
+        ret2
+    end
+    function set_compression_type(instance::GtkSourceFileSaver, _compression_type)
+        ret = ccall(("gtk_source_file_saver_set_compression_type", libgtksourceview), Nothing, (Ptr{GObject}, UInt32), instance, _compression_type)
+        nothing
+    end
+    function set_encoding(instance::GtkSourceFileSaver, _encoding::Maybe(GtkSourceEncoding))
+        _encoding_maybe = nothing_to_null(_encoding)
+        ret = ccall(("gtk_source_file_saver_set_encoding", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{GtkSourceEncoding}), instance, _encoding_maybe)
+        nothing
+    end
+    function set_flags(instance::GtkSourceFileSaver, _flags)
+        ret = ccall(("gtk_source_file_saver_set_flags", libgtksourceview), Nothing, (Ptr{GObject}, UInt32), instance, _flags)
+        nothing
+    end
+    function set_newline_type(instance::GtkSourceFileSaver, _newline_type)
+        ret = ccall(("gtk_source_file_saver_set_newline_type", libgtksourceview), Nothing, (Ptr{GObject}, UInt32), instance, _newline_type)
+        nothing
+    end
+    function get_view(instance::GtkSourceGutter)
+        ret = ccall(("gtk_source_gutter_get_view", libgtksourceview), Ptr{GObject}, (Ptr{GObject},), instance)
+        ret2 = convert(GtkSourceView, ret, false)
+        ret2
+    end
+    function insert(instance::GtkSourceGutter, _renderer::GtkSourceGutterRenderer, _position::Integer)
+        ret = ccall(("gtk_source_gutter_insert", libgtksourceview), Cint, (Ptr{GObject}, Ptr{GObject}, Int32), instance, _renderer, _position)
+        ret2 = convert(Bool, ret)
+        ret2
+    end
+    function remove(instance::GtkSourceGutter, _renderer::GtkSourceGutterRenderer)
+        ret = ccall(("gtk_source_gutter_remove", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{GObject}), instance, _renderer)
+        nothing
+    end
+    function reorder(instance::GtkSourceGutter, _renderer::GtkSourceGutterRenderer, _position::Integer)
+        ret = ccall(("gtk_source_gutter_reorder", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{GObject}, Int32), instance, _renderer, _position)
+        nothing
+    end
+    function add_class(instance::GtkSourceGutterLines, _line::Integer, _name::Union{AbstractString, Symbol})
+        ret = ccall(("gtk_source_gutter_lines_add_class", libgtksourceview), Nothing, (Ptr{GObject}, UInt32, Cstring), instance, _line, _name)
+        nothing
+    end
+    function add_qclass(instance::GtkSourceGutterLines, _line::Integer, _qname::Integer)
+        ret = ccall(("gtk_source_gutter_lines_add_qclass", libgtksourceview), Nothing, (Ptr{GObject}, UInt32, UInt32), instance, _line, _qname)
+        nothing
+    end
+    function get_buffer(instance::GtkSourceGutterLines)
+        ret = ccall(("gtk_source_gutter_lines_get_buffer", libgtksourceview), Ptr{GObject}, (Ptr{GObject},), instance)
+        ret2 = convert(GtkTextBuffer, ret, false)
+        ret2
+    end
+    function get_first(instance::GtkSourceGutterLines)
+        ret = ccall(("gtk_source_gutter_lines_get_first", libgtksourceview), UInt32, (Ptr{GObject},), instance)
+        ret
+    end
+    function get_iter_at_line(instance::GtkSourceGutterLines, _line::Integer)
+        m_iter = Ref{_GtkTextIter}()
+        ret = ccall(("gtk_source_gutter_lines_get_iter_at_line", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{_GtkTextIter}, UInt32), instance, m_iter, _line)
+        _iter = m_iter[]
+        _iter
+    end
+    function get_last(instance::GtkSourceGutterLines)
+        ret = ccall(("gtk_source_gutter_lines_get_last", libgtksourceview), UInt32, (Ptr{GObject},), instance)
+        ret
+    end
+    function get_line_yrange(instance::GtkSourceGutterLines, _line::Integer, _mode)
+        m_y = Ref{Int32}()
+        m_height = Ref{Int32}()
+        ret = ccall(("gtk_source_gutter_lines_get_line_yrange", libgtksourceview), Nothing, (Ptr{GObject}, UInt32, UInt32, Ptr{Int32}, Ptr{Int32}), instance, _line, _mode, m_y, m_height)
+        _y = m_y[]
+        _height = m_height[]
+        (_y, _height)
+    end
+    function get_view(instance::GtkSourceGutterLines)
+        ret = ccall(("gtk_source_gutter_lines_get_view", libgtksourceview), Ptr{GObject}, (Ptr{GObject},), instance)
+        ret2 = convert(GtkTextView, ret, false)
+        ret2
+    end
+    function has_any_class(instance::GtkSourceGutterLines, _line::Integer)
+        ret = ccall(("gtk_source_gutter_lines_has_any_class", libgtksourceview), Cint, (Ptr{GObject}, UInt32), instance, _line)
+        ret2 = convert(Bool, ret)
+        ret2
+    end
+    function has_class(instance::GtkSourceGutterLines, _line::Integer, _name::Union{AbstractString, Symbol})
+        ret = ccall(("gtk_source_gutter_lines_has_class", libgtksourceview), Cint, (Ptr{GObject}, UInt32, Cstring), instance, _line, _name)
+        ret2 = convert(Bool, ret)
+        ret2
+    end
+    function has_qclass(instance::GtkSourceGutterLines, _line::Integer, _qname::Integer)
+        ret = ccall(("gtk_source_gutter_lines_has_qclass", libgtksourceview), Cint, (Ptr{GObject}, UInt32, UInt32), instance, _line, _qname)
+        ret2 = convert(Bool, ret)
+        ret2
+    end
+    function is_cursor(instance::GtkSourceGutterLines, _line::Integer)
+        ret = ccall(("gtk_source_gutter_lines_is_cursor", libgtksourceview), Cint, (Ptr{GObject}, UInt32), instance, _line)
+        ret2 = convert(Bool, ret)
+        ret2
+    end
+    function is_prelit(instance::GtkSourceGutterLines, _line::Integer)
+        ret = ccall(("gtk_source_gutter_lines_is_prelit", libgtksourceview), Cint, (Ptr{GObject}, UInt32), instance, _line)
+        ret2 = convert(Bool, ret)
+        ret2
+    end
+    function is_selected(instance::GtkSourceGutterLines, _line::Integer)
+        ret = ccall(("gtk_source_gutter_lines_is_selected", libgtksourceview), Cint, (Ptr{GObject}, UInt32), instance, _line)
+        ret2 = convert(Bool, ret)
+        ret2
+    end
+    function remove_class(instance::GtkSourceGutterLines, _line::Integer, _name::Union{AbstractString, Symbol})
+        ret = ccall(("gtk_source_gutter_lines_remove_class", libgtksourceview), Nothing, (Ptr{GObject}, UInt32, Cstring), instance, _line, _name)
+        nothing
+    end
+    function remove_qclass(instance::GtkSourceGutterLines, _line::Integer, _qname::Integer)
+        ret = ccall(("gtk_source_gutter_lines_remove_qclass", libgtksourceview), Nothing, (Ptr{GObject}, UInt32, UInt32), instance, _line, _qname)
+        nothing
+    end
+    function activate(instance::GtkSourceGutterRenderer, _iter::Union{GtkTextIter, Ref{_GtkTextIter}}, _area::Union{GdkRectangle, Ref{_GdkRectangle}}, _button::Integer, _state, _n_presses::Integer)
+        ret = ccall(("gtk_source_gutter_renderer_activate", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{_GtkTextIter}, Ptr{_GdkRectangle}, UInt32, UInt32, Int32), instance, _iter, _area, _button, _state, _n_presses)
+        nothing
+    end
+    function align_cell(instance::GtkSourceGutterRenderer, _line::Integer, _width::Real, _height::Real)
+        m_x = Ref{Float32}()
+        m_y = Ref{Float32}()
+        ret = ccall(("gtk_source_gutter_renderer_align_cell", libgtksourceview), Nothing, (Ptr{GObject}, UInt32, Float32, Float32, Ptr{Float32}, Ptr{Float32}), instance, _line, _width, _height, m_x, m_y)
+        _x = m_x[]
+        _y = m_y[]
+        (_x, _y)
+    end
+    function get_alignment_mode(instance::GtkSourceGutterRenderer)
+        ret = ccall(("gtk_source_gutter_renderer_get_alignment_mode", libgtksourceview), UInt32, (Ptr{GObject},), instance)
+        ret2 = GutterRendererAlignmentMode(ret)
+        ret2
+    end
+    function get_buffer(instance::GtkSourceGutterRenderer)
+        ret = ccall(("gtk_source_gutter_renderer_get_buffer", libgtksourceview), Ptr{GObject}, (Ptr{GObject},), instance)
+        ret2 = convert_if_not_null(GtkSourceBuffer, ret, false)
+        ret2
+    end
+    function get_view(instance::GtkSourceGutterRenderer)
+        ret = ccall(("gtk_source_gutter_renderer_get_view", libgtksourceview), Ptr{GObject}, (Ptr{GObject},), instance)
+        ret2 = convert(GtkSourceView, ret, false)
+        ret2
+    end
+    function get_xalign(instance::GtkSourceGutterRenderer)
+        ret = ccall(("gtk_source_gutter_renderer_get_xalign", libgtksourceview), Float32, (Ptr{GObject},), instance)
+        ret
+    end
+    function get_xpad(instance::GtkSourceGutterRenderer)
+        ret = ccall(("gtk_source_gutter_renderer_get_xpad", libgtksourceview), Int32, (Ptr{GObject},), instance)
+        ret
+    end
+    function get_yalign(instance::GtkSourceGutterRenderer)
+        ret = ccall(("gtk_source_gutter_renderer_get_yalign", libgtksourceview), Float32, (Ptr{GObject},), instance)
+        ret
+    end
+    function get_ypad(instance::GtkSourceGutterRenderer)
+        ret = ccall(("gtk_source_gutter_renderer_get_ypad", libgtksourceview), Int32, (Ptr{GObject},), instance)
+        ret
+    end
+    function query_activatable(instance::GtkSourceGutterRenderer, _iter::Union{GtkTextIter, Ref{_GtkTextIter}}, _area::Union{GdkRectangle, Ref{_GdkRectangle}})
+        ret = ccall(("gtk_source_gutter_renderer_query_activatable", libgtksourceview), Cint, (Ptr{GObject}, Ptr{_GtkTextIter}, Ptr{_GdkRectangle}), instance, _iter, _area)
+        ret2 = convert(Bool, ret)
+        ret2
+    end
+    function set_alignment_mode(instance::GtkSourceGutterRenderer, _mode)
+        ret = ccall(("gtk_source_gutter_renderer_set_alignment_mode", libgtksourceview), Nothing, (Ptr{GObject}, UInt32), instance, _mode)
+        nothing
+    end
+    function set_xalign(instance::GtkSourceGutterRenderer, _xalign::Real)
+        ret = ccall(("gtk_source_gutter_renderer_set_xalign", libgtksourceview), Nothing, (Ptr{GObject}, Float32), instance, _xalign)
+        nothing
+    end
+    function set_xpad(instance::GtkSourceGutterRenderer, _xpad::Integer)
+        ret = ccall(("gtk_source_gutter_renderer_set_xpad", libgtksourceview), Nothing, (Ptr{GObject}, Int32), instance, _xpad)
+        nothing
+    end
+    function set_yalign(instance::GtkSourceGutterRenderer, _yalign::Real)
+        ret = ccall(("gtk_source_gutter_renderer_set_yalign", libgtksourceview), Nothing, (Ptr{GObject}, Float32), instance, _yalign)
+        nothing
+    end
+    function set_ypad(instance::GtkSourceGutterRenderer, _ypad::Integer)
+        ret = ccall(("gtk_source_gutter_renderer_set_ypad", libgtksourceview), Nothing, (Ptr{GObject}, Int32), instance, _ypad)
+        nothing
+    end
+    function GutterRendererPixbuf_new()
+        ret = ccall(("gtk_source_gutter_renderer_pixbuf_new", libgtksourceview), Ptr{GObject}, ())
+        ret2 = GtkSourceGutterRendererPixbufLeaf(ret, true)
+        ret2
+    end
+    function get_gicon(instance::GtkSourceGutterRendererPixbuf)
+        ret = ccall(("gtk_source_gutter_renderer_pixbuf_get_gicon", libgtksourceview), Ptr{GObject}, (Ptr{GObject},), instance)
+        ret2 = begin
+                leaftype = GLib.find_leaf_type(ret)
+                convert(leaftype, ret, false)
+            end
+        ret2
+    end
+    function get_icon_name(instance::GtkSourceGutterRendererPixbuf)
+        ret = ccall(("gtk_source_gutter_renderer_pixbuf_get_icon_name", libgtksourceview), Cstring, (Ptr{GObject},), instance)
+        ret2 = string_or_nothing(ret, false)
+        ret2
+    end
+    function get_paintable(instance::GtkSourceGutterRendererPixbuf)
+        ret = ccall(("gtk_source_gutter_renderer_pixbuf_get_paintable", libgtksourceview), Ptr{GObject}, (Ptr{GObject},), instance)
+        ret2 = GLib.find_leaf_type_if_not_null(ret, false)
+        ret2
+    end
+    function get_pixbuf(instance::GtkSourceGutterRendererPixbuf)
+        ret = ccall(("gtk_source_gutter_renderer_pixbuf_get_pixbuf", libgtksourceview), Ptr{GObject}, (Ptr{GObject},), instance)
+        ret2 = convert(GdkPixbuf, ret, false)
+        ret2
+    end
+    function overlay_paintable(instance::GtkSourceGutterRendererPixbuf, _paintable::GdkPaintable)
+        ret = ccall(("gtk_source_gutter_renderer_pixbuf_overlay_paintable", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{GObject}), instance, _paintable)
+        nothing
+    end
+    function set_gicon(instance::GtkSourceGutterRendererPixbuf, _icon::Maybe(GIcon))
+        _icon_maybe = nothing_to_null(_icon)
+        ret = ccall(("gtk_source_gutter_renderer_pixbuf_set_gicon", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{GObject}), instance, _icon_maybe)
+        nothing
+    end
+    function set_icon_name(instance::GtkSourceGutterRendererPixbuf, _icon_name::Maybe(Union{AbstractString, Symbol}))
+        _icon_name_maybe = nothing_to_null(_icon_name)
+        ret = ccall(("gtk_source_gutter_renderer_pixbuf_set_icon_name", libgtksourceview), Nothing, (Ptr{GObject}, Cstring), instance, _icon_name_maybe)
+        nothing
+    end
+    function set_paintable(instance::GtkSourceGutterRendererPixbuf, _paintable::Maybe(GdkPaintable))
+        _paintable_maybe = nothing_to_null(_paintable)
+        ret = ccall(("gtk_source_gutter_renderer_pixbuf_set_paintable", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{GObject}), instance, _paintable_maybe)
+        nothing
+    end
+    function set_pixbuf(instance::GtkSourceGutterRendererPixbuf, _pixbuf::Maybe(GdkPixbuf))
+        _pixbuf_maybe = nothing_to_null(_pixbuf)
+        ret = ccall(("gtk_source_gutter_renderer_pixbuf_set_pixbuf", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{GObject}), instance, _pixbuf_maybe)
+        nothing
+    end
+    function GutterRendererText_new()
+        ret = ccall(("gtk_source_gutter_renderer_text_new", libgtksourceview), Ptr{GObject}, ())
+        ret2 = GtkSourceGutterRendererTextLeaf(ret, true)
+        ret2
+    end
+    function measure(instance::GtkSourceGutterRendererText, _text::Union{AbstractString, Symbol})
+        m_width = Ref{Int32}()
+        m_height = Ref{Int32}()
+        ret = ccall(("gtk_source_gutter_renderer_text_measure", libgtksourceview), Nothing, (Ptr{GObject}, Cstring, Ptr{Int32}, Ptr{Int32}), instance, _text, m_width, m_height)
+        _width = m_width[]
+        _height = m_height[]
+        (_width, _height)
+    end
+    function measure_markup(instance::GtkSourceGutterRendererText, _markup::Union{AbstractString, Symbol})
+        m_width = Ref{Int32}()
+        m_height = Ref{Int32}()
+        ret = ccall(("gtk_source_gutter_renderer_text_measure_markup", libgtksourceview), Nothing, (Ptr{GObject}, Cstring, Ptr{Int32}, Ptr{Int32}), instance, _markup, m_width, m_height)
+        _width = m_width[]
+        _height = m_height[]
+        (_width, _height)
+    end
+    function set_markup(instance::GtkSourceGutterRendererText, _markup::Union{AbstractString, Symbol}, _length::Integer)
+        ret = ccall(("gtk_source_gutter_renderer_text_set_markup", libgtksourceview), Nothing, (Ptr{GObject}, Cstring, Int32), instance, _markup, _length)
+        nothing
+    end
+    function set_text(instance::GtkSourceGutterRendererText, _text::Union{AbstractString, Symbol}, _length::Integer)
+        ret = ccall(("gtk_source_gutter_renderer_text_set_text", libgtksourceview), Nothing, (Ptr{GObject}, Cstring, Int32), instance, _text, _length)
+        nothing
+    end
+    function add_provider(instance::GtkSourceHover, _provider::GtkSourceHoverProvider)
+        ret = ccall(("gtk_source_hover_add_provider", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{GObject}), instance, _provider)
+        nothing
+    end
+    function remove_provider(instance::GtkSourceHover, _provider::GtkSourceHoverProvider)
+        ret = ccall(("gtk_source_hover_remove_provider", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{GObject}), instance, _provider)
+        nothing
+    end
+    function get_bounds(instance::GtkSourceHoverContext)
+        m_begin = Ref{_GtkTextIter}()
+        m_end = Ref{_GtkTextIter}()
+        ret = ccall(("gtk_source_hover_context_get_bounds", libgtksourceview), Cint, (Ptr{GObject}, Ptr{_GtkTextIter}, Ptr{_GtkTextIter}), instance, m_begin, m_end)
+        ret2 = convert(Bool, ret)
+        _begin = m_begin[]
+        _end = m_end[]
+        (ret2, _begin, _end)
+    end
+    function get_buffer(instance::GtkSourceHoverContext)
+        ret = ccall(("gtk_source_hover_context_get_buffer", libgtksourceview), Ptr{GObject}, (Ptr{GObject},), instance)
+        ret2 = convert(GtkSourceBuffer, ret, false)
+        ret2
+    end
+    function get_iter(instance::GtkSourceHoverContext, _iter::Union{GtkTextIter, Ref{_GtkTextIter}})
+        ret = ccall(("gtk_source_hover_context_get_iter", libgtksourceview), Cint, (Ptr{GObject}, Ptr{_GtkTextIter}), instance, _iter)
+        ret2 = convert(Bool, ret)
+        ret2
+    end
+    function get_view(instance::GtkSourceHoverContext)
+        ret = ccall(("gtk_source_hover_context_get_view", libgtksourceview), Ptr{GObject}, (Ptr{GObject},), instance)
+        ret2 = convert(GtkSourceView, ret, false)
+        ret2
+    end
+    function append(instance::GtkSourceHoverDisplay, _child::GtkWidget)
+        ret = ccall(("gtk_source_hover_display_append", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{GObject}), instance, _child)
+        nothing
+    end
+    function insert_after(instance::GtkSourceHoverDisplay, _child::GtkWidget, _sibling::GtkWidget)
+        ret = ccall(("gtk_source_hover_display_insert_after", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{GObject}, Ptr{GObject}), instance, _child, _sibling)
+        nothing
+    end
+    function prepend(instance::GtkSourceHoverDisplay, _child::GtkWidget)
+        ret = ccall(("gtk_source_hover_display_prepend", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{GObject}), instance, _child)
+        nothing
+    end
+    function remove(instance::GtkSourceHoverDisplay, _child::GtkWidget)
+        ret = ccall(("gtk_source_hover_display_remove", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{GObject}), instance, _child)
+        nothing
+    end
+    function get_globs(instance::GtkSourceLanguage)
+        ret = ccall(("gtk_source_language_get_globs", libgtksourceview), Ptr{Cstring}, (Ptr{GObject},), instance)
+        ret2 = begin
+                _len = length_zt(ret)
+                arrtemp = bytestring.(unsafe_wrap(Vector{Cstring}, ret, _len))
+                GLib.g_strfreev(ret)
+                arrtemp
+            end
+        ret2
+    end
+    function get_hidden(instance::GtkSourceLanguage)
+        ret = ccall(("gtk_source_language_get_hidden", libgtksourceview), Cint, (Ptr{GObject},), instance)
+        ret2 = convert(Bool, ret)
+        ret2
+    end
+    function get_id(instance::GtkSourceLanguage)
+        ret = ccall(("gtk_source_language_get_id", libgtksourceview), Cstring, (Ptr{GObject},), instance)
+        ret2 = string_or_nothing(ret, false)
+        ret2
+    end
+    function get_metadata(instance::GtkSourceLanguage, _name::Union{AbstractString, Symbol})
+        ret = ccall(("gtk_source_language_get_metadata", libgtksourceview), Cstring, (Ptr{GObject}, Cstring), instance, _name)
+        ret2 = string_or_nothing(ret, false)
+        ret2
+    end
+    function get_mime_types(instance::GtkSourceLanguage)
+        ret = ccall(("gtk_source_language_get_mime_types", libgtksourceview), Ptr{Cstring}, (Ptr{GObject},), instance)
+        ret2 = begin
+                _len = length_zt(ret)
+                arrtemp = bytestring.(unsafe_wrap(Vector{Cstring}, ret, _len))
+                GLib.g_strfreev(ret)
+                arrtemp
+            end
+        ret2
+    end
+    function get_name(instance::GtkSourceLanguage)
+        ret = ccall(("gtk_source_language_get_name", libgtksourceview), Cstring, (Ptr{GObject},), instance)
+        ret2 = string_or_nothing(ret, false)
+        ret2
+    end
+    function get_section(instance::GtkSourceLanguage)
+        ret = ccall(("gtk_source_language_get_section", libgtksourceview), Cstring, (Ptr{GObject},), instance)
+        ret2 = string_or_nothing(ret, false)
+        ret2
+    end
+    function get_style_fallback(instance::GtkSourceLanguage, _style_id::Union{AbstractString, Symbol})
+        ret = ccall(("gtk_source_language_get_style_fallback", libgtksourceview), Cstring, (Ptr{GObject}, Cstring), instance, _style_id)
+        ret2 = string_or_nothing(ret, false)
+        ret2
+    end
+    function get_style_ids(instance::GtkSourceLanguage)
+        ret = ccall(("gtk_source_language_get_style_ids", libgtksourceview), Ptr{Cstring}, (Ptr{GObject},), instance)
+        ret2 = begin
+                _len = length_zt(ret)
+                arrtemp = bytestring.(unsafe_wrap(Vector{Cstring}, ret, _len))
+                GLib.g_strfreev(ret)
+                arrtemp
+            end
+        ret2
+    end
+    function get_style_name(instance::GtkSourceLanguage, _style_id::Union{AbstractString, Symbol})
+        ret = ccall(("gtk_source_language_get_style_name", libgtksourceview), Cstring, (Ptr{GObject}, Cstring), instance, _style_id)
+        ret2 = string_or_nothing(ret, false)
+        ret2
+    end
+    function LanguageManager_new()
+        ret = ccall(("gtk_source_language_manager_new", libgtksourceview), Ptr{GObject}, ())
+        ret2 = GtkSourceLanguageManagerLeaf(ret, true)
+        ret2
+    end
+    function append_search_path(instance::GtkSourceLanguageManager, _path::Union{AbstractString, Symbol})
+        ret = ccall(("gtk_source_language_manager_append_search_path", libgtksourceview), Nothing, (Ptr{GObject}, Cstring), instance, _path)
+        nothing
+    end
+    function get_language(instance::GtkSourceLanguageManager, _id::Union{AbstractString, Symbol})
+        ret = ccall(("gtk_source_language_manager_get_language", libgtksourceview), Ptr{GObject}, (Ptr{GObject}, Cstring), instance, _id)
+        ret2 = convert_if_not_null(GtkSourceLanguage, ret, false)
+        ret2
+    end
+    function get_language_ids(instance::GtkSourceLanguageManager)
+        ret = ccall(("gtk_source_language_manager_get_language_ids", libgtksourceview), Ptr{Cstring}, (Ptr{GObject},), instance)
+        ret2 = begin
+                _len = length_zt(ret)
+                arrtemp = bytestring.(unsafe_wrap(Vector{Cstring}, ret, _len))
+                arrtemp
+            end
+        ret2
+    end
+    function get_search_path(instance::GtkSourceLanguageManager)
+        ret = ccall(("gtk_source_language_manager_get_search_path", libgtksourceview), Ptr{Cstring}, (Ptr{GObject},), instance)
+        ret2 = begin
+                _len = length_zt(ret)
+                arrtemp = bytestring.(unsafe_wrap(Vector{Cstring}, ret, _len))
+                arrtemp
+            end
+        ret2
+    end
+    function guess_language(instance::GtkSourceLanguageManager, _filename::Maybe(Union{AbstractString, Symbol}), _content_type::Maybe(Union{AbstractString, Symbol}))
+        _filename_maybe = nothing_to_null(_filename)
+        _content_type_maybe = nothing_to_null(_content_type)
+        ret = ccall(("gtk_source_language_manager_guess_language", libgtksourceview), Ptr{GObject}, (Ptr{GObject}, Cstring, Cstring), instance, _filename_maybe, _content_type_maybe)
+        ret2 = convert_if_not_null(GtkSourceLanguage, ret, false)
+        ret2
+    end
+    function prepend_search_path(instance::GtkSourceLanguageManager, _path::Union{AbstractString, Symbol})
+        ret = ccall(("gtk_source_language_manager_prepend_search_path", libgtksourceview), Nothing, (Ptr{GObject}, Cstring), instance, _path)
+        nothing
+    end
+    function set_search_path(instance::GtkSourceLanguageManager, _dirs)
+        _dirs_maybe = nothing_to_null(_dirs)
+        ret = ccall(("gtk_source_language_manager_set_search_path", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{Cstring}), instance, _dirs_maybe)
+        nothing
+    end
+    function Map_new()
+        ret = ccall(("gtk_source_map_new", libgtksourceview), Ptr{GObject}, ())
+        ret2 = GtkSourceMapLeaf(ret, false)
+        ret2
+    end
+    function get_view(instance::GtkSourceMap)
+        ret = ccall(("gtk_source_map_get_view", libgtksourceview), Ptr{GObject}, (Ptr{GObject},), instance)
+        ret2 = convert_if_not_null(GtkSourceView, ret, false)
+        ret2
+    end
+    function set_view(instance::GtkSourceMap, _view::GtkSourceView)
+        ret = ccall(("gtk_source_map_set_view", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{GObject}), instance, _view)
+        nothing
+    end
+    function Mark_new(_name::Maybe(Union{AbstractString, Symbol}), _category::Union{AbstractString, Symbol})
+        _name_maybe = nothing_to_null(_name)
+        ret = ccall(("gtk_source_mark_new", libgtksourceview), Ptr{GObject}, (Cstring, Cstring), _name_maybe, _category)
+        ret2 = GtkSourceMarkLeaf(ret, true)
+        ret2
+    end
+    function get_category(instance::GtkSourceMark)
+        ret = ccall(("gtk_source_mark_get_category", libgtksourceview), Cstring, (Ptr{GObject},), instance)
+        ret2 = string_or_nothing(ret, false)
+        ret2
+    end
+    function next(instance::GtkSourceMark, _category::Maybe(Union{AbstractString, Symbol}))
+        _category_maybe = nothing_to_null(_category)
+        ret = ccall(("gtk_source_mark_next", libgtksourceview), Ptr{GObject}, (Ptr{GObject}, Cstring), instance, _category_maybe)
+        ret2 = convert_if_not_null(GtkSourceMark, ret, false)
+        ret2
+    end
+    function prev(instance::GtkSourceMark, _category::Maybe(Union{AbstractString, Symbol}))
+        _category_maybe = nothing_to_null(_category)
+        ret = ccall(("gtk_source_mark_prev", libgtksourceview), Ptr{GObject}, (Ptr{GObject}, Cstring), instance, _category_maybe)
+        ret2 = convert_if_not_null(GtkSourceMark, ret, false)
+        ret2
+    end
+    function MarkAttributes_new()
+        ret = ccall(("gtk_source_mark_attributes_new", libgtksourceview), Ptr{GObject}, ())
+        ret2 = GtkSourceMarkAttributesLeaf(ret, true)
+        ret2
+    end
+    function get_background(instance::GtkSourceMarkAttributes)
+        m_background = Ref{_GdkRGBA}()
+        ret = ccall(("gtk_source_mark_attributes_get_background", libgtksourceview), Cint, (Ptr{GObject}, Ptr{_GdkRGBA}), instance, m_background)
+        ret2 = convert(Bool, ret)
+        _background = m_background[]
+        (ret2, _background)
+    end
+    function get_gicon(instance::GtkSourceMarkAttributes)
+        ret = ccall(("gtk_source_mark_attributes_get_gicon", libgtksourceview), Ptr{GObject}, (Ptr{GObject},), instance)
+        ret2 = begin
+                leaftype = GLib.find_leaf_type(ret)
+                convert(leaftype, ret, false)
+            end
+        ret2
+    end
+    function get_icon_name(instance::GtkSourceMarkAttributes)
+        ret = ccall(("gtk_source_mark_attributes_get_icon_name", libgtksourceview), Cstring, (Ptr{GObject},), instance)
+        ret2 = string_or_nothing(ret, false)
+        ret2
+    end
+    function get_pixbuf(instance::GtkSourceMarkAttributes)
+        ret = ccall(("gtk_source_mark_attributes_get_pixbuf", libgtksourceview), Ptr{GObject}, (Ptr{GObject},), instance)
+        ret2 = convert(GdkPixbuf, ret, false)
+        ret2
+    end
+    function get_tooltip_markup(instance::GtkSourceMarkAttributes, _mark::GtkSourceMark)
+        ret = ccall(("gtk_source_mark_attributes_get_tooltip_markup", libgtksourceview), Cstring, (Ptr{GObject}, Ptr{GObject}), instance, _mark)
+        ret2 = string_or_nothing(ret, true)
+        ret2
+    end
+    function get_tooltip_text(instance::GtkSourceMarkAttributes, _mark::GtkSourceMark)
+        ret = ccall(("gtk_source_mark_attributes_get_tooltip_text", libgtksourceview), Cstring, (Ptr{GObject}, Ptr{GObject}), instance, _mark)
+        ret2 = string_or_nothing(ret, true)
+        ret2
+    end
+    function render_icon(instance::GtkSourceMarkAttributes, _widget::GtkWidget, _size::Integer)
+        ret = ccall(("gtk_source_mark_attributes_render_icon", libgtksourceview), Ptr{GObject}, (Ptr{GObject}, Ptr{GObject}, Int32), instance, _widget, _size)
+        ret2 = begin
+                leaftype = GLib.find_leaf_type(ret)
+                convert(leaftype, ret, false)
+            end
+        ret2
+    end
+    function set_background(instance::GtkSourceMarkAttributes, _background::Union{GdkRGBA, Ref{_GdkRGBA}})
+        ret = ccall(("gtk_source_mark_attributes_set_background", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{_GdkRGBA}), instance, _background)
+        nothing
+    end
+    function set_gicon(instance::GtkSourceMarkAttributes, _gicon::GIcon)
+        ret = ccall(("gtk_source_mark_attributes_set_gicon", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{GObject}), instance, _gicon)
+        nothing
+    end
+    function set_icon_name(instance::GtkSourceMarkAttributes, _icon_name::Union{AbstractString, Symbol})
+        ret = ccall(("gtk_source_mark_attributes_set_icon_name", libgtksourceview), Nothing, (Ptr{GObject}, Cstring), instance, _icon_name)
+        nothing
+    end
+    function set_pixbuf(instance::GtkSourceMarkAttributes, _pixbuf::GdkPixbuf)
+        ret = ccall(("gtk_source_mark_attributes_set_pixbuf", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{GObject}), instance, _pixbuf)
+        nothing
+    end
+    function PrintCompositor_new(_buffer::GtkSourceBuffer)
+        ret = ccall(("gtk_source_print_compositor_new", libgtksourceview), Ptr{GObject}, (Ptr{GObject},), _buffer)
+        ret2 = GtkSourcePrintCompositorLeaf(ret, true)
+        ret2
+    end
+    function PrintCompositor_new_from_view(_view::GtkSourceView)
+        ret = ccall(("gtk_source_print_compositor_new_from_view", libgtksourceview), Ptr{GObject}, (Ptr{GObject},), _view)
+        ret2 = GtkSourcePrintCompositorLeaf(ret, true)
+        ret2
+    end
+    function draw_page(instance::GtkSourcePrintCompositor, _context::GtkPrintContext, _page_nr::Integer)
+        ret = ccall(("gtk_source_print_compositor_draw_page", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{GObject}, Int32), instance, _context, _page_nr)
+        nothing
+    end
+    function get_body_font_name(instance::GtkSourcePrintCompositor)
+        ret = ccall(("gtk_source_print_compositor_get_body_font_name", libgtksourceview), Cstring, (Ptr{GObject},), instance)
+        ret2 = string_or_nothing(ret, true)
+        ret2
+    end
+    function get_bottom_margin(instance::GtkSourcePrintCompositor, _unit)
+        ret = ccall(("gtk_source_print_compositor_get_bottom_margin", libgtksourceview), Float64, (Ptr{GObject}, UInt32), instance, _unit)
+        ret
+    end
+    function get_buffer(instance::GtkSourcePrintCompositor)
+        ret = ccall(("gtk_source_print_compositor_get_buffer", libgtksourceview), Ptr{GObject}, (Ptr{GObject},), instance)
+        ret2 = convert(GtkSourceBuffer, ret, false)
+        ret2
+    end
+    function get_footer_font_name(instance::GtkSourcePrintCompositor)
+        ret = ccall(("gtk_source_print_compositor_get_footer_font_name", libgtksourceview), Cstring, (Ptr{GObject},), instance)
+        ret2 = string_or_nothing(ret, true)
+        ret2
+    end
+    function get_header_font_name(instance::GtkSourcePrintCompositor)
+        ret = ccall(("gtk_source_print_compositor_get_header_font_name", libgtksourceview), Cstring, (Ptr{GObject},), instance)
+        ret2 = string_or_nothing(ret, true)
+        ret2
+    end
+    function get_highlight_syntax(instance::GtkSourcePrintCompositor)
+        ret = ccall(("gtk_source_print_compositor_get_highlight_syntax", libgtksourceview), Cint, (Ptr{GObject},), instance)
+        ret2 = convert(Bool, ret)
+        ret2
+    end
+    function get_left_margin(instance::GtkSourcePrintCompositor, _unit)
+        ret = ccall(("gtk_source_print_compositor_get_left_margin", libgtksourceview), Float64, (Ptr{GObject}, UInt32), instance, _unit)
+        ret
+    end
+    function get_line_numbers_font_name(instance::GtkSourcePrintCompositor)
+        ret = ccall(("gtk_source_print_compositor_get_line_numbers_font_name", libgtksourceview), Cstring, (Ptr{GObject},), instance)
+        ret2 = string_or_nothing(ret, true)
+        ret2
+    end
+    function get_n_pages(instance::GtkSourcePrintCompositor)
+        ret = ccall(("gtk_source_print_compositor_get_n_pages", libgtksourceview), Int32, (Ptr{GObject},), instance)
+        ret
+    end
+    function get_pagination_progress(instance::GtkSourcePrintCompositor)
+        ret = ccall(("gtk_source_print_compositor_get_pagination_progress", libgtksourceview), Float64, (Ptr{GObject},), instance)
+        ret
+    end
+    function get_print_footer(instance::GtkSourcePrintCompositor)
+        ret = ccall(("gtk_source_print_compositor_get_print_footer", libgtksourceview), Cint, (Ptr{GObject},), instance)
+        ret2 = convert(Bool, ret)
+        ret2
+    end
+    function get_print_header(instance::GtkSourcePrintCompositor)
+        ret = ccall(("gtk_source_print_compositor_get_print_header", libgtksourceview), Cint, (Ptr{GObject},), instance)
+        ret2 = convert(Bool, ret)
+        ret2
+    end
+    function get_print_line_numbers(instance::GtkSourcePrintCompositor)
+        ret = ccall(("gtk_source_print_compositor_get_print_line_numbers", libgtksourceview), UInt32, (Ptr{GObject},), instance)
+        ret
+    end
+    function get_right_margin(instance::GtkSourcePrintCompositor, _unit)
+        ret = ccall(("gtk_source_print_compositor_get_right_margin", libgtksourceview), Float64, (Ptr{GObject}, UInt32), instance, _unit)
+        ret
+    end
+    function get_tab_width(instance::GtkSourcePrintCompositor)
+        ret = ccall(("gtk_source_print_compositor_get_tab_width", libgtksourceview), UInt32, (Ptr{GObject},), instance)
+        ret
+    end
+    function get_top_margin(instance::GtkSourcePrintCompositor, _unit)
+        ret = ccall(("gtk_source_print_compositor_get_top_margin", libgtksourceview), Float64, (Ptr{GObject}, UInt32), instance, _unit)
+        ret
+    end
+    function get_wrap_mode(instance::GtkSourcePrintCompositor)
+        ret = ccall(("gtk_source_print_compositor_get_wrap_mode", libgtksourceview), UInt32, (Ptr{GObject},), instance)
+        ret2 = WrapMode(ret)
+        ret2
+    end
+    function ignore_tag(instance::GtkSourcePrintCompositor, _tag::GtkTextTag)
+        ret = ccall(("gtk_source_print_compositor_ignore_tag", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{GObject}), instance, _tag)
+        nothing
+    end
+    function paginate(instance::GtkSourcePrintCompositor, _context::GtkPrintContext)
+        ret = ccall(("gtk_source_print_compositor_paginate", libgtksourceview), Cint, (Ptr{GObject}, Ptr{GObject}), instance, _context)
+        ret2 = convert(Bool, ret)
+        ret2
+    end
+    function set_body_font_name(instance::GtkSourcePrintCompositor, _font_name::Union{AbstractString, Symbol})
+        ret = ccall(("gtk_source_print_compositor_set_body_font_name", libgtksourceview), Nothing, (Ptr{GObject}, Cstring), instance, _font_name)
+        nothing
+    end
+    function set_bottom_margin(instance::GtkSourcePrintCompositor, _margin::Real, _unit)
+        ret = ccall(("gtk_source_print_compositor_set_bottom_margin", libgtksourceview), Nothing, (Ptr{GObject}, Float64, UInt32), instance, _margin, _unit)
+        nothing
+    end
+    function set_footer_font_name(instance::GtkSourcePrintCompositor, _font_name::Maybe(Union{AbstractString, Symbol}))
+        _font_name_maybe = nothing_to_null(_font_name)
+        ret = ccall(("gtk_source_print_compositor_set_footer_font_name", libgtksourceview), Nothing, (Ptr{GObject}, Cstring), instance, _font_name_maybe)
+        nothing
+    end
+    function set_footer_format(instance::GtkSourcePrintCompositor, _separator::Bool, _left::Maybe(Union{AbstractString, Symbol}), _center::Maybe(Union{AbstractString, Symbol}), _right::Maybe(Union{AbstractString, Symbol}))
+        _left_maybe = nothing_to_null(_left)
+        _center_maybe = nothing_to_null(_center)
+        _right_maybe = nothing_to_null(_right)
+        ret = ccall(("gtk_source_print_compositor_set_footer_format", libgtksourceview), Nothing, (Ptr{GObject}, Cint, Cstring, Cstring, Cstring), instance, _separator, _left_maybe, _center_maybe, _right_maybe)
+        nothing
+    end
+    function set_header_font_name(instance::GtkSourcePrintCompositor, _font_name::Maybe(Union{AbstractString, Symbol}))
+        _font_name_maybe = nothing_to_null(_font_name)
+        ret = ccall(("gtk_source_print_compositor_set_header_font_name", libgtksourceview), Nothing, (Ptr{GObject}, Cstring), instance, _font_name_maybe)
+        nothing
+    end
+    function set_header_format(instance::GtkSourcePrintCompositor, _separator::Bool, _left::Maybe(Union{AbstractString, Symbol}), _center::Maybe(Union{AbstractString, Symbol}), _right::Maybe(Union{AbstractString, Symbol}))
+        _left_maybe = nothing_to_null(_left)
+        _center_maybe = nothing_to_null(_center)
+        _right_maybe = nothing_to_null(_right)
+        ret = ccall(("gtk_source_print_compositor_set_header_format", libgtksourceview), Nothing, (Ptr{GObject}, Cint, Cstring, Cstring, Cstring), instance, _separator, _left_maybe, _center_maybe, _right_maybe)
+        nothing
+    end
+    function set_highlight_syntax(instance::GtkSourcePrintCompositor, _highlight::Bool)
+        ret = ccall(("gtk_source_print_compositor_set_highlight_syntax", libgtksourceview), Nothing, (Ptr{GObject}, Cint), instance, _highlight)
+        nothing
+    end
+    function set_left_margin(instance::GtkSourcePrintCompositor, _margin::Real, _unit)
+        ret = ccall(("gtk_source_print_compositor_set_left_margin", libgtksourceview), Nothing, (Ptr{GObject}, Float64, UInt32), instance, _margin, _unit)
+        nothing
+    end
+    function set_line_numbers_font_name(instance::GtkSourcePrintCompositor, _font_name::Maybe(Union{AbstractString, Symbol}))
+        _font_name_maybe = nothing_to_null(_font_name)
+        ret = ccall(("gtk_source_print_compositor_set_line_numbers_font_name", libgtksourceview), Nothing, (Ptr{GObject}, Cstring), instance, _font_name_maybe)
+        nothing
+    end
+    function set_print_footer(instance::GtkSourcePrintCompositor, _print::Bool)
+        ret = ccall(("gtk_source_print_compositor_set_print_footer", libgtksourceview), Nothing, (Ptr{GObject}, Cint), instance, _print)
+        nothing
+    end
+    function set_print_header(instance::GtkSourcePrintCompositor, _print::Bool)
+        ret = ccall(("gtk_source_print_compositor_set_print_header", libgtksourceview), Nothing, (Ptr{GObject}, Cint), instance, _print)
+        nothing
+    end
+    function set_print_line_numbers(instance::GtkSourcePrintCompositor, _interval::Integer)
+        ret = ccall(("gtk_source_print_compositor_set_print_line_numbers", libgtksourceview), Nothing, (Ptr{GObject}, UInt32), instance, _interval)
+        nothing
+    end
+    function set_right_margin(instance::GtkSourcePrintCompositor, _margin::Real, _unit)
+        ret = ccall(("gtk_source_print_compositor_set_right_margin", libgtksourceview), Nothing, (Ptr{GObject}, Float64, UInt32), instance, _margin, _unit)
+        nothing
+    end
+    function set_tab_width(instance::GtkSourcePrintCompositor, _width::Integer)
+        ret = ccall(("gtk_source_print_compositor_set_tab_width", libgtksourceview), Nothing, (Ptr{GObject}, UInt32), instance, _width)
+        nothing
+    end
+    function set_top_margin(instance::GtkSourcePrintCompositor, _margin::Real, _unit)
+        ret = ccall(("gtk_source_print_compositor_set_top_margin", libgtksourceview), Nothing, (Ptr{GObject}, Float64, UInt32), instance, _margin, _unit)
+        nothing
+    end
+    function set_wrap_mode(instance::GtkSourcePrintCompositor, _wrap_mode)
+        ret = ccall(("gtk_source_print_compositor_set_wrap_mode", libgtksourceview), Nothing, (Ptr{GObject}, UInt32), instance, _wrap_mode)
+        nothing
+    end
+    function Region_new(_buffer::GtkTextBuffer)
+        ret = ccall(("gtk_source_region_new", libgtksourceview), Ptr{GObject}, (Ptr{GObject},), _buffer)
+        ret2 = GtkSourceRegionLeaf(ret, true)
+        ret2
+    end
+    function add_region(instance::GtkSourceRegion, _region_to_add::Maybe(GtkSourceRegion))
+        _region_to_add_maybe = nothing_to_null(_region_to_add)
+        ret = ccall(("gtk_source_region_add_region", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{GObject}), instance, _region_to_add_maybe)
+        nothing
+    end
+    function add_subregion(instance::GtkSourceRegion, __start::Union{GtkTextIter, Ref{_GtkTextIter}}, __end::Union{GtkTextIter, Ref{_GtkTextIter}})
+        ret = ccall(("gtk_source_region_add_subregion", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{_GtkTextIter}, Ptr{_GtkTextIter}), instance, __start, __end)
+        nothing
+    end
+    function get_bounds(instance::GtkSourceRegion)
+        m_start = Ref{_GtkTextIter}()
+        m_end = Ref{_GtkTextIter}()
+        ret = ccall(("gtk_source_region_get_bounds", libgtksourceview), Cint, (Ptr{GObject}, Ptr{_GtkTextIter}, Ptr{_GtkTextIter}), instance, m_start, m_end)
+        ret2 = convert(Bool, ret)
+        _start = m_start[]
+        _end = m_end[]
+        (ret2, _start, _end)
+    end
+    function get_buffer(instance::GtkSourceRegion)
+        ret = ccall(("gtk_source_region_get_buffer", libgtksourceview), Ptr{GObject}, (Ptr{GObject},), instance)
+        ret2 = convert_if_not_null(GtkTextBuffer, ret, false)
+        ret2
+    end
+    function get_start_region_iter(instance::GtkSourceRegion)
+        m_iter = Ref{_GtkSourceRegionIter}()
+        ret = ccall(("gtk_source_region_get_start_region_iter", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{_GtkSourceRegionIter}), instance, m_iter)
+        _iter = m_iter[]
+        _iter = convert(_GtkSourceRegionIter, _iter)
+        _iter
+    end
+    function intersect_region(instance::GtkSourceRegion, _region2::Maybe(GtkSourceRegion))
+        _region2_maybe = nothing_to_null(_region2)
+        ret = ccall(("gtk_source_region_intersect_region", libgtksourceview), Ptr{GObject}, (Ptr{GObject}, Ptr{GObject}), instance, _region2_maybe)
+        ret2 = convert_if_not_null(GtkSourceRegion, ret, true)
+        ret2
+    end
+    function intersect_subregion(instance::GtkSourceRegion, __start::Union{GtkTextIter, Ref{_GtkTextIter}}, __end::Union{GtkTextIter, Ref{_GtkTextIter}})
+        ret = ccall(("gtk_source_region_intersect_subregion", libgtksourceview), Ptr{GObject}, (Ptr{GObject}, Ptr{_GtkTextIter}, Ptr{_GtkTextIter}), instance, __start, __end)
+        ret2 = convert_if_not_null(GtkSourceRegion, ret, true)
+        ret2
+    end
+    function is_empty(instance::GtkSourceRegion)
+        ret = ccall(("gtk_source_region_is_empty", libgtksourceview), Cint, (Ptr{GObject},), instance)
+        ret2 = convert(Bool, ret)
+        ret2
+    end
+    function subtract_region(instance::GtkSourceRegion, _region_to_subtract::Maybe(GtkSourceRegion))
+        _region_to_subtract_maybe = nothing_to_null(_region_to_subtract)
+        ret = ccall(("gtk_source_region_subtract_region", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{GObject}), instance, _region_to_subtract_maybe)
+        nothing
+    end
+    function subtract_subregion(instance::GtkSourceRegion, __start::Union{GtkTextIter, Ref{_GtkTextIter}}, __end::Union{GtkTextIter, Ref{_GtkTextIter}})
+        ret = ccall(("gtk_source_region_subtract_subregion", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{_GtkTextIter}, Ptr{_GtkTextIter}), instance, __start, __end)
+        nothing
+    end
+    function to_string(instance::GtkSourceRegion)
+        ret = ccall(("gtk_source_region_to_string", libgtksourceview), Cstring, (Ptr{GObject},), instance)
+        ret2 = string_or_nothing(ret, true)
+        ret2
+    end
+    function SearchContext_new(_buffer::GtkSourceBuffer, _settings::Maybe(GtkSourceSearchSettings))
+        _settings_maybe = nothing_to_null(_settings)
+        ret = ccall(("gtk_source_search_context_new", libgtksourceview), Ptr{GObject}, (Ptr{GObject}, Ptr{GObject}), _buffer, _settings_maybe)
+        ret2 = GtkSourceSearchContextLeaf(ret, true)
+        ret2
+    end
+    function backward(instance::GtkSourceSearchContext, _iter::Union{GtkTextIter, Ref{_GtkTextIter}})
+        m_match_start = Ref{_GtkTextIter}()
+        m_match_end = Ref{_GtkTextIter}()
+        m_has_wrapped_around = Ref{Cint}()
+        ret = ccall(("gtk_source_search_context_backward", libgtksourceview), Cint, (Ptr{GObject}, Ptr{_GtkTextIter}, Ptr{_GtkTextIter}, Ptr{_GtkTextIter}, Ptr{Cint}), instance, _iter, m_match_start, m_match_end, m_has_wrapped_around)
+        ret2 = convert(Bool, ret)
+        _match_start = m_match_start[]
+        _match_end = m_match_end[]
+        _has_wrapped_around = m_has_wrapped_around[]
+        _has_wrapped_around = convert(Bool, _has_wrapped_around)
+        (ret2, _match_start, _match_end, _has_wrapped_around)
+    end
+    function backward_async(instance::GtkSourceSearchContext, _iter::Union{GtkTextIter, Ref{_GtkTextIter}}, _cancellable::Maybe(GCancellable), _callback::Maybe(Function))
+        _cancellable_maybe = nothing_to_null(_cancellable)
+        if _callback === nothing
+            _callback_cfunc = C_NULL
+            _callback_closure = C_NULL
+        else
+            _callback_cfunc = @cfunction(GAsyncReadyCallback, Nothing, (Ptr{GObject}, Ptr{GObject}, Ref{Function}))
+            _callback_closure = GLib.gc_ref(_callback)
+        end
+        ret = ccall(("gtk_source_search_context_backward_async", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{_GtkTextIter}, Ptr{GObject}, Ptr{Cvoid}, Ptr{Nothing}), instance, _iter, _cancellable_maybe, _callback_cfunc, _callback_closure)
+        nothing
+    end
+    function backward_finish(instance::GtkSourceSearchContext, _result::GAsyncResult)
+        m_match_start = Ref{_GtkTextIter}()
+        m_match_end = Ref{_GtkTextIter}()
+        m_has_wrapped_around = Ref{Cint}()
+        err = err_buf()
+        ret = ccall(("gtk_source_search_context_backward_finish", libgtksourceview), Cint, (Ptr{GObject}, Ptr{GObject}, Ptr{_GtkTextIter}, Ptr{_GtkTextIter}, Ptr{Cint}, Ptr{Ptr{GError}}), instance, _result, m_match_start, m_match_end, m_has_wrapped_around, err)
+        check_err(err)
+        ret2 = convert(Bool, ret)
+        _match_start = m_match_start[]
+        _match_end = m_match_end[]
+        _has_wrapped_around = m_has_wrapped_around[]
+        _has_wrapped_around = convert(Bool, _has_wrapped_around)
+        (ret2, _match_start, _match_end, _has_wrapped_around)
+    end
+    function forward(instance::GtkSourceSearchContext, _iter::Union{GtkTextIter, Ref{_GtkTextIter}})
+        m_match_start = Ref{_GtkTextIter}()
+        m_match_end = Ref{_GtkTextIter}()
+        m_has_wrapped_around = Ref{Cint}()
+        ret = ccall(("gtk_source_search_context_forward", libgtksourceview), Cint, (Ptr{GObject}, Ptr{_GtkTextIter}, Ptr{_GtkTextIter}, Ptr{_GtkTextIter}, Ptr{Cint}), instance, _iter, m_match_start, m_match_end, m_has_wrapped_around)
+        ret2 = convert(Bool, ret)
+        _match_start = m_match_start[]
+        _match_end = m_match_end[]
+        _has_wrapped_around = m_has_wrapped_around[]
+        _has_wrapped_around = convert(Bool, _has_wrapped_around)
+        (ret2, _match_start, _match_end, _has_wrapped_around)
+    end
+    function forward_async(instance::GtkSourceSearchContext, _iter::Union{GtkTextIter, Ref{_GtkTextIter}}, _cancellable::Maybe(GCancellable), _callback::Maybe(Function))
+        _cancellable_maybe = nothing_to_null(_cancellable)
+        if _callback === nothing
+            _callback_cfunc = C_NULL
+            _callback_closure = C_NULL
+        else
+            _callback_cfunc = @cfunction(GAsyncReadyCallback, Nothing, (Ptr{GObject}, Ptr{GObject}, Ref{Function}))
+            _callback_closure = GLib.gc_ref(_callback)
+        end
+        ret = ccall(("gtk_source_search_context_forward_async", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{_GtkTextIter}, Ptr{GObject}, Ptr{Cvoid}, Ptr{Nothing}), instance, _iter, _cancellable_maybe, _callback_cfunc, _callback_closure)
+        nothing
+    end
+    function forward_finish(instance::GtkSourceSearchContext, _result::GAsyncResult)
+        m_match_start = Ref{_GtkTextIter}()
+        m_match_end = Ref{_GtkTextIter}()
+        m_has_wrapped_around = Ref{Cint}()
+        err = err_buf()
+        ret = ccall(("gtk_source_search_context_forward_finish", libgtksourceview), Cint, (Ptr{GObject}, Ptr{GObject}, Ptr{_GtkTextIter}, Ptr{_GtkTextIter}, Ptr{Cint}, Ptr{Ptr{GError}}), instance, _result, m_match_start, m_match_end, m_has_wrapped_around, err)
+        check_err(err)
+        ret2 = convert(Bool, ret)
+        _match_start = m_match_start[]
+        _match_end = m_match_end[]
+        _has_wrapped_around = m_has_wrapped_around[]
+        _has_wrapped_around = convert(Bool, _has_wrapped_around)
+        (ret2, _match_start, _match_end, _has_wrapped_around)
+    end
+    function get_buffer(instance::GtkSourceSearchContext)
+        ret = ccall(("gtk_source_search_context_get_buffer", libgtksourceview), Ptr{GObject}, (Ptr{GObject},), instance)
+        ret2 = convert(GtkSourceBuffer, ret, false)
+        ret2
+    end
+    function get_highlight(instance::GtkSourceSearchContext)
+        ret = ccall(("gtk_source_search_context_get_highlight", libgtksourceview), Cint, (Ptr{GObject},), instance)
+        ret2 = convert(Bool, ret)
+        ret2
+    end
+    function get_match_style(instance::GtkSourceSearchContext)
+        ret = ccall(("gtk_source_search_context_get_match_style", libgtksourceview), Ptr{GObject}, (Ptr{GObject},), instance)
+        ret2 = convert(GtkSourceStyle, ret, false)
+        ret2
+    end
+    function get_occurrence_position(instance::GtkSourceSearchContext, _match_start::Union{GtkTextIter, Ref{_GtkTextIter}}, _match_end::Union{GtkTextIter, Ref{_GtkTextIter}})
+        ret = ccall(("gtk_source_search_context_get_occurrence_position", libgtksourceview), Int32, (Ptr{GObject}, Ptr{_GtkTextIter}, Ptr{_GtkTextIter}), instance, _match_start, _match_end)
+        ret
+    end
+    function get_occurrences_count(instance::GtkSourceSearchContext)
+        ret = ccall(("gtk_source_search_context_get_occurrences_count", libgtksourceview), Int32, (Ptr{GObject},), instance)
+        ret
+    end
+    function get_regex_error(instance::GtkSourceSearchContext)
+        ret = ccall(("gtk_source_search_context_get_regex_error", libgtksourceview), Ptr{GError}, (Ptr{GObject},), instance)
+        ret
+    end
+    function get_settings(instance::GtkSourceSearchContext)
+        ret = ccall(("gtk_source_search_context_get_settings", libgtksourceview), Ptr{GObject}, (Ptr{GObject},), instance)
+        ret2 = convert(GtkSourceSearchSettings, ret, false)
+        ret2
+    end
+    function replace(instance::GtkSourceSearchContext, _match_start::Union{GtkTextIter, Ref{_GtkTextIter}}, _match_end::Union{GtkTextIter, Ref{_GtkTextIter}}, _replace::Union{AbstractString, Symbol}, _replace_length::Integer)
+        err = err_buf()
+        ret = ccall(("gtk_source_search_context_replace", libgtksourceview), Cint, (Ptr{GObject}, Ptr{_GtkTextIter}, Ptr{_GtkTextIter}, Cstring, Int32, Ptr{Ptr{GError}}), instance, _match_start, _match_end, _replace, _replace_length, err)
+        check_err(err)
+        ret2 = convert(Bool, ret)
+        ret2
+    end
+    function replace_all(instance::GtkSourceSearchContext, _replace::Union{AbstractString, Symbol}, _replace_length::Integer)
+        err = err_buf()
+        ret = ccall(("gtk_source_search_context_replace_all", libgtksourceview), UInt32, (Ptr{GObject}, Cstring, Int32, Ptr{Ptr{GError}}), instance, _replace, _replace_length, err)
+        check_err(err)
+        ret
+    end
+    function set_highlight(instance::GtkSourceSearchContext, _highlight::Bool)
+        ret = ccall(("gtk_source_search_context_set_highlight", libgtksourceview), Nothing, (Ptr{GObject}, Cint), instance, _highlight)
+        nothing
+    end
+    function set_match_style(instance::GtkSourceSearchContext, _match_style::Maybe(GtkSourceStyle))
+        _match_style_maybe = nothing_to_null(_match_style)
+        ret = ccall(("gtk_source_search_context_set_match_style", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{GObject}), instance, _match_style_maybe)
+        nothing
+    end
+    function SearchSettings_new()
+        ret = ccall(("gtk_source_search_settings_new", libgtksourceview), Ptr{GObject}, ())
+        ret2 = GtkSourceSearchSettingsLeaf(ret, true)
+        ret2
+    end
+    function get_at_word_boundaries(instance::GtkSourceSearchSettings)
+        ret = ccall(("gtk_source_search_settings_get_at_word_boundaries", libgtksourceview), Cint, (Ptr{GObject},), instance)
+        ret2 = convert(Bool, ret)
+        ret2
+    end
+    function get_case_sensitive(instance::GtkSourceSearchSettings)
+        ret = ccall(("gtk_source_search_settings_get_case_sensitive", libgtksourceview), Cint, (Ptr{GObject},), instance)
+        ret2 = convert(Bool, ret)
+        ret2
+    end
+    function get_regex_enabled(instance::GtkSourceSearchSettings)
+        ret = ccall(("gtk_source_search_settings_get_regex_enabled", libgtksourceview), Cint, (Ptr{GObject},), instance)
+        ret2 = convert(Bool, ret)
+        ret2
+    end
+    function get_search_text(instance::GtkSourceSearchSettings)
+        ret = ccall(("gtk_source_search_settings_get_search_text", libgtksourceview), Cstring, (Ptr{GObject},), instance)
+        ret2 = string_or_nothing(ret, false)
+        ret2
+    end
+    function get_wrap_around(instance::GtkSourceSearchSettings)
+        ret = ccall(("gtk_source_search_settings_get_wrap_around", libgtksourceview), Cint, (Ptr{GObject},), instance)
+        ret2 = convert(Bool, ret)
+        ret2
+    end
+    function set_at_word_boundaries(instance::GtkSourceSearchSettings, _at_word_boundaries::Bool)
+        ret = ccall(("gtk_source_search_settings_set_at_word_boundaries", libgtksourceview), Nothing, (Ptr{GObject}, Cint), instance, _at_word_boundaries)
+        nothing
+    end
+    function set_case_sensitive(instance::GtkSourceSearchSettings, _case_sensitive::Bool)
+        ret = ccall(("gtk_source_search_settings_set_case_sensitive", libgtksourceview), Nothing, (Ptr{GObject}, Cint), instance, _case_sensitive)
+        nothing
+    end
+    function set_regex_enabled(instance::GtkSourceSearchSettings, _regex_enabled::Bool)
+        ret = ccall(("gtk_source_search_settings_set_regex_enabled", libgtksourceview), Nothing, (Ptr{GObject}, Cint), instance, _regex_enabled)
+        nothing
+    end
+    function set_search_text(instance::GtkSourceSearchSettings, _search_text::Maybe(Union{AbstractString, Symbol}))
+        _search_text_maybe = nothing_to_null(_search_text)
+        ret = ccall(("gtk_source_search_settings_set_search_text", libgtksourceview), Nothing, (Ptr{GObject}, Cstring), instance, _search_text_maybe)
+        nothing
+    end
+    function set_wrap_around(instance::GtkSourceSearchSettings, _wrap_around::Bool)
+        ret = ccall(("gtk_source_search_settings_set_wrap_around", libgtksourceview), Nothing, (Ptr{GObject}, Cint), instance, _wrap_around)
+        nothing
+    end
+    function Snippet_new(_trigger::Maybe(Union{AbstractString, Symbol}), _language_id::Maybe(Union{AbstractString, Symbol}))
+        _trigger_maybe = nothing_to_null(_trigger)
+        _language_id_maybe = nothing_to_null(_language_id)
+        ret = ccall(("gtk_source_snippet_new", libgtksourceview), Ptr{GObject}, (Cstring, Cstring), _trigger_maybe, _language_id_maybe)
+        ret2 = GtkSourceSnippetLeaf(ret, true)
+        ret2
+    end
+    function Snippet_new_parsed(_text::Union{AbstractString, Symbol})
+        err = err_buf()
+        ret = ccall(("gtk_source_snippet_new_parsed", libgtksourceview), Ptr{GObject}, (Cstring, Ptr{Ptr{GError}}), _text, err)
+        check_err(err)
+        ret2 = GtkSourceSnippetLeaf(ret, true)
+        ret2
+    end
+    function add_chunk(instance::GtkSourceSnippet, _chunk::GtkSourceSnippetChunk)
+        ret = ccall(("gtk_source_snippet_add_chunk", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{GObject}), instance, _chunk)
+        nothing
+    end
+    function copy(instance::GtkSourceSnippet)
+        ret = ccall(("gtk_source_snippet_copy", libgtksourceview), Ptr{GObject}, (Ptr{GObject},), instance)
+        ret2 = convert(GtkSourceSnippet, ret, true)
+        ret2
+    end
+    function get_context(instance::GtkSourceSnippet)
+        ret = ccall(("gtk_source_snippet_get_context", libgtksourceview), Ptr{GObject}, (Ptr{GObject},), instance)
+        ret2 = convert_if_not_null(GtkSourceSnippetContext, ret, false)
+        ret2
+    end
+    function get_description(instance::GtkSourceSnippet)
+        ret = ccall(("gtk_source_snippet_get_description", libgtksourceview), Cstring, (Ptr{GObject},), instance)
+        ret2 = string_or_nothing(ret, false)
+        ret2
+    end
+    function get_focus_position(instance::GtkSourceSnippet)
+        ret = ccall(("gtk_source_snippet_get_focus_position", libgtksourceview), Int32, (Ptr{GObject},), instance)
+        ret
+    end
+    function get_language_id(instance::GtkSourceSnippet)
+        ret = ccall(("gtk_source_snippet_get_language_id", libgtksourceview), Cstring, (Ptr{GObject},), instance)
+        ret2 = string_or_nothing(ret, false)
+        ret2
+    end
+    function get_n_chunks(instance::GtkSourceSnippet)
+        ret = ccall(("gtk_source_snippet_get_n_chunks", libgtksourceview), UInt32, (Ptr{GObject},), instance)
+        ret
+    end
+    function get_name(instance::GtkSourceSnippet)
+        ret = ccall(("gtk_source_snippet_get_name", libgtksourceview), Cstring, (Ptr{GObject},), instance)
+        ret2 = string_or_nothing(ret, false)
+        ret2
+    end
+    function get_nth_chunk(instance::GtkSourceSnippet, _nth::Integer)
+        ret = ccall(("gtk_source_snippet_get_nth_chunk", libgtksourceview), Ptr{GObject}, (Ptr{GObject}, UInt32), instance, _nth)
+        ret2 = convert(GtkSourceSnippetChunk, ret, false)
+        ret2
+    end
+    function get_trigger(instance::GtkSourceSnippet)
+        ret = ccall(("gtk_source_snippet_get_trigger", libgtksourceview), Cstring, (Ptr{GObject},), instance)
+        ret2 = string_or_nothing(ret, false)
+        ret2
+    end
+    function set_description(instance::GtkSourceSnippet, _description::Union{AbstractString, Symbol})
+        ret = ccall(("gtk_source_snippet_set_description", libgtksourceview), Nothing, (Ptr{GObject}, Cstring), instance, _description)
+        nothing
+    end
+    function set_language_id(instance::GtkSourceSnippet, _language_id::Union{AbstractString, Symbol})
+        ret = ccall(("gtk_source_snippet_set_language_id", libgtksourceview), Nothing, (Ptr{GObject}, Cstring), instance, _language_id)
+        nothing
+    end
+    function set_name(instance::GtkSourceSnippet, _name::Union{AbstractString, Symbol})
+        ret = ccall(("gtk_source_snippet_set_name", libgtksourceview), Nothing, (Ptr{GObject}, Cstring), instance, _name)
+        nothing
+    end
+    function set_trigger(instance::GtkSourceSnippet, _trigger::Union{AbstractString, Symbol})
+        ret = ccall(("gtk_source_snippet_set_trigger", libgtksourceview), Nothing, (Ptr{GObject}, Cstring), instance, _trigger)
+        nothing
+    end
+    function SnippetChunk_new()
+        ret = ccall(("gtk_source_snippet_chunk_new", libgtksourceview), Ptr{GObject}, ())
+        ret2 = GtkSourceSnippetChunkLeaf(ret, false)
+        ret2
+    end
+    function copy(instance::GtkSourceSnippetChunk)
+        ret = ccall(("gtk_source_snippet_chunk_copy", libgtksourceview), Ptr{GObject}, (Ptr{GObject},), instance)
+        ret2 = convert(GtkSourceSnippetChunk, ret, true)
+        ret2
+    end
+    function get_context(instance::GtkSourceSnippetChunk)
+        ret = ccall(("gtk_source_snippet_chunk_get_context", libgtksourceview), Ptr{GObject}, (Ptr{GObject},), instance)
+        ret2 = convert(GtkSourceSnippetContext, ret, false)
+        ret2
+    end
+    function get_focus_position(instance::GtkSourceSnippetChunk)
+        ret = ccall(("gtk_source_snippet_chunk_get_focus_position", libgtksourceview), Int32, (Ptr{GObject},), instance)
+        ret
+    end
+    function get_spec(instance::GtkSourceSnippetChunk)
+        ret = ccall(("gtk_source_snippet_chunk_get_spec", libgtksourceview), Cstring, (Ptr{GObject},), instance)
+        ret2 = string_or_nothing(ret, false)
+        ret2
+    end
+    function get_text(instance::GtkSourceSnippetChunk)
+        ret = ccall(("gtk_source_snippet_chunk_get_text", libgtksourceview), Cstring, (Ptr{GObject},), instance)
+        ret2 = string_or_nothing(ret, false)
+        ret2
+    end
+    function get_text_set(instance::GtkSourceSnippetChunk)
+        ret = ccall(("gtk_source_snippet_chunk_get_text_set", libgtksourceview), Cint, (Ptr{GObject},), instance)
+        ret2 = convert(Bool, ret)
+        ret2
+    end
+    function get_tooltip_text(instance::GtkSourceSnippetChunk)
+        ret = ccall(("gtk_source_snippet_chunk_get_tooltip_text", libgtksourceview), Cstring, (Ptr{GObject},), instance)
+        ret2 = string_or_nothing(ret, false)
+        ret2
+    end
+    function set_context(instance::GtkSourceSnippetChunk, _context::GtkSourceSnippetContext)
+        ret = ccall(("gtk_source_snippet_chunk_set_context", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{GObject}), instance, _context)
+        nothing
+    end
+    function set_focus_position(instance::GtkSourceSnippetChunk, _focus_position::Integer)
+        ret = ccall(("gtk_source_snippet_chunk_set_focus_position", libgtksourceview), Nothing, (Ptr{GObject}, Int32), instance, _focus_position)
+        nothing
+    end
+    function set_spec(instance::GtkSourceSnippetChunk, _spec::Union{AbstractString, Symbol})
+        ret = ccall(("gtk_source_snippet_chunk_set_spec", libgtksourceview), Nothing, (Ptr{GObject}, Cstring), instance, _spec)
+        nothing
+    end
+    function set_text(instance::GtkSourceSnippetChunk, _text::Union{AbstractString, Symbol})
+        ret = ccall(("gtk_source_snippet_chunk_set_text", libgtksourceview), Nothing, (Ptr{GObject}, Cstring), instance, _text)
+        nothing
+    end
+    function set_text_set(instance::GtkSourceSnippetChunk, _text_set::Bool)
+        ret = ccall(("gtk_source_snippet_chunk_set_text_set", libgtksourceview), Nothing, (Ptr{GObject}, Cint), instance, _text_set)
+        nothing
+    end
+    function set_tooltip_text(instance::GtkSourceSnippetChunk, _tooltip_text::Union{AbstractString, Symbol})
+        ret = ccall(("gtk_source_snippet_chunk_set_tooltip_text", libgtksourceview), Nothing, (Ptr{GObject}, Cstring), instance, _tooltip_text)
+        nothing
+    end
+    function SnippetContext_new()
+        ret = ccall(("gtk_source_snippet_context_new", libgtksourceview), Ptr{GObject}, ())
+        ret2 = GtkSourceSnippetContextLeaf(ret, true)
+        ret2
+    end
+    function clear_variables(instance::GtkSourceSnippetContext)
+        ret = ccall(("gtk_source_snippet_context_clear_variables", libgtksourceview), Nothing, (Ptr{GObject},), instance)
+        nothing
+    end
+    function expand(instance::GtkSourceSnippetContext, _input::Union{AbstractString, Symbol})
+        ret = ccall(("gtk_source_snippet_context_expand", libgtksourceview), Cstring, (Ptr{GObject}, Cstring), instance, _input)
+        ret2 = string_or_nothing(ret, true)
+        ret2
+    end
+    function get_variable(instance::GtkSourceSnippetContext, _key::Union{AbstractString, Symbol})
+        ret = ccall(("gtk_source_snippet_context_get_variable", libgtksourceview), Cstring, (Ptr{GObject}, Cstring), instance, _key)
+        ret2 = string_or_nothing(ret, false)
+        ret2
+    end
+    function set_constant(instance::GtkSourceSnippetContext, _key::Union{AbstractString, Symbol}, _value::Union{AbstractString, Symbol})
+        ret = ccall(("gtk_source_snippet_context_set_constant", libgtksourceview), Nothing, (Ptr{GObject}, Cstring, Cstring), instance, _key, _value)
+        nothing
+    end
+    function set_line_prefix(instance::GtkSourceSnippetContext, _line_prefix::Union{AbstractString, Symbol})
+        ret = ccall(("gtk_source_snippet_context_set_line_prefix", libgtksourceview), Nothing, (Ptr{GObject}, Cstring), instance, _line_prefix)
+        nothing
+    end
+    function set_tab_width(instance::GtkSourceSnippetContext, _tab_width::Integer)
+        ret = ccall(("gtk_source_snippet_context_set_tab_width", libgtksourceview), Nothing, (Ptr{GObject}, Int32), instance, _tab_width)
+        nothing
+    end
+    function set_use_spaces(instance::GtkSourceSnippetContext, _use_spaces::Bool)
+        ret = ccall(("gtk_source_snippet_context_set_use_spaces", libgtksourceview), Nothing, (Ptr{GObject}, Cint), instance, _use_spaces)
+        nothing
+    end
+    function set_variable(instance::GtkSourceSnippetContext, _key::Union{AbstractString, Symbol}, _value::Union{AbstractString, Symbol})
+        ret = ccall(("gtk_source_snippet_context_set_variable", libgtksourceview), Nothing, (Ptr{GObject}, Cstring, Cstring), instance, _key, _value)
+        nothing
+    end
+    function get_search_path(instance::GtkSourceSnippetManager)
+        ret = ccall(("gtk_source_snippet_manager_get_search_path", libgtksourceview), Ptr{Cstring}, (Ptr{GObject},), instance)
+        ret2 = begin
+                _len = length_zt(ret)
+                arrtemp = bytestring.(unsafe_wrap(Vector{Cstring}, ret, _len))
+                arrtemp
+            end
+        ret2
+    end
+    function get_snippet(instance::GtkSourceSnippetManager, _group::Maybe(Union{AbstractString, Symbol}), _language_id::Maybe(Union{AbstractString, Symbol}), _trigger::Union{AbstractString, Symbol})
+        _group_maybe = nothing_to_null(_group)
+        _language_id_maybe = nothing_to_null(_language_id)
+        ret = ccall(("gtk_source_snippet_manager_get_snippet", libgtksourceview), Ptr{GObject}, (Ptr{GObject}, Cstring, Cstring, Cstring), instance, _group_maybe, _language_id_maybe, _trigger)
+        ret2 = convert_if_not_null(GtkSourceSnippet, ret, true)
+        ret2
+    end
+    function list_all(instance::GtkSourceSnippetManager)
+        ret = ccall(("gtk_source_snippet_manager_list_all", libgtksourceview), Ptr{GObject}, (Ptr{GObject},), instance)
+        ret2 = begin
+                leaftype = GLib.find_leaf_type(ret)
+                convert(leaftype, ret, false)
+            end
+        ret2
+    end
+    function list_matching(instance::GtkSourceSnippetManager, _group::Maybe(Union{AbstractString, Symbol}), _language_id::Maybe(Union{AbstractString, Symbol}), _trigger_prefix::Maybe(Union{AbstractString, Symbol}))
+        _group_maybe = nothing_to_null(_group)
+        _language_id_maybe = nothing_to_null(_language_id)
+        _trigger_prefix_maybe = nothing_to_null(_trigger_prefix)
+        ret = ccall(("gtk_source_snippet_manager_list_matching", libgtksourceview), Ptr{GObject}, (Ptr{GObject}, Cstring, Cstring, Cstring), instance, _group_maybe, _language_id_maybe, _trigger_prefix_maybe)
+        ret2 = begin
+                leaftype = GLib.find_leaf_type(ret)
+                convert(leaftype, ret, true)
+            end
+        ret2
+    end
+    function set_search_path(instance::GtkSourceSnippetManager, _dirs)
+        _dirs_maybe = nothing_to_null(_dirs)
+        ret = ccall(("gtk_source_snippet_manager_set_search_path", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{Cstring}), instance, _dirs_maybe)
+        nothing
+    end
+    function SpaceDrawer_new()
+        ret = ccall(("gtk_source_space_drawer_new", libgtksourceview), Ptr{GObject}, ())
+        ret2 = GtkSourceSpaceDrawerLeaf(ret, true)
+        ret2
+    end
+    function bind_matrix_setting(instance::GtkSourceSpaceDrawer, _settings::GSettings, _key::Union{AbstractString, Symbol}, _flags)
+        ret = ccall(("gtk_source_space_drawer_bind_matrix_setting", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{GObject}, Cstring, UInt32), instance, _settings, _key, _flags)
+        nothing
+    end
+    function get_enable_matrix(instance::GtkSourceSpaceDrawer)
+        ret = ccall(("gtk_source_space_drawer_get_enable_matrix", libgtksourceview), Cint, (Ptr{GObject},), instance)
+        ret2 = convert(Bool, ret)
+        ret2
+    end
+    function get_matrix(instance::GtkSourceSpaceDrawer)
+        ret = ccall(("gtk_source_space_drawer_get_matrix", libgtksourceview), Ptr{GVariant}, (Ptr{GObject},), instance)
+        ret2 = convert(GVariant, ret)
+        ret2
+    end
+    function get_types_for_locations(instance::GtkSourceSpaceDrawer, _locations)
+        ret = ccall(("gtk_source_space_drawer_get_types_for_locations", libgtksourceview), UInt32, (Ptr{GObject}, UInt32), instance, _locations)
+        ret2 = SpaceTypeFlags(ret)
+        ret2
+    end
+    function set_enable_matrix(instance::GtkSourceSpaceDrawer, _enable_matrix::Bool)
+        ret = ccall(("gtk_source_space_drawer_set_enable_matrix", libgtksourceview), Nothing, (Ptr{GObject}, Cint), instance, _enable_matrix)
+        nothing
+    end
+    function set_matrix(instance::GtkSourceSpaceDrawer, _matrix::Maybe(GVariant))
+        _matrix_maybe = nothing_to_null(_matrix)
+        ret = ccall(("gtk_source_space_drawer_set_matrix", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{GVariant}), instance, _matrix_maybe)
+        nothing
+    end
+    function set_types_for_locations(instance::GtkSourceSpaceDrawer, _locations, _types)
+        ret = ccall(("gtk_source_space_drawer_set_types_for_locations", libgtksourceview), Nothing, (Ptr{GObject}, UInt32, UInt32), instance, _locations, _types)
+        nothing
+    end
+    function apply(instance::GtkSourceStyle, _tag::GtkTextTag)
+        ret = ccall(("gtk_source_style_apply", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{GObject}), instance, _tag)
+        nothing
+    end
+    function copy(instance::GtkSourceStyle)
+        ret = ccall(("gtk_source_style_copy", libgtksourceview), Ptr{GObject}, (Ptr{GObject},), instance)
+        ret2 = convert(GtkSourceStyle, ret, true)
+        ret2
+    end
+    function get_authors(instance::GtkSourceStyleScheme)
+        ret = ccall(("gtk_source_style_scheme_get_authors", libgtksourceview), Ptr{Cstring}, (Ptr{GObject},), instance)
+        ret2 = begin
+                _len = length_zt(ret)
+                arrtemp = bytestring.(unsafe_wrap(Vector{Cstring}, ret, _len))
+                arrtemp
+            end
+        ret2
+    end
+    function get_description(instance::GtkSourceStyleScheme)
+        ret = ccall(("gtk_source_style_scheme_get_description", libgtksourceview), Cstring, (Ptr{GObject},), instance)
+        ret2 = string_or_nothing(ret, false)
+        ret2
+    end
+    function get_filename(instance::GtkSourceStyleScheme)
+        ret = ccall(("gtk_source_style_scheme_get_filename", libgtksourceview), Cstring, (Ptr{GObject},), instance)
+        ret2 = string_or_nothing(ret, false)
+        ret2
+    end
+    function get_id(instance::GtkSourceStyleScheme)
+        ret = ccall(("gtk_source_style_scheme_get_id", libgtksourceview), Cstring, (Ptr{GObject},), instance)
+        ret2 = string_or_nothing(ret, false)
+        ret2
+    end
+    function get_metadata(instance::GtkSourceStyleScheme, _name::Union{AbstractString, Symbol})
+        ret = ccall(("gtk_source_style_scheme_get_metadata", libgtksourceview), Cstring, (Ptr{GObject}, Cstring), instance, _name)
+        ret2 = string_or_nothing(ret, false)
+        ret2
+    end
+    function get_name(instance::GtkSourceStyleScheme)
+        ret = ccall(("gtk_source_style_scheme_get_name", libgtksourceview), Cstring, (Ptr{GObject},), instance)
+        ret2 = string_or_nothing(ret, false)
+        ret2
+    end
+    function get_style(instance::GtkSourceStyleScheme, _style_id::Union{AbstractString, Symbol})
+        ret = ccall(("gtk_source_style_scheme_get_style", libgtksourceview), Ptr{GObject}, (Ptr{GObject}, Cstring), instance, _style_id)
+        ret2 = convert_if_not_null(GtkSourceStyle, ret, false)
+        ret2
+    end
+    function StyleSchemeChooserButton_new()
+        ret = ccall(("gtk_source_style_scheme_chooser_button_new", libgtksourceview), Ptr{GObject}, ())
+        ret2 = GtkSourceStyleSchemeChooserButtonLeaf(ret, false)
+        ret2
+    end
+    function StyleSchemeChooserWidget_new()
+        ret = ccall(("gtk_source_style_scheme_chooser_widget_new", libgtksourceview), Ptr{GObject}, ())
+        ret2 = GtkSourceStyleSchemeChooserWidgetLeaf(ret, false)
+        ret2
+    end
+    function StyleSchemeManager_new()
+        ret = ccall(("gtk_source_style_scheme_manager_new", libgtksourceview), Ptr{GObject}, ())
+        ret2 = GtkSourceStyleSchemeManagerLeaf(ret, true)
+        ret2
+    end
+    function append_search_path(instance::GtkSourceStyleSchemeManager, _path::Union{AbstractString, Symbol})
+        ret = ccall(("gtk_source_style_scheme_manager_append_search_path", libgtksourceview), Nothing, (Ptr{GObject}, Cstring), instance, _path)
+        nothing
+    end
+    function force_rescan(instance::GtkSourceStyleSchemeManager)
+        ret = ccall(("gtk_source_style_scheme_manager_force_rescan", libgtksourceview), Nothing, (Ptr{GObject},), instance)
+        nothing
+    end
+    function get_scheme(instance::GtkSourceStyleSchemeManager, _scheme_id::Union{AbstractString, Symbol})
+        ret = ccall(("gtk_source_style_scheme_manager_get_scheme", libgtksourceview), Ptr{GObject}, (Ptr{GObject}, Cstring), instance, _scheme_id)
+        ret2 = convert_if_not_null(GtkSourceStyleScheme, ret, false)
+        ret2
+    end
+    function get_scheme_ids(instance::GtkSourceStyleSchemeManager)
+        ret = ccall(("gtk_source_style_scheme_manager_get_scheme_ids", libgtksourceview), Ptr{Cstring}, (Ptr{GObject},), instance)
+        ret2 = begin
+                _len = length_zt(ret)
+                arrtemp = bytestring.(unsafe_wrap(Vector{Cstring}, ret, _len))
+                arrtemp
+            end
+        ret2
+    end
+    function get_search_path(instance::GtkSourceStyleSchemeManager)
+        ret = ccall(("gtk_source_style_scheme_manager_get_search_path", libgtksourceview), Ptr{Cstring}, (Ptr{GObject},), instance)
+        ret2 = begin
+                _len = length_zt(ret)
+                arrtemp = bytestring.(unsafe_wrap(Vector{Cstring}, ret, _len))
+                arrtemp
+            end
+        ret2
+    end
+    function prepend_search_path(instance::GtkSourceStyleSchemeManager, _path::Union{AbstractString, Symbol})
+        ret = ccall(("gtk_source_style_scheme_manager_prepend_search_path", libgtksourceview), Nothing, (Ptr{GObject}, Cstring), instance, _path)
+        nothing
+    end
+    function set_search_path(instance::GtkSourceStyleSchemeManager, _path)
+        _path_maybe = nothing_to_null(_path)
+        ret = ccall(("gtk_source_style_scheme_manager_set_search_path", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{Cstring}), instance, _path_maybe)
+        nothing
+    end
+    function StyleSchemePreview_new(_scheme::GtkSourceStyleScheme)
+        ret = ccall(("gtk_source_style_scheme_preview_new", libgtksourceview), Ptr{GObject}, (Ptr{GObject},), _scheme)
+        ret2 = GtkSourceStyleSchemePreviewLeaf(ret, false)
+        ret2
+    end
+    function get_scheme(instance::GtkSourceStyleSchemePreview)
+        ret = ccall(("gtk_source_style_scheme_preview_get_scheme", libgtksourceview), Ptr{GObject}, (Ptr{GObject},), instance)
+        ret2 = convert(GtkSourceStyleScheme, ret, false)
+        ret2
+    end
+    function get_selected(instance::GtkSourceStyleSchemePreview)
+        ret = ccall(("gtk_source_style_scheme_preview_get_selected", libgtksourceview), Cint, (Ptr{GObject},), instance)
+        ret2 = convert(Bool, ret)
+        ret2
+    end
+    function set_selected(instance::GtkSourceStyleSchemePreview, _selected::Bool)
+        ret = ccall(("gtk_source_style_scheme_preview_set_selected", libgtksourceview), Nothing, (Ptr{GObject}, Cint), instance, _selected)
+        nothing
+    end
+    function Tag_new(_name::Maybe(Union{AbstractString, Symbol}))
+        _name_maybe = nothing_to_null(_name)
+        ret = ccall(("gtk_source_tag_new", libgtksourceview), Ptr{GObject}, (Cstring,), _name_maybe)
+        ret2 = GtkSourceTagLeaf(ret, true)
+        ret2
+    end
+    function View_new()
+        ret = ccall(("gtk_source_view_new", libgtksourceview), Ptr{GObject}, ())
+        ret2 = GtkSourceViewLeaf(ret, false)
+        ret2
+    end
+    function View_new_with_buffer(_buffer::GtkSourceBuffer)
+        ret = ccall(("gtk_source_view_new_with_buffer", libgtksourceview), Ptr{GObject}, (Ptr{GObject},), _buffer)
+        ret2 = GtkSourceViewLeaf(ret, false)
+        ret2
+    end
+    function get_auto_indent(instance::GtkSourceView)
+        ret = ccall(("gtk_source_view_get_auto_indent", libgtksourceview), Cint, (Ptr{GObject},), instance)
+        ret2 = convert(Bool, ret)
+        ret2
+    end
+    function get_background_pattern(instance::GtkSourceView)
+        ret = ccall(("gtk_source_view_get_background_pattern", libgtksourceview), UInt32, (Ptr{GObject},), instance)
+        ret2 = BackgroundPatternType(ret)
+        ret2
+    end
+    function get_completion(instance::GtkSourceView)
+        ret = ccall(("gtk_source_view_get_completion", libgtksourceview), Ptr{GObject}, (Ptr{GObject},), instance)
+        ret2 = convert(GtkSourceCompletion, ret, false)
+        ret2
+    end
+    function get_enable_snippets(instance::GtkSourceView)
+        ret = ccall(("gtk_source_view_get_enable_snippets", libgtksourceview), Cint, (Ptr{GObject},), instance)
+        ret2 = convert(Bool, ret)
+        ret2
+    end
+    function get_gutter(instance::GtkSourceView, _window_type)
+        ret = ccall(("gtk_source_view_get_gutter", libgtksourceview), Ptr{GObject}, (Ptr{GObject}, UInt32), instance, _window_type)
+        ret2 = convert(GtkSourceGutter, ret, false)
+        ret2
+    end
+    function get_highlight_current_line(instance::GtkSourceView)
+        ret = ccall(("gtk_source_view_get_highlight_current_line", libgtksourceview), Cint, (Ptr{GObject},), instance)
+        ret2 = convert(Bool, ret)
+        ret2
+    end
+    function get_hover(instance::GtkSourceView)
+        ret = ccall(("gtk_source_view_get_hover", libgtksourceview), Ptr{GObject}, (Ptr{GObject},), instance)
+        ret2 = convert(GtkSourceHover, ret, false)
+        ret2
+    end
+    function get_indent_on_tab(instance::GtkSourceView)
+        ret = ccall(("gtk_source_view_get_indent_on_tab", libgtksourceview), Cint, (Ptr{GObject},), instance)
+        ret2 = convert(Bool, ret)
+        ret2
+    end
+    function get_indent_width(instance::GtkSourceView)
+        ret = ccall(("gtk_source_view_get_indent_width", libgtksourceview), Int32, (Ptr{GObject},), instance)
+        ret
+    end
+    function get_indenter(instance::GtkSourceView)
+        ret = ccall(("gtk_source_view_get_indenter", libgtksourceview), Ptr{GObject}, (Ptr{GObject},), instance)
+        ret2 = GLib.find_leaf_type_if_not_null(ret, false)
+        ret2
+    end
+    function get_insert_spaces_instead_of_tabs(instance::GtkSourceView)
+        ret = ccall(("gtk_source_view_get_insert_spaces_instead_of_tabs", libgtksourceview), Cint, (Ptr{GObject},), instance)
+        ret2 = convert(Bool, ret)
+        ret2
+    end
+    function get_mark_attributes(instance::GtkSourceView, _category::Union{AbstractString, Symbol}, _priority::Int32)
+        ret = ccall(("gtk_source_view_get_mark_attributes", libgtksourceview), Ptr{GObject}, (Ptr{GObject}, Cstring, Ptr{Int32}), instance, _category, _priority)
+        ret2 = convert(GtkSourceMarkAttributes, ret, false)
+        ret2
+    end
+    function get_right_margin_position(instance::GtkSourceView)
+        ret = ccall(("gtk_source_view_get_right_margin_position", libgtksourceview), UInt32, (Ptr{GObject},), instance)
+        ret
+    end
+    function get_show_line_marks(instance::GtkSourceView)
+        ret = ccall(("gtk_source_view_get_show_line_marks", libgtksourceview), Cint, (Ptr{GObject},), instance)
+        ret2 = convert(Bool, ret)
+        ret2
+    end
+    function get_show_line_numbers(instance::GtkSourceView)
+        ret = ccall(("gtk_source_view_get_show_line_numbers", libgtksourceview), Cint, (Ptr{GObject},), instance)
+        ret2 = convert(Bool, ret)
+        ret2
+    end
+    function get_show_right_margin(instance::GtkSourceView)
+        ret = ccall(("gtk_source_view_get_show_right_margin", libgtksourceview), Cint, (Ptr{GObject},), instance)
+        ret2 = convert(Bool, ret)
+        ret2
+    end
+    function get_smart_backspace(instance::GtkSourceView)
+        ret = ccall(("gtk_source_view_get_smart_backspace", libgtksourceview), Cint, (Ptr{GObject},), instance)
+        ret2 = convert(Bool, ret)
+        ret2
+    end
+    function get_smart_home_end(instance::GtkSourceView)
+        ret = ccall(("gtk_source_view_get_smart_home_end", libgtksourceview), UInt32, (Ptr{GObject},), instance)
+        ret2 = SmartHomeEndType(ret)
+        ret2
+    end
+    function get_space_drawer(instance::GtkSourceView)
+        ret = ccall(("gtk_source_view_get_space_drawer", libgtksourceview), Ptr{GObject}, (Ptr{GObject},), instance)
+        ret2 = convert(GtkSourceSpaceDrawer, ret, false)
+        ret2
+    end
+    function get_tab_width(instance::GtkSourceView)
+        ret = ccall(("gtk_source_view_get_tab_width", libgtksourceview), UInt32, (Ptr{GObject},), instance)
+        ret
+    end
+    function get_visual_column(instance::GtkSourceView, _iter::Union{GtkTextIter, Ref{_GtkTextIter}})
+        ret = ccall(("gtk_source_view_get_visual_column", libgtksourceview), UInt32, (Ptr{GObject}, Ptr{_GtkTextIter}), instance, _iter)
+        ret
+    end
+    function indent_lines(instance::GtkSourceView, _start::Union{GtkTextIter, Ref{_GtkTextIter}}, _end::Union{GtkTextIter, Ref{_GtkTextIter}})
+        ret = ccall(("gtk_source_view_indent_lines", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{_GtkTextIter}, Ptr{_GtkTextIter}), instance, _start, _end)
+        nothing
+    end
+    function push_snippet(instance::GtkSourceView, _snippet::GtkSourceSnippet, _location::Maybe(Union{GtkTextIter, Ref{_GtkTextIter}}))
+        _location_maybe = nothing_to_null(_location)
+        ret = ccall(("gtk_source_view_push_snippet", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{GObject}, Ptr{_GtkTextIter}), instance, _snippet, _location_maybe)
+        nothing
+    end
+    function set_auto_indent(instance::GtkSourceView, _enable::Bool)
+        ret = ccall(("gtk_source_view_set_auto_indent", libgtksourceview), Nothing, (Ptr{GObject}, Cint), instance, _enable)
+        nothing
+    end
+    function set_background_pattern(instance::GtkSourceView, _background_pattern)
+        ret = ccall(("gtk_source_view_set_background_pattern", libgtksourceview), Nothing, (Ptr{GObject}, UInt32), instance, _background_pattern)
+        nothing
+    end
+    function set_enable_snippets(instance::GtkSourceView, _enable_snippets::Bool)
+        ret = ccall(("gtk_source_view_set_enable_snippets", libgtksourceview), Nothing, (Ptr{GObject}, Cint), instance, _enable_snippets)
+        nothing
+    end
+    function set_highlight_current_line(instance::GtkSourceView, _highlight::Bool)
+        ret = ccall(("gtk_source_view_set_highlight_current_line", libgtksourceview), Nothing, (Ptr{GObject}, Cint), instance, _highlight)
+        nothing
+    end
+    function set_indent_on_tab(instance::GtkSourceView, _enable::Bool)
+        ret = ccall(("gtk_source_view_set_indent_on_tab", libgtksourceview), Nothing, (Ptr{GObject}, Cint), instance, _enable)
+        nothing
+    end
+    function set_indent_width(instance::GtkSourceView, _width::Integer)
+        ret = ccall(("gtk_source_view_set_indent_width", libgtksourceview), Nothing, (Ptr{GObject}, Int32), instance, _width)
+        nothing
+    end
+    function set_indenter(instance::GtkSourceView, _indenter::Maybe(GtkSourceIndenter))
+        _indenter_maybe = nothing_to_null(_indenter)
+        ret = ccall(("gtk_source_view_set_indenter", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{GObject}), instance, _indenter_maybe)
+        nothing
+    end
+    function set_insert_spaces_instead_of_tabs(instance::GtkSourceView, _enable::Bool)
+        ret = ccall(("gtk_source_view_set_insert_spaces_instead_of_tabs", libgtksourceview), Nothing, (Ptr{GObject}, Cint), instance, _enable)
+        nothing
+    end
+    function set_mark_attributes(instance::GtkSourceView, _category::Union{AbstractString, Symbol}, _attributes::GtkSourceMarkAttributes, _priority::Integer)
+        ret = ccall(("gtk_source_view_set_mark_attributes", libgtksourceview), Nothing, (Ptr{GObject}, Cstring, Ptr{GObject}, Int32), instance, _category, _attributes, _priority)
+        nothing
+    end
+    function set_right_margin_position(instance::GtkSourceView, _pos::Integer)
+        ret = ccall(("gtk_source_view_set_right_margin_position", libgtksourceview), Nothing, (Ptr{GObject}, UInt32), instance, _pos)
+        nothing
+    end
+    function set_show_line_marks(instance::GtkSourceView, _show::Bool)
+        ret = ccall(("gtk_source_view_set_show_line_marks", libgtksourceview), Nothing, (Ptr{GObject}, Cint), instance, _show)
+        nothing
+    end
+    function set_show_line_numbers(instance::GtkSourceView, _show::Bool)
+        ret = ccall(("gtk_source_view_set_show_line_numbers", libgtksourceview), Nothing, (Ptr{GObject}, Cint), instance, _show)
+        nothing
+    end
+    function set_show_right_margin(instance::GtkSourceView, _show::Bool)
+        ret = ccall(("gtk_source_view_set_show_right_margin", libgtksourceview), Nothing, (Ptr{GObject}, Cint), instance, _show)
+        nothing
+    end
+    function set_smart_backspace(instance::GtkSourceView, _smart_backspace::Bool)
+        ret = ccall(("gtk_source_view_set_smart_backspace", libgtksourceview), Nothing, (Ptr{GObject}, Cint), instance, _smart_backspace)
+        nothing
+    end
+    function set_smart_home_end(instance::GtkSourceView, _smart_home_end)
+        ret = ccall(("gtk_source_view_set_smart_home_end", libgtksourceview), Nothing, (Ptr{GObject}, UInt32), instance, _smart_home_end)
+        nothing
+    end
+    function set_tab_width(instance::GtkSourceView, _width::Integer)
+        ret = ccall(("gtk_source_view_set_tab_width", libgtksourceview), Nothing, (Ptr{GObject}, UInt32), instance, _width)
+        nothing
+    end
+    function unindent_lines(instance::GtkSourceView, _start::Union{GtkTextIter, Ref{_GtkTextIter}}, _end::Union{GtkTextIter, Ref{_GtkTextIter}})
+        ret = ccall(("gtk_source_view_unindent_lines", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{_GtkTextIter}, Ptr{_GtkTextIter}), instance, _start, _end)
+        nothing
+    end
+    function VimIMContext_new()
+        ret = ccall(("gtk_source_vim_im_context_new", libgtksourceview), Ptr{GObject}, ())
+        ret2 = GtkSourceVimIMContextLeaf(ret, true)
+        ret2
+    end
+    function execute_command(instance::GtkSourceVimIMContext, _command::Union{AbstractString, Symbol})
+        ret = ccall(("gtk_source_vim_im_context_execute_command", libgtksourceview), Nothing, (Ptr{GObject}, Cstring), instance, _command)
+        nothing
+    end
+    function get_command_bar_text(instance::GtkSourceVimIMContext)
+        ret = ccall(("gtk_source_vim_im_context_get_command_bar_text", libgtksourceview), Cstring, (Ptr{GObject},), instance)
+        ret2 = string_or_nothing(ret, false)
+        ret2
+    end
+    function get_command_text(instance::GtkSourceVimIMContext)
+        ret = ccall(("gtk_source_vim_im_context_get_command_text", libgtksourceview), Cstring, (Ptr{GObject},), instance)
+        ret2 = string_or_nothing(ret, false)
+        ret2
+    end
+    function get_typed_text(instance::GtkSourceCompletionProposal)
+        ret = ccall(("gtk_source_completion_proposal_get_typed_text", libgtksourceview), Cstring, (Ptr{GObject},), instance)
+        ret2 = string_or_nothing(ret, true)
+        ret2
+    end
+    function activate(instance::GtkSourceCompletionProvider, _context::GtkSourceCompletionContext, _proposal::GtkSourceCompletionProposal)
+        ret = ccall(("gtk_source_completion_provider_activate", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{GObject}, Ptr{GObject}), instance, _context, _proposal)
+        nothing
+    end
+    function display(instance::GtkSourceCompletionProvider, _context::GtkSourceCompletionContext, _proposal::GtkSourceCompletionProposal, _cell::GtkSourceCompletionCell)
+        ret = ccall(("gtk_source_completion_provider_display", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{GObject}, Ptr{GObject}, Ptr{GObject}), instance, _context, _proposal, _cell)
+        nothing
+    end
+    function get_priority(instance::GtkSourceCompletionProvider, _context::GtkSourceCompletionContext)
+        ret = ccall(("gtk_source_completion_provider_get_priority", libgtksourceview), Int32, (Ptr{GObject}, Ptr{GObject}), instance, _context)
+        ret
+    end
+    function get_title(instance::GtkSourceCompletionProvider)
+        ret = ccall(("gtk_source_completion_provider_get_title", libgtksourceview), Cstring, (Ptr{GObject},), instance)
+        ret2 = string_or_nothing(ret, true)
+        ret2
+    end
+    function is_trigger(instance::GtkSourceCompletionProvider, _iter::Union{GtkTextIter, Ref{_GtkTextIter}}, _ch)
+        ret = ccall(("gtk_source_completion_provider_is_trigger", libgtksourceview), Cint, (Ptr{GObject}, Ptr{_GtkTextIter}, Nothing), instance, _iter, _ch)
+        ret2 = convert(Bool, ret)
+        ret2
+    end
+    function key_activates(instance::GtkSourceCompletionProvider, _context::GtkSourceCompletionContext, _proposal::GtkSourceCompletionProposal, _keyval::Integer, _state)
+        ret = ccall(("gtk_source_completion_provider_key_activates", libgtksourceview), Cint, (Ptr{GObject}, Ptr{GObject}, Ptr{GObject}, UInt32, UInt32), instance, _context, _proposal, _keyval, _state)
+        ret2 = convert(Bool, ret)
+        ret2
+    end
+    function list_alternates(instance::GtkSourceCompletionProvider, _context::GtkSourceCompletionContext, _proposal::GtkSourceCompletionProposal)
+        ret = ccall(("gtk_source_completion_provider_list_alternates", libgtksourceview), Ptr{GPtrArray}, (Ptr{GObject}, Ptr{GObject}, Ptr{GObject}), instance, _context, _proposal)
+        ret
+    end
+    function populate_async(instance::GtkSourceCompletionProvider, _context::GtkSourceCompletionContext, _cancellable::Maybe(GCancellable), _callback::Maybe(Function))
+        _cancellable_maybe = nothing_to_null(_cancellable)
+        if _callback === nothing
+            _callback_cfunc = C_NULL
+            _callback_closure = C_NULL
+        else
+            _callback_cfunc = @cfunction(GAsyncReadyCallback, Nothing, (Ptr{GObject}, Ptr{GObject}, Ref{Function}))
+            _callback_closure = GLib.gc_ref(_callback)
+        end
+        ret = ccall(("gtk_source_completion_provider_populate_async", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{GObject}, Ptr{GObject}, Ptr{Cvoid}, Ptr{Nothing}), instance, _context, _cancellable_maybe, _callback_cfunc, _callback_closure)
+        nothing
+    end
+    function populate_finish(instance::GtkSourceCompletionProvider, _result::GAsyncResult)
+        err = err_buf()
+        ret = ccall(("gtk_source_completion_provider_populate_finish", libgtksourceview), Ptr{GObject}, (Ptr{GObject}, Ptr{GObject}, Ptr{Ptr{GError}}), instance, _result, err)
+        check_err(err)
+        ret2 = begin
+                leaftype = GLib.find_leaf_type(ret)
+                convert(leaftype, ret, true)
+            end
+        ret2
+    end
+    function refilter(instance::GtkSourceCompletionProvider, _context::GtkSourceCompletionContext, _model::GListModel)
+        ret = ccall(("gtk_source_completion_provider_refilter", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{GObject}, Ptr{GObject}), instance, _context, _model)
+        nothing
+    end
+    function populate_async(instance::GtkSourceHoverProvider, _context::GtkSourceHoverContext, _display::GtkSourceHoverDisplay, _cancellable::Maybe(GCancellable), _callback::Maybe(Function))
+        _cancellable_maybe = nothing_to_null(_cancellable)
+        if _callback === nothing
+            _callback_cfunc = C_NULL
+            _callback_closure = C_NULL
+        else
+            _callback_cfunc = @cfunction(GAsyncReadyCallback, Nothing, (Ptr{GObject}, Ptr{GObject}, Ref{Function}))
+            _callback_closure = GLib.gc_ref(_callback)
+        end
+        ret = ccall(("gtk_source_hover_provider_populate_async", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{GObject}, Ptr{GObject}, Ptr{GObject}, Ptr{Cvoid}, Ptr{Nothing}), instance, _context, _display, _cancellable_maybe, _callback_cfunc, _callback_closure)
+        nothing
+    end
+    function populate_finish(instance::GtkSourceHoverProvider, _result::GAsyncResult)
+        err = err_buf()
+        ret = ccall(("gtk_source_hover_provider_populate_finish", libgtksourceview), Cint, (Ptr{GObject}, Ptr{GObject}, Ptr{Ptr{GError}}), instance, _result, err)
+        check_err(err)
+        ret2 = convert(Bool, ret)
+        ret2
+    end
+    function indent(instance::GtkSourceIndenter, _view::GtkSourceView, _iter::Union{GtkTextIter, Ref{_GtkTextIter}})
+        m_iter = Ref{_GtkTextIter}()
+        m_iter[] = Base.cconvert(_GtkTextIter, _iter)
+        ret = ccall(("gtk_source_indenter_indent", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{GObject}, Ptr{_GtkTextIter}), instance, _view, m_iter)
+        _iter = m_iter[]
+        _iter
+    end
+    function is_trigger(instance::GtkSourceIndenter, _view::GtkSourceView, _location::Union{GtkTextIter, Ref{_GtkTextIter}}, _state, _keyval::Integer)
+        ret = ccall(("gtk_source_indenter_is_trigger", libgtksourceview), Cint, (Ptr{GObject}, Ptr{GObject}, Ptr{_GtkTextIter}, UInt32, UInt32), instance, _view, _location, _state, _keyval)
+        ret2 = convert(Bool, ret)
+        ret2
+    end
+    function get_style_scheme(instance::GtkSourceStyleSchemeChooser)
+        ret = ccall(("gtk_source_style_scheme_chooser_get_style_scheme", libgtksourceview), Ptr{GObject}, (Ptr{GObject},), instance)
+        ret2 = convert(GtkSourceStyleScheme, ret, false)
+        ret2
+    end
+    function set_style_scheme(instance::GtkSourceStyleSchemeChooser, _scheme::GtkSourceStyleScheme)
+        ret = ccall(("gtk_source_style_scheme_chooser_set_style_scheme", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{GObject}), instance, _scheme)
+        nothing
+    end
+end))
+end
