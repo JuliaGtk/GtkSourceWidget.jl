@@ -10,13 +10,11 @@ export GtkSourceLanguage, GtkSourceLanguageManager, GtkSourceBuffer,
        GtkSourceSearchContext, GtkSourceSearchSettings
 
 export scheme, language, show_line_numbers!, auto_indent!, style_scheme, style_scheme!,
-       max_undo_levels, max_undo_levels!, undo!, redo!, canundo, canredo, undomanager,
        highlight_current_line!, highlight_matching_brackets, source_view_get_gutter,
        reset_undomanager, set_view, get_view, style_scheme_chooser, style_scheme_chooser_button,
        set_search_text, get_search_text, search_context_forward, highlight, search_context_replace
 
 import ..Gtk4: GObject, GtkTextIter
-#suffix?
 
 eval(include("gen/gtksourceview_consts"))
 eval(include("gen/gtksourceview_structs"))
@@ -84,8 +82,7 @@ function GtkSourceStyleSchemeManagerLeaf(default=true)
     GtkSourceStyleSchemeManagerLeaf(
       ccall((:gtk_source_style_scheme_manager_get_default, libgtksourceview), Ptr{GObject}, ()))
   else
-    GtkSourceStyleSchemeManagerLeaf(
-      ccall((:gtk_source_style_scheme_manager_get_new, libgtksourceview), Ptr{GObject}, ()))
+    G_.StyleSchemeManager_new()
   end
 end
 
@@ -108,39 +105,15 @@ set_search_path(manager::GtkSourceStyleSchemeManager, dir)  = ccall(
     (Ptr{GObject}, Ptr{Ptr{UInt8}}), manager, dir
 )
 
-### GtkSourceUndoManager
-
-### This is a hack!!!
-struct GtkSourceUndoManagerI end
-
-undo!(manager::GtkSourceUndoManagerI) =
-  ccall((:gtk_source_undo_manager_undo, libgtksourceview), Nothing,
-        (Ptr{Nothing}, ), manager.handle)
-
-redo!(manager::GtkSourceUndoManagerI) =
-  ccall((:gtk_source_undo_manager_redo, libgtksourceview), Nothing,
-        (Ptr{Nothing}, ), manager.handle)
-
-canundo(manager::GtkSourceUndoManagerI) = Bool(
-  ccall((:gtk_source_undo_manager_can_undo, libgtksourceview), Cint,
-        (Ptr{Nothing}, ), manager.handle))
-
-canredo(manager::GtkSourceUndoManagerI) = Bool(
-  ccall((:gtk_source_undo_manager_can_redo, libgtksourceview), Cint,
-        (Ptr{Nothing}, ), manager.handle))
-
 ### GtkSourceBuffer
 
-GtkSourceBuffer() = GtkSourceBuffer(nothing)
+GtkSourceBuffer(; kwargs...) = GtkSourceBuffer(nothing; kwargs...)
 
-"""
-    GtkSourceBuffer(lang::GtkSourceLanguage)
-
-Implements `gtk_source_buffer_new_with_language`.
-"""
-GtkSourceBufferLeaf(lang::GtkSourceLanguage) = GtkSourceBufferLeaf(
-     ccall((:gtk_source_buffer_new_with_language, libgtksourceview), Ptr{GObject},
-           (Ptr{GObject}, ), lang) )
+#"""
+#    GtkSourceBuffer(lang::GtkSourceLanguage)
+#
+#Implements `gtk_source_buffer_new_with_language`.
+#"""
 
 """
     highlight_syntax(buffer::GtkSourceBuffer, highlight::Bool)
@@ -169,53 +142,7 @@ style_scheme!(buffer::GtkSourceBuffer, scheme::GtkSourceStyleScheme) =
   ccall((:gtk_source_buffer_set_style_scheme, libgtksourceview), Nothing,
         (Ptr{GObject}, Ptr{GObject}), buffer, scheme)
 
-max_undo_levels(buffer::GtkSourceBuffer) =
-  ccall((:gtk_source_buffer_get_max_undo_levels, libgtksourceview), Cint,
-        (Ptr{GObject}, ), buffer)
-
-max_undo_levels!(buffer::GtkSourceBuffer, levels::Integer) =
-  ccall((:gtk_source_buffer_set_max_undo_levels, libgtksourceview), Nothing,
-        (Ptr{GObject}, Cint), buffer, levels)
-
-"""
-    undo!(buffer::GtkSourceBuffer)
-
-Implements `gtk_source_buffer_undo`.
-"""
-undo!(buffer::GtkSourceBuffer) =
-  ccall((:gtk_source_buffer_undo, libgtksourceview), Nothing,
-        (Ptr{GObject}, ), buffer)
-
-"""
-    redo!(buffer::GtkSourceBuffer)
-
-Implements `gtk_source_buffer_redo`.
-"""
-redo!(buffer::GtkSourceBuffer) =
-  ccall((:gtk_source_buffer_redo, libgtksourceview), Nothing,
-        (Ptr{GObject}, ), buffer)
-
-canundo(buffer::GtkSourceBuffer) = Bool(
-  ccall((:gtk_source_buffer_can_undo, libgtksourceview), Cint,
-        (Ptr{GObject}, ), buffer))
-
-canredo(buffer::GtkSourceBuffer) = Bool(
-  ccall((:gtk_source_buffer_can_redo, libgtksourceview), Cint,
-        (Ptr{GObject}, ), buffer))
-
-undomanager(buffer::GtkSourceBuffer) = GtkSourceUndoManagerI(
-  ccall((:gtk_source_buffer_get_undo_manager, libgtksourceview), Ptr{Nothing},
-        (Ptr{GObject}, ), buffer))
-
-reset_undomanager(buffer::GtkSourceBuffer) = ccall(
-    (:gtk_source_buffer_set_undo_manager, libgtksourceview), Nothing,
-    (Ptr{GObject}, Ptr{GObject}), buffer, C_NULL
-)
-
 ### GtkSourceView
-
-GtkSourceViewLeaf(buffer=GtkSourceBuffer()) = GtkSourceView(
-    ccall((:gtk_source_view_new_with_buffer, libgtksourceview), Ptr{GObject}, (Ptr{GObject}, ), buffer))
 
 """
     show_line_numbers!(view::GtkSourceView, show::Bool)
@@ -235,9 +162,7 @@ auto_indent!(view::GtkSourceView, auto::Bool) =
 
 Implements `gtk_source_view_set_highlight_current_line`.
 """
-highlight_current_line!(view::GtkSourceView, hl::Bool) =
-  ccall((:gtk_source_view_set_highlight_current_line, libgtksourceview), Nothing,
-        (Ptr{GObject}, Cint), view, Int32(hl))
+highlight_current_line!(view::GtkSourceView, hl::Bool) = G_.set_highlight_current_line(view,hl)
 
 
 ### GtkSourceCompletion
@@ -255,12 +180,6 @@ get_completion(view::GtkSourceView) =
 
 ### GtkSourceCompletionContext
 
-baremodule GtkSourceCompletionActivation
-    const GTK_SOURCE_COMPLETION_ACTIVATION_NONE = 0
-    const GTK_SOURCE_COMPLETION_ACTIVATION_INTERACTIVE = 1
-    const GTK_SOURCE_COMPLETION_ACTIVATION_USER_REQUESTED = 2
-end
-
 #function add_proposals(context::GtkSourceCompletionContext, provider::GtkSourceCompletionProvider,
 #                       proposals::GList, finished::Bool)
 #  ccall((:gtk_source_completion_context_add_proposals, libgtksourceview), Nothing,
@@ -277,16 +196,11 @@ getactivation(context::GtkSourceCompletionContext) =
 
 ## GtkSourceSearchSettings
 
-GtkSourceSearchSettingsLeaf() = GtkSourceSearchSettingsLeaf(
-    ccall((:gtk_source_search_settings_new, libgtksourceview), Ptr{GObject}, ())
-)
-
 set_search_text(settings::GtkSourceSearchSettings, text::String) =
     ccall((:gtk_source_search_settings_set_search_text, libgtksourceview), Nothing,
         (Ptr{GObject}, Ptr{UInt8}), settings, text)
 
 function get_search_text(settings::GtkSourceSearchSettings)
-
     s = ccall((:gtk_source_search_settings_get_search_text, libgtksourceview), Ptr{UInt8},
     (Ptr{GObject}, ), settings)
 
@@ -322,8 +236,6 @@ source_view_get_gutter(view::GtkSourceView) =  ccall(
 )
 
 ### GtkSourceMap
-
-GtkSourceMapLeaf() = GtkSourceMapLeaf( ccall((:gtk_source_map_new, libgtksourceview), Ptr{GObject}, ()) )
 
 get_view(map::GtkSourceMap) =
     ccall((:gtk_source_map_get_view, libgtksourceview), Ptr{GtkSourceView},
