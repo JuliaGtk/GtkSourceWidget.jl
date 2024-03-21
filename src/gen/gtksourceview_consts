@@ -1,0 +1,106 @@
+quote
+$(Expr(:toplevel, quote
+    begin
+        const MAJOR_VERSION = 5
+        const MICRO_VERSION = 0
+        const MINOR_VERSION = 10
+        begin
+            @cenum BackgroundPatternType::Int32 BackgroundPatternType_NONE = 0 BackgroundPatternType_GRID = 1
+            (GLib.g_type(::Type{T}) where T <: BackgroundPatternType) = begin
+                    ccall(("gtk_source_background_pattern_type_get_type", libgtksourceview), GType, ())
+                end
+        end
+        begin
+            @cenum BracketMatchType::Int32 BracketMatchType_NONE = 0 BracketMatchType_OUT_OF_RANGE = 1 BracketMatchType_NOT_FOUND = 2 BracketMatchType_FOUND = 3
+            (GLib.g_type(::Type{T}) where T <: BracketMatchType) = begin
+                    ccall(("gtk_source_bracket_match_type_get_type", libgtksourceview), GType, ())
+                end
+        end
+        begin
+            @cenum ChangeCaseType::Int32 ChangeCaseType_LOWER = 0 ChangeCaseType_UPPER = 1 ChangeCaseType_TOGGLE = 2 ChangeCaseType_TITLE = 3
+            (GLib.g_type(::Type{T}) where T <: ChangeCaseType) = begin
+                    ccall(("gtk_source_change_case_type_get_type", libgtksourceview), GType, ())
+                end
+        end
+        begin
+            @cenum CompletionActivation::Int32 CompletionActivation_NONE = 0 CompletionActivation_INTERACTIVE = 1 CompletionActivation_USER_REQUESTED = 2
+            (GLib.g_type(::Type{T}) where T <: CompletionActivation) = begin
+                    ccall(("gtk_source_completion_activation_get_type", libgtksourceview), GType, ())
+                end
+        end
+        begin
+            @cenum CompletionColumn::Int32 CompletionColumn_ICON = 0 CompletionColumn_BEFORE = 1 CompletionColumn_TYPED_TEXT = 2 CompletionColumn_AFTER = 3 CompletionColumn_COMMENT = 4 CompletionColumn_DETAILS = 5
+            (GLib.g_type(::Type{T}) where T <: CompletionColumn) = begin
+                    ccall(("gtk_source_completion_column_get_type", libgtksourceview), GType, ())
+                end
+        end
+        begin
+            @cenum CompressionType::Int32 CompressionType_NONE = 0 CompressionType_GZIP = 1
+            (GLib.g_type(::Type{T}) where T <: CompressionType) = begin
+                    ccall(("gtk_source_compression_type_get_type", libgtksourceview), GType, ())
+                end
+        end
+        begin
+            @cenum FileLoaderError::Int32 FileLoaderError_TOO_BIG = 0 FileLoaderError_ENCODING_AUTO_DETECTION_FAILED = 1 FileLoaderError_CONVERSION_FALLBACK = 2
+            (GLib.g_type(::Type{T}) where T <: FileLoaderError) = begin
+                    ccall(("gtk_source_file_loader_error_get_type", libgtksourceview), GType, ())
+                end
+        end
+        begin
+            @cenum FileSaverError::Int32 FileSaverError_INVALID_CHARS = 0 FileSaverError_EXTERNALLY_MODIFIED = 1
+            (GLib.g_type(::Type{T}) where T <: FileSaverError) = begin
+                    ccall(("gtk_source_file_saver_error_get_type", libgtksourceview), GType, ())
+                end
+        end
+        begin
+            @cenum GutterRendererAlignmentMode::Int32 GutterRendererAlignmentMode_CELL = 0 GutterRendererAlignmentMode_FIRST = 1 GutterRendererAlignmentMode_LAST = 2
+            (GLib.g_type(::Type{T}) where T <: GutterRendererAlignmentMode) = begin
+                    ccall(("gtk_source_gutter_renderer_alignment_mode_get_type", libgtksourceview), GType, ())
+                end
+        end
+        begin
+            @cenum NewlineType::Int32 NewlineType_LF = 0 NewlineType_CR = 1 NewlineType_CR_LF = 2
+            (GLib.g_type(::Type{T}) where T <: NewlineType) = begin
+                    ccall(("gtk_source_newline_type_get_type", libgtksourceview), GType, ())
+                end
+        end
+        begin
+            @cenum SmartHomeEndType::Int32 SmartHomeEndType_DISABLED = 0 SmartHomeEndType_BEFORE = 1 SmartHomeEndType_AFTER = 2 SmartHomeEndType_ALWAYS = 3
+            (GLib.g_type(::Type{T}) where T <: SmartHomeEndType) = begin
+                    ccall(("gtk_source_smart_home_end_type_get_type", libgtksourceview), GType, ())
+                end
+        end
+        begin
+            @cenum ViewGutterPosition::UInt16 ViewGutterPosition_LINES = 0xffe2 ViewGutterPosition_MARKS = 0xffec
+            (GLib.g_type(::Type{T}) where T <: ViewGutterPosition) = begin
+                    ccall(("gtk_source_view_gutter_position_get_type", libgtksourceview), GType, ())
+                end
+        end
+        begin
+            @bitflag FileSaverFlags::UInt32 FileSaverFlags_NONE = 0 FileSaverFlags_IGNORE_INVALID_CHARS = 1 FileSaverFlags_IGNORE_MODIFICATION_TIME = 2 FileSaverFlags_CREATE_BACKUP = 4
+            (GLib.g_type(::Type{T}) where T <: FileSaverFlags) = begin
+                    ccall(("gtk_source_file_saver_flags_get_type", libgtksourceview), GType, ())
+                end
+        end
+        begin
+            @bitflag SortFlags::UInt32 SortFlags_NONE = 0 SortFlags_CASE_SENSITIVE = 1 SortFlags_REVERSE_ORDER = 2 SortFlags_REMOVE_DUPLICATES = 4
+            (GLib.g_type(::Type{T}) where T <: SortFlags) = begin
+                    ccall(("gtk_source_sort_flags_get_type", libgtksourceview), GType, ())
+                end
+        end
+        begin
+            @bitflag SpaceLocationFlags::UInt32 SpaceLocationFlags_NONE = 0 SpaceLocationFlags_LEADING = 1 SpaceLocationFlags_INSIDE_TEXT = 2 SpaceLocationFlags_TRAILING = 4
+            (GLib.g_type(::Type{T}) where T <: SpaceLocationFlags) = begin
+                    ccall(("gtk_source_space_location_flags_get_type", libgtksourceview), GType, ())
+                end
+        end
+        begin
+            @bitflag SpaceTypeFlags::UInt32 SpaceTypeFlags_NONE = 0 SpaceTypeFlags_SPACE = 1 SpaceTypeFlags_TAB = 2 SpaceTypeFlags_NEWLINE = 4 SpaceTypeFlags_NBSP = 8
+            (GLib.g_type(::Type{T}) where T <: SpaceTypeFlags) = begin
+                    ccall(("gtk_source_space_type_flags_get_type", libgtksourceview), GType, ())
+                end
+        end
+        export BackgroundPatternType, BracketMatchType, ChangeCaseType, CompletionActivation, CompletionColumn, CompressionType, FileLoaderError, FileSaverError, GutterRendererAlignmentMode, NewlineType, SmartHomeEndType, ViewGutterPosition, FileSaverFlags, SortFlags, SpaceLocationFlags, SpaceTypeFlags
+    end
+end))
+end

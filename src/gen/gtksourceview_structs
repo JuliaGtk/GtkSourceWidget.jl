@@ -1,0 +1,1197 @@
+quote
+$(Expr(:toplevel, quote
+    gboxed_types = Any[]
+    struct GtkSourceCompletionProposal <: GInterface
+        handle::Ptr{GObject}
+        gc::Any
+        GtkSourceCompletionProposal(x::GObject) = begin
+                new(unsafe_convert(Ptr{GObject}, x), x)
+            end
+    end
+    struct GtkSourceCompletionProvider <: GInterface
+        handle::Ptr{GObject}
+        gc::Any
+        GtkSourceCompletionProvider(x::GObject) = begin
+                new(unsafe_convert(Ptr{GObject}, x), x)
+            end
+    end
+    struct GtkSourceHoverProvider <: GInterface
+        handle::Ptr{GObject}
+        gc::Any
+        GtkSourceHoverProvider(x::GObject) = begin
+                new(unsafe_convert(Ptr{GObject}, x), x)
+            end
+    end
+    struct GtkSourceIndenter <: GInterface
+        handle::Ptr{GObject}
+        gc::Any
+        GtkSourceIndenter(x::GObject) = begin
+                new(unsafe_convert(Ptr{GObject}, x), x)
+            end
+    end
+    struct GtkSourceStyleSchemeChooser <: GInterface
+        handle::Ptr{GObject}
+        gc::Any
+        GtkSourceStyleSchemeChooser(x::GObject) = begin
+                new(unsafe_convert(Ptr{GObject}, x), x)
+            end
+    end
+    const gtype_wrapper_cache = Dict{Symbol, Type}()
+    begin
+        abstract type GtkSourceBuffer <: GtkTextBuffer end
+        mutable struct GtkSourceBufferLeaf <: GtkSourceBuffer
+            handle::Ptr{GObject}
+            function GtkSourceBufferLeaf(handle::Ptr{GObject}, owns = false)
+                if handle == C_NULL
+                    error("Cannot construct GtkSourceBufferLeaf with a NULL pointer")
+                end
+                GLib.gobject_maybe_sink(handle, owns)
+                return gobject_ref(new(handle))
+            end
+        end
+        gtype_wrapper_cache[:GtkSourceBuffer] = GtkSourceBufferLeaf
+        (GLib.g_type(::Type{T}) where T <: GtkSourceBuffer) = begin
+                ccall(("gtk_source_buffer_get_type", libgtksourceview), GType, ())
+            end
+    end
+    begin
+        function GLib.signalnames(::Type{GtkSourceBuffer})
+            vcat([:bracket_matched, :cursor_moved, :highlight_updated, :source_mark_updated], signalnames(supertype(GtkSourceBuffer)))
+        end
+        let d = Dict{Symbol, Tuple{Any, Any}}(:notify => (:Nothing, Any[:(Ptr{GParamSpec})]), :undo => (:Nothing, Any[]), :remove_tag => (:Nothing, Any[:(Ptr{GObject}), :_GtkTextIter, :_GtkTextIter]), :insert_child_anchor => (:Nothing, Any[:_GtkTextIter, :(Ptr{GObject})]), :source_mark_updated => (:Nothing, Any[:(Ptr{GObject})]), :cursor_moved => (:Nothing, Any[]), :redo => (:Nothing, Any[]), :begin_user_action => (:Nothing, Any[]), :highlight_updated => (:Nothing, Any[:_GtkTextIter, :_GtkTextIter]), :delete_range => (:Nothing, Any[:_GtkTextIter, :_GtkTextIter]), :bracket_matched => (:Nothing, Any[:_GtkTextIter, :UInt32]), :mark_deleted => (:Nothing, Any[:(Ptr{GObject})]), :end_user_action => (:Nothing, Any[]), :modified_changed => (:Nothing, Any[]), :mark_set => (:Nothing, Any[:_GtkTextIter, :(Ptr{GObject})]), :insert_paintable => (:Nothing, Any[:_GtkTextIter, :(Ptr{GObject})]), :apply_tag => (:Nothing, Any[:(Ptr{GObject}), :_GtkTextIter, :_GtkTextIter]), :changed => (:Nothing, Any[]), :insert_text => (:Nothing, Any[:_GtkTextIter, :Cstring, :Int32]), :paste_done => (:Nothing, Any[:(Ptr{GObject})]))
+            function GLib.signal_return_type(::Type{T}, name::Symbol) where T <: GtkSourceBuffer
+                eval((d[name])[1])
+            end
+            function GLib.signal_argument_types(::Type{T}, name::Symbol) where T <: GtkSourceBuffer
+                Tuple(eval.((d[name])[2]))
+            end
+        end
+    end
+    begin
+        abstract type GtkSourceCompletion <: GObject end
+        mutable struct GtkSourceCompletionLeaf <: GtkSourceCompletion
+            handle::Ptr{GObject}
+            function GtkSourceCompletionLeaf(handle::Ptr{GObject}, owns = false)
+                if handle == C_NULL
+                    error("Cannot construct GtkSourceCompletionLeaf with a NULL pointer")
+                end
+                GLib.gobject_maybe_sink(handle, owns)
+                return gobject_ref(new(handle))
+            end
+        end
+        gtype_wrapper_cache[:GtkSourceCompletion] = GtkSourceCompletionLeaf
+        (GLib.g_type(::Type{T}) where T <: GtkSourceCompletion) = begin
+                ccall(("gtk_source_completion_get_type", libgtksourceview), GType, ())
+            end
+    end
+    begin
+        function GLib.signalnames(::Type{GtkSourceCompletion})
+            vcat([:hide, :provider_added, :provider_removed, :show], signalnames(supertype(GtkSourceCompletion)))
+        end
+        let d = Dict{Symbol, Tuple{Any, Any}}(:notify => (:Nothing, Any[:(Ptr{GParamSpec})]), :show => (:Nothing, Any[]), :hide => (:Nothing, Any[]), :provider_removed => (:Nothing, Any[:(Ptr{GObject})]), :provider_added => (:Nothing, Any[:(Ptr{GObject})]))
+            function GLib.signal_return_type(::Type{T}, name::Symbol) where T <: GtkSourceCompletion
+                eval((d[name])[1])
+            end
+            function GLib.signal_argument_types(::Type{T}, name::Symbol) where T <: GtkSourceCompletion
+                Tuple(eval.((d[name])[2]))
+            end
+        end
+    end
+    begin
+        abstract type GtkSourceCompletionCell <: GtkWidget end
+        mutable struct GtkSourceCompletionCellLeaf <: GtkSourceCompletionCell
+            handle::Ptr{GObject}
+            function GtkSourceCompletionCellLeaf(handle::Ptr{GObject}, owns = false)
+                if handle == C_NULL
+                    error("Cannot construct GtkSourceCompletionCellLeaf with a NULL pointer")
+                end
+                GLib.gobject_maybe_sink(handle, owns)
+                return gobject_ref(new(handle))
+            end
+        end
+        gtype_wrapper_cache[:GtkSourceCompletionCell] = GtkSourceCompletionCellLeaf
+        (GLib.g_type(::Type{T}) where T <: GtkSourceCompletionCell) = begin
+                ccall(("gtk_source_completion_cell_get_type", libgtksourceview), GType, ())
+            end
+    end
+    begin
+        function GLib.signalnames(::Type{GtkSourceCompletionCell})
+            signalnames(supertype(GtkSourceCompletionCell))
+        end
+    end
+    begin
+        abstract type GtkSourceCompletionContext <: GObject end
+        mutable struct GtkSourceCompletionContextLeaf <: GtkSourceCompletionContext
+            handle::Ptr{GObject}
+            function GtkSourceCompletionContextLeaf(handle::Ptr{GObject}, owns = false)
+                if handle == C_NULL
+                    error("Cannot construct GtkSourceCompletionContextLeaf with a NULL pointer")
+                end
+                GLib.gobject_maybe_sink(handle, owns)
+                return gobject_ref(new(handle))
+            end
+        end
+        gtype_wrapper_cache[:GtkSourceCompletionContext] = GtkSourceCompletionContextLeaf
+        (GLib.g_type(::Type{T}) where T <: GtkSourceCompletionContext) = begin
+                ccall(("gtk_source_completion_context_get_type", libgtksourceview), GType, ())
+            end
+    end
+    begin
+        function GLib.signalnames(::Type{GtkSourceCompletionContext})
+            vcat([:provider_model_changed, :items_changed], signalnames(supertype(GtkSourceCompletionContext)))
+        end
+        let d = Dict{Symbol, Tuple{Any, Any}}(:notify => (:Nothing, Any[:(Ptr{GParamSpec})]), :provider_model_changed => (:Nothing, Any[:(Ptr{GObject}), :(Ptr{GObject})]))
+            function GLib.signal_return_type(::Type{T}, name::Symbol) where T <: GtkSourceCompletionContext
+                eval((d[name])[1])
+            end
+            function GLib.signal_argument_types(::Type{T}, name::Symbol) where T <: GtkSourceCompletionContext
+                Tuple(eval.((d[name])[2]))
+            end
+        end
+    end
+    begin
+        abstract type GtkSourceCompletionSnippets <: GObject end
+        mutable struct GtkSourceCompletionSnippetsLeaf <: GtkSourceCompletionSnippets
+            handle::Ptr{GObject}
+            function GtkSourceCompletionSnippetsLeaf(handle::Ptr{GObject}, owns = false)
+                if handle == C_NULL
+                    error("Cannot construct GtkSourceCompletionSnippetsLeaf with a NULL pointer")
+                end
+                GLib.gobject_maybe_sink(handle, owns)
+                return gobject_ref(new(handle))
+            end
+        end
+        gtype_wrapper_cache[:GtkSourceCompletionSnippets] = GtkSourceCompletionSnippetsLeaf
+        (GLib.g_type(::Type{T}) where T <: GtkSourceCompletionSnippets) = begin
+                ccall(("gtk_source_completion_snippets_get_type", libgtksourceview), GType, ())
+            end
+    end
+    begin
+        function GLib.signalnames(::Type{GtkSourceCompletionSnippets})
+            signalnames(supertype(GtkSourceCompletionSnippets))
+        end
+    end
+    begin
+        abstract type GtkSourceCompletionWords <: GObject end
+        mutable struct GtkSourceCompletionWordsLeaf <: GtkSourceCompletionWords
+            handle::Ptr{GObject}
+            function GtkSourceCompletionWordsLeaf(handle::Ptr{GObject}, owns = false)
+                if handle == C_NULL
+                    error("Cannot construct GtkSourceCompletionWordsLeaf with a NULL pointer")
+                end
+                GLib.gobject_maybe_sink(handle, owns)
+                return gobject_ref(new(handle))
+            end
+        end
+        gtype_wrapper_cache[:GtkSourceCompletionWords] = GtkSourceCompletionWordsLeaf
+        (GLib.g_type(::Type{T}) where T <: GtkSourceCompletionWords) = begin
+                ccall(("gtk_source_completion_words_get_type", libgtksourceview), GType, ())
+            end
+    end
+    begin
+        function GLib.signalnames(::Type{GtkSourceCompletionWords})
+            signalnames(supertype(GtkSourceCompletionWords))
+        end
+    end
+    begin
+        abstract type GtkSourceFile <: GObject end
+        mutable struct GtkSourceFileLeaf <: GtkSourceFile
+            handle::Ptr{GObject}
+            function GtkSourceFileLeaf(handle::Ptr{GObject}, owns = false)
+                if handle == C_NULL
+                    error("Cannot construct GtkSourceFileLeaf with a NULL pointer")
+                end
+                GLib.gobject_maybe_sink(handle, owns)
+                return gobject_ref(new(handle))
+            end
+        end
+        gtype_wrapper_cache[:GtkSourceFile] = GtkSourceFileLeaf
+        (GLib.g_type(::Type{T}) where T <: GtkSourceFile) = begin
+                ccall(("gtk_source_file_get_type", libgtksourceview), GType, ())
+            end
+    end
+    begin
+        function GLib.signalnames(::Type{GtkSourceFile})
+            signalnames(supertype(GtkSourceFile))
+        end
+    end
+    begin
+        abstract type GtkSourceFileLoader <: GObject end
+        mutable struct GtkSourceFileLoaderLeaf <: GtkSourceFileLoader
+            handle::Ptr{GObject}
+            function GtkSourceFileLoaderLeaf(handle::Ptr{GObject}, owns = false)
+                if handle == C_NULL
+                    error("Cannot construct GtkSourceFileLoaderLeaf with a NULL pointer")
+                end
+                GLib.gobject_maybe_sink(handle, owns)
+                return gobject_ref(new(handle))
+            end
+        end
+        gtype_wrapper_cache[:GtkSourceFileLoader] = GtkSourceFileLoaderLeaf
+        (GLib.g_type(::Type{T}) where T <: GtkSourceFileLoader) = begin
+                ccall(("gtk_source_file_loader_get_type", libgtksourceview), GType, ())
+            end
+    end
+    begin
+        function GLib.signalnames(::Type{GtkSourceFileLoader})
+            signalnames(supertype(GtkSourceFileLoader))
+        end
+    end
+    begin
+        abstract type GtkSourceFileSaver <: GObject end
+        mutable struct GtkSourceFileSaverLeaf <: GtkSourceFileSaver
+            handle::Ptr{GObject}
+            function GtkSourceFileSaverLeaf(handle::Ptr{GObject}, owns = false)
+                if handle == C_NULL
+                    error("Cannot construct GtkSourceFileSaverLeaf with a NULL pointer")
+                end
+                GLib.gobject_maybe_sink(handle, owns)
+                return gobject_ref(new(handle))
+            end
+        end
+        gtype_wrapper_cache[:GtkSourceFileSaver] = GtkSourceFileSaverLeaf
+        (GLib.g_type(::Type{T}) where T <: GtkSourceFileSaver) = begin
+                ccall(("gtk_source_file_saver_get_type", libgtksourceview), GType, ())
+            end
+    end
+    begin
+        function GLib.signalnames(::Type{GtkSourceFileSaver})
+            signalnames(supertype(GtkSourceFileSaver))
+        end
+    end
+    begin
+        abstract type GtkSourceGutter <: GtkWidget end
+        mutable struct GtkSourceGutterLeaf <: GtkSourceGutter
+            handle::Ptr{GObject}
+            function GtkSourceGutterLeaf(handle::Ptr{GObject}, owns = false)
+                if handle == C_NULL
+                    error("Cannot construct GtkSourceGutterLeaf with a NULL pointer")
+                end
+                GLib.gobject_maybe_sink(handle, owns)
+                return gobject_ref(new(handle))
+            end
+        end
+        gtype_wrapper_cache[:GtkSourceGutter] = GtkSourceGutterLeaf
+        (GLib.g_type(::Type{T}) where T <: GtkSourceGutter) = begin
+                ccall(("gtk_source_gutter_get_type", libgtksourceview), GType, ())
+            end
+    end
+    begin
+        function GLib.signalnames(::Type{GtkSourceGutter})
+            signalnames(supertype(GtkSourceGutter))
+        end
+    end
+    begin
+        abstract type GtkSourceGutterLines <: GObject end
+        mutable struct GtkSourceGutterLinesLeaf <: GtkSourceGutterLines
+            handle::Ptr{GObject}
+            function GtkSourceGutterLinesLeaf(handle::Ptr{GObject}, owns = false)
+                if handle == C_NULL
+                    error("Cannot construct GtkSourceGutterLinesLeaf with a NULL pointer")
+                end
+                GLib.gobject_maybe_sink(handle, owns)
+                return gobject_ref(new(handle))
+            end
+        end
+        gtype_wrapper_cache[:GtkSourceGutterLines] = GtkSourceGutterLinesLeaf
+        (GLib.g_type(::Type{T}) where T <: GtkSourceGutterLines) = begin
+                ccall(("gtk_source_gutter_lines_get_type", libgtksourceview), GType, ())
+            end
+    end
+    begin
+        function GLib.signalnames(::Type{GtkSourceGutterLines})
+            signalnames(supertype(GtkSourceGutterLines))
+        end
+    end
+    begin
+        abstract type GtkSourceGutterRenderer <: GtkWidget end
+        mutable struct GtkSourceGutterRendererLeaf <: GtkSourceGutterRenderer
+            handle::Ptr{GObject}
+            function GtkSourceGutterRendererLeaf(handle::Ptr{GObject}, owns = false)
+                if handle == C_NULL
+                    error("Cannot construct GtkSourceGutterRendererLeaf with a NULL pointer")
+                end
+                GLib.gobject_maybe_sink(handle, owns)
+                return gobject_ref(new(handle))
+            end
+        end
+        gtype_wrapper_cache[:GtkSourceGutterRenderer] = GtkSourceGutterRendererLeaf
+        (GLib.g_type(::Type{T}) where T <: GtkSourceGutterRenderer) = begin
+                ccall(("gtk_source_gutter_renderer_get_type", libgtksourceview), GType, ())
+            end
+    end
+    begin
+        function GLib.signalnames(::Type{GtkSourceGutterRenderer})
+            vcat([:activate, :query_activatable, :query_data], signalnames(supertype(GtkSourceGutterRenderer)))
+        end
+        let d = Dict{Symbol, Tuple{Any, Any}}(:notify => (:Nothing, Any[:(Ptr{GParamSpec})]), :state_flags_changed => (:Nothing, Any[:UInt32]), :map => (:Nothing, Any[]), :query_activatable => (:Cint, Any[:_GtkTextIter, :_GdkRectangle]), :unrealize => (:Nothing, Any[]), :show => (:Nothing, Any[]), :unmap => (:Nothing, Any[]), :hide => (:Nothing, Any[]), :query_tooltip => (:Cint, Any[:Int32, :Int32, :Cint, :(Ptr{GObject})]), :query_data => (:Nothing, Any[:(Ptr{GObject}), :UInt32]), :move_focus => (:Nothing, Any[:UInt32]), :mnemonic_activate => (:Cint, Any[:Cint]), :direction_changed => (:Nothing, Any[:UInt32]), :activate => (:Nothing, Any[:_GtkTextIter, :_GdkRectangle, :UInt32, :UInt32, :Int32]), :destroy => (:Nothing, Any[]), :keynav_failed => (:Cint, Any[:UInt32]), :realize => (:Nothing, Any[]))
+            function GLib.signal_return_type(::Type{T}, name::Symbol) where T <: GtkSourceGutterRenderer
+                eval((d[name])[1])
+            end
+            function GLib.signal_argument_types(::Type{T}, name::Symbol) where T <: GtkSourceGutterRenderer
+                Tuple(eval.((d[name])[2]))
+            end
+        end
+    end
+    begin
+        abstract type GtkSourceGutterRendererPixbuf <: GtkSourceGutterRenderer end
+        mutable struct GtkSourceGutterRendererPixbufLeaf <: GtkSourceGutterRendererPixbuf
+            handle::Ptr{GObject}
+            function GtkSourceGutterRendererPixbufLeaf(handle::Ptr{GObject}, owns = false)
+                if handle == C_NULL
+                    error("Cannot construct GtkSourceGutterRendererPixbufLeaf with a NULL pointer")
+                end
+                GLib.gobject_maybe_sink(handle, owns)
+                return gobject_ref(new(handle))
+            end
+        end
+        gtype_wrapper_cache[:GtkSourceGutterRendererPixbuf] = GtkSourceGutterRendererPixbufLeaf
+        (GLib.g_type(::Type{T}) where T <: GtkSourceGutterRendererPixbuf) = begin
+                ccall(("gtk_source_gutter_renderer_pixbuf_get_type", libgtksourceview), GType, ())
+            end
+    end
+    begin
+        function GLib.signalnames(::Type{GtkSourceGutterRendererPixbuf})
+            signalnames(supertype(GtkSourceGutterRendererPixbuf))
+        end
+    end
+    begin
+        abstract type GtkSourceGutterRendererText <: GtkSourceGutterRenderer end
+        mutable struct GtkSourceGutterRendererTextLeaf <: GtkSourceGutterRendererText
+            handle::Ptr{GObject}
+            function GtkSourceGutterRendererTextLeaf(handle::Ptr{GObject}, owns = false)
+                if handle == C_NULL
+                    error("Cannot construct GtkSourceGutterRendererTextLeaf with a NULL pointer")
+                end
+                GLib.gobject_maybe_sink(handle, owns)
+                return gobject_ref(new(handle))
+            end
+        end
+        gtype_wrapper_cache[:GtkSourceGutterRendererText] = GtkSourceGutterRendererTextLeaf
+        (GLib.g_type(::Type{T}) where T <: GtkSourceGutterRendererText) = begin
+                ccall(("gtk_source_gutter_renderer_text_get_type", libgtksourceview), GType, ())
+            end
+    end
+    begin
+        function GLib.signalnames(::Type{GtkSourceGutterRendererText})
+            signalnames(supertype(GtkSourceGutterRendererText))
+        end
+    end
+    begin
+        abstract type GtkSourceHover <: GObject end
+        mutable struct GtkSourceHoverLeaf <: GtkSourceHover
+            handle::Ptr{GObject}
+            function GtkSourceHoverLeaf(handle::Ptr{GObject}, owns = false)
+                if handle == C_NULL
+                    error("Cannot construct GtkSourceHoverLeaf with a NULL pointer")
+                end
+                GLib.gobject_maybe_sink(handle, owns)
+                return gobject_ref(new(handle))
+            end
+        end
+        gtype_wrapper_cache[:GtkSourceHover] = GtkSourceHoverLeaf
+        (GLib.g_type(::Type{T}) where T <: GtkSourceHover) = begin
+                ccall(("gtk_source_hover_get_type", libgtksourceview), GType, ())
+            end
+    end
+    begin
+        function GLib.signalnames(::Type{GtkSourceHover})
+            signalnames(supertype(GtkSourceHover))
+        end
+    end
+    begin
+        abstract type GtkSourceHoverContext <: GObject end
+        mutable struct GtkSourceHoverContextLeaf <: GtkSourceHoverContext
+            handle::Ptr{GObject}
+            function GtkSourceHoverContextLeaf(handle::Ptr{GObject}, owns = false)
+                if handle == C_NULL
+                    error("Cannot construct GtkSourceHoverContextLeaf with a NULL pointer")
+                end
+                GLib.gobject_maybe_sink(handle, owns)
+                return gobject_ref(new(handle))
+            end
+        end
+        gtype_wrapper_cache[:GtkSourceHoverContext] = GtkSourceHoverContextLeaf
+        (GLib.g_type(::Type{T}) where T <: GtkSourceHoverContext) = begin
+                ccall(("gtk_source_hover_context_get_type", libgtksourceview), GType, ())
+            end
+    end
+    begin
+        function GLib.signalnames(::Type{GtkSourceHoverContext})
+            signalnames(supertype(GtkSourceHoverContext))
+        end
+    end
+    begin
+        abstract type GtkSourceHoverDisplay <: GtkWidget end
+        mutable struct GtkSourceHoverDisplayLeaf <: GtkSourceHoverDisplay
+            handle::Ptr{GObject}
+            function GtkSourceHoverDisplayLeaf(handle::Ptr{GObject}, owns = false)
+                if handle == C_NULL
+                    error("Cannot construct GtkSourceHoverDisplayLeaf with a NULL pointer")
+                end
+                GLib.gobject_maybe_sink(handle, owns)
+                return gobject_ref(new(handle))
+            end
+        end
+        gtype_wrapper_cache[:GtkSourceHoverDisplay] = GtkSourceHoverDisplayLeaf
+        (GLib.g_type(::Type{T}) where T <: GtkSourceHoverDisplay) = begin
+                ccall(("gtk_source_hover_display_get_type", libgtksourceview), GType, ())
+            end
+    end
+    begin
+        function GLib.signalnames(::Type{GtkSourceHoverDisplay})
+            signalnames(supertype(GtkSourceHoverDisplay))
+        end
+    end
+    begin
+        abstract type GtkSourceLanguage <: GObject end
+        mutable struct GtkSourceLanguageLeaf <: GtkSourceLanguage
+            handle::Ptr{GObject}
+            function GtkSourceLanguageLeaf(handle::Ptr{GObject}, owns = false)
+                if handle == C_NULL
+                    error("Cannot construct GtkSourceLanguageLeaf with a NULL pointer")
+                end
+                GLib.gobject_maybe_sink(handle, owns)
+                return gobject_ref(new(handle))
+            end
+        end
+        gtype_wrapper_cache[:GtkSourceLanguage] = GtkSourceLanguageLeaf
+        (GLib.g_type(::Type{T}) where T <: GtkSourceLanguage) = begin
+                ccall(("gtk_source_language_get_type", libgtksourceview), GType, ())
+            end
+    end
+    begin
+        function GLib.signalnames(::Type{GtkSourceLanguage})
+            signalnames(supertype(GtkSourceLanguage))
+        end
+    end
+    begin
+        abstract type GtkSourceLanguageManager <: GObject end
+        mutable struct GtkSourceLanguageManagerLeaf <: GtkSourceLanguageManager
+            handle::Ptr{GObject}
+            function GtkSourceLanguageManagerLeaf(handle::Ptr{GObject}, owns = false)
+                if handle == C_NULL
+                    error("Cannot construct GtkSourceLanguageManagerLeaf with a NULL pointer")
+                end
+                GLib.gobject_maybe_sink(handle, owns)
+                return gobject_ref(new(handle))
+            end
+        end
+        gtype_wrapper_cache[:GtkSourceLanguageManager] = GtkSourceLanguageManagerLeaf
+        (GLib.g_type(::Type{T}) where T <: GtkSourceLanguageManager) = begin
+                ccall(("gtk_source_language_manager_get_type", libgtksourceview), GType, ())
+            end
+    end
+    begin
+        function GLib.signalnames(::Type{GtkSourceLanguageManager})
+            signalnames(supertype(GtkSourceLanguageManager))
+        end
+    end
+    begin
+        abstract type GtkSourceView <: GtkTextView end
+        mutable struct GtkSourceViewLeaf <: GtkSourceView
+            handle::Ptr{GObject}
+            function GtkSourceViewLeaf(handle::Ptr{GObject}, owns = false)
+                if handle == C_NULL
+                    error("Cannot construct GtkSourceViewLeaf with a NULL pointer")
+                end
+                GLib.gobject_maybe_sink(handle, owns)
+                return gobject_ref(new(handle))
+            end
+        end
+        gtype_wrapper_cache[:GtkSourceView] = GtkSourceViewLeaf
+        (GLib.g_type(::Type{T}) where T <: GtkSourceView) = begin
+                ccall(("gtk_source_view_get_type", libgtksourceview), GType, ())
+            end
+    end
+    begin
+        function GLib.signalnames(::Type{GtkSourceView})
+            vcat([:change_case, :change_number, :join_lines, :line_mark_activated, :move_lines, :move_to_matching_bracket, :move_words, :push_snippet, :show_completion, :smart_home_end], signalnames(supertype(GtkSourceView)))
+        end
+        let d = Dict{Symbol, Tuple{Any, Any}}(:notify => (:Nothing, Any[:(Ptr{GParamSpec})]), :insert_at_cursor => (:Nothing, Any[:Cstring]), :map => (:Nothing, Any[]), :change_case => (:Nothing, Any[:UInt32]), :preedit_changed => (:Nothing, Any[:Cstring]), :line_mark_activated => (:Nothing, Any[:_GtkTextIter, :UInt32, :UInt32, :Int32]), :push_snippet => (:Nothing, Any[:(Ptr{GObject}), :_GtkTextIter]), :move_to_matching_bracket => (:Nothing, Any[:Cint]), :move_words => (:Nothing, Any[:Int32]), :cut_clipboard => (:Nothing, Any[]), :show_completion => (:Nothing, Any[]), :insert_emoji => (:Nothing, Any[]), :toggle_cursor_visible => (:Nothing, Any[]), :smart_home_end => (:Nothing, Any[:_GtkTextIter, :Int32]), :move_focus => (:Nothing, Any[:UInt32]), :direction_changed => (:Nothing, Any[:UInt32]), :join_lines => (:Nothing, Any[]), :state_flags_changed => (:Nothing, Any[:UInt32]), :select_all => (:Nothing, Any[:Cint]), :extend_selection => (:Cint, Any[:UInt32, :_GtkTextIter, :_GtkTextIter, :_GtkTextIter]), :move_lines => (:Nothing, Any[:Cint]), :delete_from_cursor => (:Nothing, Any[:UInt32, :Int32]), :unrealize => (:Nothing, Any[]), :set_anchor => (:Nothing, Any[]), :toggle_overwrite => (:Nothing, Any[]), :backspace => (:Nothing, Any[]), :move_viewport => (:Nothing, Any[:UInt32, :Int32]), :move_cursor => (:Nothing, Any[:UInt32, :Int32, :Cint]), :paste_clipboard => (:Nothing, Any[]), :show => (:Nothing, Any[]), :unmap => (:Nothing, Any[]), :copy_clipboard => (:Nothing, Any[]), :hide => (:Nothing, Any[]), :query_tooltip => (:Cint, Any[:Int32, :Int32, :Cint, :(Ptr{GObject})]), :change_number => (:Nothing, Any[:Int32]), :mnemonic_activate => (:Cint, Any[:Cint]), :destroy => (:Nothing, Any[]), :keynav_failed => (:Cint, Any[:UInt32]), :realize => (:Nothing, Any[]))
+            function GLib.signal_return_type(::Type{T}, name::Symbol) where T <: GtkSourceView
+                eval((d[name])[1])
+            end
+            function GLib.signal_argument_types(::Type{T}, name::Symbol) where T <: GtkSourceView
+                Tuple(eval.((d[name])[2]))
+            end
+        end
+    end
+    begin
+        abstract type GtkSourceMap <: GtkSourceView end
+        mutable struct GtkSourceMapLeaf <: GtkSourceMap
+            handle::Ptr{GObject}
+            function GtkSourceMapLeaf(handle::Ptr{GObject}, owns = false)
+                if handle == C_NULL
+                    error("Cannot construct GtkSourceMapLeaf with a NULL pointer")
+                end
+                GLib.gobject_maybe_sink(handle, owns)
+                return gobject_ref(new(handle))
+            end
+        end
+        gtype_wrapper_cache[:GtkSourceMap] = GtkSourceMapLeaf
+        (GLib.g_type(::Type{T}) where T <: GtkSourceMap) = begin
+                ccall(("gtk_source_map_get_type", libgtksourceview), GType, ())
+            end
+    end
+    begin
+        function GLib.signalnames(::Type{GtkSourceMap})
+            signalnames(supertype(GtkSourceMap))
+        end
+    end
+    begin
+        abstract type GtkSourceMark <: GtkTextMark end
+        mutable struct GtkSourceMarkLeaf <: GtkSourceMark
+            handle::Ptr{GObject}
+            function GtkSourceMarkLeaf(handle::Ptr{GObject}, owns = false)
+                if handle == C_NULL
+                    error("Cannot construct GtkSourceMarkLeaf with a NULL pointer")
+                end
+                GLib.gobject_maybe_sink(handle, owns)
+                return gobject_ref(new(handle))
+            end
+        end
+        gtype_wrapper_cache[:GtkSourceMark] = GtkSourceMarkLeaf
+        (GLib.g_type(::Type{T}) where T <: GtkSourceMark) = begin
+                ccall(("gtk_source_mark_get_type", libgtksourceview), GType, ())
+            end
+    end
+    begin
+        function GLib.signalnames(::Type{GtkSourceMark})
+            signalnames(supertype(GtkSourceMark))
+        end
+    end
+    begin
+        abstract type GtkSourceMarkAttributes <: GObject end
+        mutable struct GtkSourceMarkAttributesLeaf <: GtkSourceMarkAttributes
+            handle::Ptr{GObject}
+            function GtkSourceMarkAttributesLeaf(handle::Ptr{GObject}, owns = false)
+                if handle == C_NULL
+                    error("Cannot construct GtkSourceMarkAttributesLeaf with a NULL pointer")
+                end
+                GLib.gobject_maybe_sink(handle, owns)
+                return gobject_ref(new(handle))
+            end
+        end
+        gtype_wrapper_cache[:GtkSourceMarkAttributes] = GtkSourceMarkAttributesLeaf
+        (GLib.g_type(::Type{T}) where T <: GtkSourceMarkAttributes) = begin
+                ccall(("gtk_source_mark_attributes_get_type", libgtksourceview), GType, ())
+            end
+    end
+    begin
+        function GLib.signalnames(::Type{GtkSourceMarkAttributes})
+            vcat([:query_tooltip_markup, :query_tooltip_text], signalnames(supertype(GtkSourceMarkAttributes)))
+        end
+        let d = Dict{Symbol, Tuple{Any, Any}}(:notify => (:Nothing, Any[:(Ptr{GParamSpec})]), :query_tooltip_markup => (:Cstring, Any[:(Ptr{GObject})]), :query_tooltip_text => (:Cstring, Any[:(Ptr{GObject})]))
+            function GLib.signal_return_type(::Type{T}, name::Symbol) where T <: GtkSourceMarkAttributes
+                eval((d[name])[1])
+            end
+            function GLib.signal_argument_types(::Type{T}, name::Symbol) where T <: GtkSourceMarkAttributes
+                Tuple(eval.((d[name])[2]))
+            end
+        end
+    end
+    begin
+        abstract type GtkSourcePrintCompositor <: GObject end
+        mutable struct GtkSourcePrintCompositorLeaf <: GtkSourcePrintCompositor
+            handle::Ptr{GObject}
+            function GtkSourcePrintCompositorLeaf(handle::Ptr{GObject}, owns = false)
+                if handle == C_NULL
+                    error("Cannot construct GtkSourcePrintCompositorLeaf with a NULL pointer")
+                end
+                GLib.gobject_maybe_sink(handle, owns)
+                return gobject_ref(new(handle))
+            end
+        end
+        gtype_wrapper_cache[:GtkSourcePrintCompositor] = GtkSourcePrintCompositorLeaf
+        (GLib.g_type(::Type{T}) where T <: GtkSourcePrintCompositor) = begin
+                ccall(("gtk_source_print_compositor_get_type", libgtksourceview), GType, ())
+            end
+    end
+    begin
+        function GLib.signalnames(::Type{GtkSourcePrintCompositor})
+            signalnames(supertype(GtkSourcePrintCompositor))
+        end
+    end
+    begin
+        abstract type GtkSourceRegion <: GObject end
+        mutable struct GtkSourceRegionLeaf <: GtkSourceRegion
+            handle::Ptr{GObject}
+            function GtkSourceRegionLeaf(handle::Ptr{GObject}, owns = false)
+                if handle == C_NULL
+                    error("Cannot construct GtkSourceRegionLeaf with a NULL pointer")
+                end
+                GLib.gobject_maybe_sink(handle, owns)
+                return gobject_ref(new(handle))
+            end
+        end
+        gtype_wrapper_cache[:GtkSourceRegion] = GtkSourceRegionLeaf
+        (GLib.g_type(::Type{T}) where T <: GtkSourceRegion) = begin
+                ccall(("gtk_source_region_get_type", libgtksourceview), GType, ())
+            end
+    end
+    begin
+        function GLib.signalnames(::Type{GtkSourceRegion})
+            signalnames(supertype(GtkSourceRegion))
+        end
+    end
+    begin
+        abstract type GtkSourceSearchContext <: GObject end
+        mutable struct GtkSourceSearchContextLeaf <: GtkSourceSearchContext
+            handle::Ptr{GObject}
+            function GtkSourceSearchContextLeaf(handle::Ptr{GObject}, owns = false)
+                if handle == C_NULL
+                    error("Cannot construct GtkSourceSearchContextLeaf with a NULL pointer")
+                end
+                GLib.gobject_maybe_sink(handle, owns)
+                return gobject_ref(new(handle))
+            end
+        end
+        gtype_wrapper_cache[:GtkSourceSearchContext] = GtkSourceSearchContextLeaf
+        (GLib.g_type(::Type{T}) where T <: GtkSourceSearchContext) = begin
+                ccall(("gtk_source_search_context_get_type", libgtksourceview), GType, ())
+            end
+    end
+    begin
+        function GLib.signalnames(::Type{GtkSourceSearchContext})
+            signalnames(supertype(GtkSourceSearchContext))
+        end
+    end
+    begin
+        abstract type GtkSourceSearchSettings <: GObject end
+        mutable struct GtkSourceSearchSettingsLeaf <: GtkSourceSearchSettings
+            handle::Ptr{GObject}
+            function GtkSourceSearchSettingsLeaf(handle::Ptr{GObject}, owns = false)
+                if handle == C_NULL
+                    error("Cannot construct GtkSourceSearchSettingsLeaf with a NULL pointer")
+                end
+                GLib.gobject_maybe_sink(handle, owns)
+                return gobject_ref(new(handle))
+            end
+        end
+        gtype_wrapper_cache[:GtkSourceSearchSettings] = GtkSourceSearchSettingsLeaf
+        (GLib.g_type(::Type{T}) where T <: GtkSourceSearchSettings) = begin
+                ccall(("gtk_source_search_settings_get_type", libgtksourceview), GType, ())
+            end
+    end
+    begin
+        function GLib.signalnames(::Type{GtkSourceSearchSettings})
+            signalnames(supertype(GtkSourceSearchSettings))
+        end
+    end
+    begin
+        abstract type GtkSourceSnippet <: GObject end
+        mutable struct GtkSourceSnippetLeaf <: GtkSourceSnippet
+            handle::Ptr{GObject}
+            function GtkSourceSnippetLeaf(handle::Ptr{GObject}, owns = false)
+                if handle == C_NULL
+                    error("Cannot construct GtkSourceSnippetLeaf with a NULL pointer")
+                end
+                GLib.gobject_maybe_sink(handle, owns)
+                return gobject_ref(new(handle))
+            end
+        end
+        gtype_wrapper_cache[:GtkSourceSnippet] = GtkSourceSnippetLeaf
+        (GLib.g_type(::Type{T}) where T <: GtkSourceSnippet) = begin
+                ccall(("gtk_source_snippet_get_type", libgtksourceview), GType, ())
+            end
+    end
+    begin
+        function GLib.signalnames(::Type{GtkSourceSnippet})
+            signalnames(supertype(GtkSourceSnippet))
+        end
+    end
+    begin
+        abstract type GtkSourceSnippetChunk <: GInitiallyUnowned end
+        mutable struct GtkSourceSnippetChunkLeaf <: GtkSourceSnippetChunk
+            handle::Ptr{GObject}
+            function GtkSourceSnippetChunkLeaf(handle::Ptr{GObject}, owns = false)
+                if handle == C_NULL
+                    error("Cannot construct GtkSourceSnippetChunkLeaf with a NULL pointer")
+                end
+                GLib.gobject_maybe_sink(handle, owns)
+                return gobject_ref(new(handle))
+            end
+        end
+        gtype_wrapper_cache[:GtkSourceSnippetChunk] = GtkSourceSnippetChunkLeaf
+        (GLib.g_type(::Type{T}) where T <: GtkSourceSnippetChunk) = begin
+                ccall(("gtk_source_snippet_chunk_get_type", libgtksourceview), GType, ())
+            end
+    end
+    begin
+        function GLib.signalnames(::Type{GtkSourceSnippetChunk})
+            signalnames(supertype(GtkSourceSnippetChunk))
+        end
+    end
+    begin
+        abstract type GtkSourceSnippetContext <: GObject end
+        mutable struct GtkSourceSnippetContextLeaf <: GtkSourceSnippetContext
+            handle::Ptr{GObject}
+            function GtkSourceSnippetContextLeaf(handle::Ptr{GObject}, owns = false)
+                if handle == C_NULL
+                    error("Cannot construct GtkSourceSnippetContextLeaf with a NULL pointer")
+                end
+                GLib.gobject_maybe_sink(handle, owns)
+                return gobject_ref(new(handle))
+            end
+        end
+        gtype_wrapper_cache[:GtkSourceSnippetContext] = GtkSourceSnippetContextLeaf
+        (GLib.g_type(::Type{T}) where T <: GtkSourceSnippetContext) = begin
+                ccall(("gtk_source_snippet_context_get_type", libgtksourceview), GType, ())
+            end
+    end
+    begin
+        function GLib.signalnames(::Type{GtkSourceSnippetContext})
+            vcat([:changed], signalnames(supertype(GtkSourceSnippetContext)))
+        end
+        let d = Dict{Symbol, Tuple{Any, Any}}(:notify => (:Nothing, Any[:(Ptr{GParamSpec})]), :changed => (:Nothing, Any[]))
+            function GLib.signal_return_type(::Type{T}, name::Symbol) where T <: GtkSourceSnippetContext
+                eval((d[name])[1])
+            end
+            function GLib.signal_argument_types(::Type{T}, name::Symbol) where T <: GtkSourceSnippetContext
+                Tuple(eval.((d[name])[2]))
+            end
+        end
+    end
+    begin
+        abstract type GtkSourceSnippetManager <: GObject end
+        mutable struct GtkSourceSnippetManagerLeaf <: GtkSourceSnippetManager
+            handle::Ptr{GObject}
+            function GtkSourceSnippetManagerLeaf(handle::Ptr{GObject}, owns = false)
+                if handle == C_NULL
+                    error("Cannot construct GtkSourceSnippetManagerLeaf with a NULL pointer")
+                end
+                GLib.gobject_maybe_sink(handle, owns)
+                return gobject_ref(new(handle))
+            end
+        end
+        gtype_wrapper_cache[:GtkSourceSnippetManager] = GtkSourceSnippetManagerLeaf
+        (GLib.g_type(::Type{T}) where T <: GtkSourceSnippetManager) = begin
+                ccall(("gtk_source_snippet_manager_get_type", libgtksourceview), GType, ())
+            end
+    end
+    begin
+        function GLib.signalnames(::Type{GtkSourceSnippetManager})
+            signalnames(supertype(GtkSourceSnippetManager))
+        end
+    end
+    begin
+        abstract type GtkSourceSpaceDrawer <: GObject end
+        mutable struct GtkSourceSpaceDrawerLeaf <: GtkSourceSpaceDrawer
+            handle::Ptr{GObject}
+            function GtkSourceSpaceDrawerLeaf(handle::Ptr{GObject}, owns = false)
+                if handle == C_NULL
+                    error("Cannot construct GtkSourceSpaceDrawerLeaf with a NULL pointer")
+                end
+                GLib.gobject_maybe_sink(handle, owns)
+                return gobject_ref(new(handle))
+            end
+        end
+        gtype_wrapper_cache[:GtkSourceSpaceDrawer] = GtkSourceSpaceDrawerLeaf
+        (GLib.g_type(::Type{T}) where T <: GtkSourceSpaceDrawer) = begin
+                ccall(("gtk_source_space_drawer_get_type", libgtksourceview), GType, ())
+            end
+    end
+    begin
+        function GLib.signalnames(::Type{GtkSourceSpaceDrawer})
+            signalnames(supertype(GtkSourceSpaceDrawer))
+        end
+    end
+    begin
+        abstract type GtkSourceStyle <: GObject end
+        mutable struct GtkSourceStyleLeaf <: GtkSourceStyle
+            handle::Ptr{GObject}
+            function GtkSourceStyleLeaf(handle::Ptr{GObject}, owns = false)
+                if handle == C_NULL
+                    error("Cannot construct GtkSourceStyleLeaf with a NULL pointer")
+                end
+                GLib.gobject_maybe_sink(handle, owns)
+                return gobject_ref(new(handle))
+            end
+        end
+        gtype_wrapper_cache[:GtkSourceStyle] = GtkSourceStyleLeaf
+        (GLib.g_type(::Type{T}) where T <: GtkSourceStyle) = begin
+                ccall(("gtk_source_style_get_type", libgtksourceview), GType, ())
+            end
+    end
+    begin
+        function GLib.signalnames(::Type{GtkSourceStyle})
+            signalnames(supertype(GtkSourceStyle))
+        end
+    end
+    begin
+        abstract type GtkSourceStyleScheme <: GObject end
+        mutable struct GtkSourceStyleSchemeLeaf <: GtkSourceStyleScheme
+            handle::Ptr{GObject}
+            function GtkSourceStyleSchemeLeaf(handle::Ptr{GObject}, owns = false)
+                if handle == C_NULL
+                    error("Cannot construct GtkSourceStyleSchemeLeaf with a NULL pointer")
+                end
+                GLib.gobject_maybe_sink(handle, owns)
+                return gobject_ref(new(handle))
+            end
+        end
+        gtype_wrapper_cache[:GtkSourceStyleScheme] = GtkSourceStyleSchemeLeaf
+        (GLib.g_type(::Type{T}) where T <: GtkSourceStyleScheme) = begin
+                ccall(("gtk_source_style_scheme_get_type", libgtksourceview), GType, ())
+            end
+    end
+    begin
+        function GLib.signalnames(::Type{GtkSourceStyleScheme})
+            signalnames(supertype(GtkSourceStyleScheme))
+        end
+    end
+    begin
+        abstract type GtkSourceStyleSchemeChooserButton <: GtkButton end
+        mutable struct GtkSourceStyleSchemeChooserButtonLeaf <: GtkSourceStyleSchemeChooserButton
+            handle::Ptr{GObject}
+            function GtkSourceStyleSchemeChooserButtonLeaf(handle::Ptr{GObject}, owns = false)
+                if handle == C_NULL
+                    error("Cannot construct GtkSourceStyleSchemeChooserButtonLeaf with a NULL pointer")
+                end
+                GLib.gobject_maybe_sink(handle, owns)
+                return gobject_ref(new(handle))
+            end
+        end
+        gtype_wrapper_cache[:GtkSourceStyleSchemeChooserButton] = GtkSourceStyleSchemeChooserButtonLeaf
+        (GLib.g_type(::Type{T}) where T <: GtkSourceStyleSchemeChooserButton) = begin
+                ccall(("gtk_source_style_scheme_chooser_button_get_type", libgtksourceview), GType, ())
+            end
+    end
+    begin
+        function GLib.signalnames(::Type{GtkSourceStyleSchemeChooserButton})
+            signalnames(supertype(GtkSourceStyleSchemeChooserButton))
+        end
+    end
+    begin
+        abstract type GtkSourceStyleSchemeChooserWidget <: GtkWidget end
+        mutable struct GtkSourceStyleSchemeChooserWidgetLeaf <: GtkSourceStyleSchemeChooserWidget
+            handle::Ptr{GObject}
+            function GtkSourceStyleSchemeChooserWidgetLeaf(handle::Ptr{GObject}, owns = false)
+                if handle == C_NULL
+                    error("Cannot construct GtkSourceStyleSchemeChooserWidgetLeaf with a NULL pointer")
+                end
+                GLib.gobject_maybe_sink(handle, owns)
+                return gobject_ref(new(handle))
+            end
+        end
+        gtype_wrapper_cache[:GtkSourceStyleSchemeChooserWidget] = GtkSourceStyleSchemeChooserWidgetLeaf
+        (GLib.g_type(::Type{T}) where T <: GtkSourceStyleSchemeChooserWidget) = begin
+                ccall(("gtk_source_style_scheme_chooser_widget_get_type", libgtksourceview), GType, ())
+            end
+    end
+    begin
+        function GLib.signalnames(::Type{GtkSourceStyleSchemeChooserWidget})
+            signalnames(supertype(GtkSourceStyleSchemeChooserWidget))
+        end
+    end
+    begin
+        abstract type GtkSourceStyleSchemeManager <: GObject end
+        mutable struct GtkSourceStyleSchemeManagerLeaf <: GtkSourceStyleSchemeManager
+            handle::Ptr{GObject}
+            function GtkSourceStyleSchemeManagerLeaf(handle::Ptr{GObject}, owns = false)
+                if handle == C_NULL
+                    error("Cannot construct GtkSourceStyleSchemeManagerLeaf with a NULL pointer")
+                end
+                GLib.gobject_maybe_sink(handle, owns)
+                return gobject_ref(new(handle))
+            end
+        end
+        gtype_wrapper_cache[:GtkSourceStyleSchemeManager] = GtkSourceStyleSchemeManagerLeaf
+        (GLib.g_type(::Type{T}) where T <: GtkSourceStyleSchemeManager) = begin
+                ccall(("gtk_source_style_scheme_manager_get_type", libgtksourceview), GType, ())
+            end
+    end
+    begin
+        function GLib.signalnames(::Type{GtkSourceStyleSchemeManager})
+            signalnames(supertype(GtkSourceStyleSchemeManager))
+        end
+    end
+    begin
+        abstract type GtkSourceStyleSchemePreview <: GtkWidget end
+        mutable struct GtkSourceStyleSchemePreviewLeaf <: GtkSourceStyleSchemePreview
+            handle::Ptr{GObject}
+            function GtkSourceStyleSchemePreviewLeaf(handle::Ptr{GObject}, owns = false)
+                if handle == C_NULL
+                    error("Cannot construct GtkSourceStyleSchemePreviewLeaf with a NULL pointer")
+                end
+                GLib.gobject_maybe_sink(handle, owns)
+                return gobject_ref(new(handle))
+            end
+        end
+        gtype_wrapper_cache[:GtkSourceStyleSchemePreview] = GtkSourceStyleSchemePreviewLeaf
+        (GLib.g_type(::Type{T}) where T <: GtkSourceStyleSchemePreview) = begin
+                ccall(("gtk_source_style_scheme_preview_get_type", libgtksourceview), GType, ())
+            end
+    end
+    begin
+        function GLib.signalnames(::Type{GtkSourceStyleSchemePreview})
+            vcat([:activate], signalnames(supertype(GtkSourceStyleSchemePreview)))
+        end
+        let d = Dict{Symbol, Tuple{Any, Any}}(:notify => (:Nothing, Any[:(Ptr{GParamSpec})]), :state_flags_changed => (:Nothing, Any[:UInt32]), :map => (:Nothing, Any[]), :unrealize => (:Nothing, Any[]), :show => (:Nothing, Any[]), :unmap => (:Nothing, Any[]), :hide => (:Nothing, Any[]), :query_tooltip => (:Cint, Any[:Int32, :Int32, :Cint, :(Ptr{GObject})]), :move_focus => (:Nothing, Any[:UInt32]), :mnemonic_activate => (:Cint, Any[:Cint]), :direction_changed => (:Nothing, Any[:UInt32]), :activate => (:Nothing, Any[]), :destroy => (:Nothing, Any[]), :keynav_failed => (:Cint, Any[:UInt32]), :realize => (:Nothing, Any[]))
+            function GLib.signal_return_type(::Type{T}, name::Symbol) where T <: GtkSourceStyleSchemePreview
+                eval((d[name])[1])
+            end
+            function GLib.signal_argument_types(::Type{T}, name::Symbol) where T <: GtkSourceStyleSchemePreview
+                Tuple(eval.((d[name])[2]))
+            end
+        end
+    end
+    begin
+        abstract type GtkSourceTag <: GtkTextTag end
+        mutable struct GtkSourceTagLeaf <: GtkSourceTag
+            handle::Ptr{GObject}
+            function GtkSourceTagLeaf(handle::Ptr{GObject}, owns = false)
+                if handle == C_NULL
+                    error("Cannot construct GtkSourceTagLeaf with a NULL pointer")
+                end
+                GLib.gobject_maybe_sink(handle, owns)
+                return gobject_ref(new(handle))
+            end
+        end
+        gtype_wrapper_cache[:GtkSourceTag] = GtkSourceTagLeaf
+        (GLib.g_type(::Type{T}) where T <: GtkSourceTag) = begin
+                ccall(("gtk_source_tag_get_type", libgtksourceview), GType, ())
+            end
+    end
+    begin
+        function GLib.signalnames(::Type{GtkSourceTag})
+            signalnames(supertype(GtkSourceTag))
+        end
+    end
+    begin
+        abstract type GtkSourceVimIMContext <: GtkIMContext end
+        mutable struct GtkSourceVimIMContextLeaf <: GtkSourceVimIMContext
+            handle::Ptr{GObject}
+            function GtkSourceVimIMContextLeaf(handle::Ptr{GObject}, owns = false)
+                if handle == C_NULL
+                    error("Cannot construct GtkSourceVimIMContextLeaf with a NULL pointer")
+                end
+                GLib.gobject_maybe_sink(handle, owns)
+                return gobject_ref(new(handle))
+            end
+        end
+        gtype_wrapper_cache[:GtkSourceVimIMContext] = GtkSourceVimIMContextLeaf
+        (GLib.g_type(::Type{T}) where T <: GtkSourceVimIMContext) = begin
+                ccall(("gtk_source_vim_im_context_get_type", libgtksourceview), GType, ())
+            end
+    end
+    begin
+        function GLib.signalnames(::Type{GtkSourceVimIMContext})
+            vcat([:edit, :execute_command, :format_text, :write], signalnames(supertype(GtkSourceVimIMContext)))
+        end
+        let d = Dict{Symbol, Tuple{Any, Any}}(:notify => (:Nothing, Any[:(Ptr{GParamSpec})]), :format_text => (:Nothing, Any[:_GtkTextIter, :_GtkTextIter]), :preedit_changed => (:Nothing, Any[]), :write => (:Nothing, Any[:(Ptr{GObject}), :Cstring]), :preedit_start => (:Nothing, Any[]), :edit => (:Nothing, Any[:(Ptr{GObject}), :Cstring]), :commit => (:Nothing, Any[:Cstring]), :execute_command => (:Cint, Any[:Cstring]), :delete_surrounding => (:Cint, Any[:Int32, :Int32]), :preedit_end => (:Nothing, Any[]), :retrieve_surrounding => (:Cint, Any[]))
+            function GLib.signal_return_type(::Type{T}, name::Symbol) where T <: GtkSourceVimIMContext
+                eval((d[name])[1])
+            end
+            function GLib.signal_argument_types(::Type{T}, name::Symbol) where T <: GtkSourceVimIMContext
+                Tuple(eval.((d[name])[2]))
+            end
+        end
+    end
+    begin
+        gtype_wrapper_cache_init() = begin
+                merge!(GLib.gtype_wrappers, gtype_wrapper_cache)
+            end
+    end
+    function GtkSourceBuffer(_table::Maybe(GtkTextTagTable); kwargs...)
+        obj = G_.Buffer_new(_table)
+        GLib.setproperties!(obj; kwargs...)
+        obj
+    end
+    function GtkSourceBuffer(_language::GtkSourceLanguage; kwargs...)
+        obj = G_.Buffer_new_with_language(_language)
+        GLib.setproperties!(obj; kwargs...)
+        obj
+    end
+    function GtkSourceCompletionSnippets(; kwargs...)
+        obj = G_.CompletionSnippets_new()
+        GLib.setproperties!(obj; kwargs...)
+        obj
+    end
+    function GtkSourceCompletionWords(_title::Maybe(Union{AbstractString, Symbol}); kwargs...)
+        obj = G_.CompletionWords_new(_title)
+        GLib.setproperties!(obj; kwargs...)
+        obj
+    end
+    function GtkSourceFile(; kwargs...)
+        obj = G_.File_new()
+        GLib.setproperties!(obj; kwargs...)
+        obj
+    end
+    function GtkSourceFileLoader(_buffer::GtkSourceBuffer, _file::GtkSourceFile; kwargs...)
+        obj = G_.FileLoader_new(_buffer, _file)
+        GLib.setproperties!(obj; kwargs...)
+        obj
+    end
+    function GtkSourceFileLoader(_buffer::GtkSourceBuffer, _file::GtkSourceFile, _stream::GInputStream; kwargs...)
+        obj = G_.FileLoader_new_from_stream(_buffer, _file, _stream)
+        GLib.setproperties!(obj; kwargs...)
+        obj
+    end
+    function GtkSourceFileSaver(_buffer::GtkSourceBuffer, _file::GtkSourceFile; kwargs...)
+        obj = G_.FileSaver_new(_buffer, _file)
+        GLib.setproperties!(obj; kwargs...)
+        obj
+    end
+    function GtkSourceFileSaver(_buffer::GtkSourceBuffer, _file::GtkSourceFile, _target_location::GFile; kwargs...)
+        obj = G_.FileSaver_new_with_target(_buffer, _file, _target_location)
+        GLib.setproperties!(obj; kwargs...)
+        obj
+    end
+    function GtkSourceGutterRendererPixbuf(; kwargs...)
+        obj = G_.GutterRendererPixbuf_new()
+        GLib.setproperties!(obj; kwargs...)
+        obj
+    end
+    function GtkSourceGutterRendererText(; kwargs...)
+        obj = G_.GutterRendererText_new()
+        GLib.setproperties!(obj; kwargs...)
+        obj
+    end
+    function GtkSourceLanguageManager(; kwargs...)
+        obj = G_.LanguageManager_new()
+        GLib.setproperties!(obj; kwargs...)
+        obj
+    end
+    function GtkSourceMap(; kwargs...)
+        obj = G_.Map_new()
+        GLib.setproperties!(obj; kwargs...)
+        obj
+    end
+    function GtkSourceMark(_name::Maybe(Union{AbstractString, Symbol}), _category::Union{AbstractString, Symbol}; kwargs...)
+        obj = G_.Mark_new(_name, _category)
+        GLib.setproperties!(obj; kwargs...)
+        obj
+    end
+    function GtkSourceMarkAttributes(; kwargs...)
+        obj = G_.MarkAttributes_new()
+        GLib.setproperties!(obj; kwargs...)
+        obj
+    end
+    function GtkSourcePrintCompositor(_buffer::GtkSourceBuffer; kwargs...)
+        obj = G_.PrintCompositor_new(_buffer)
+        GLib.setproperties!(obj; kwargs...)
+        obj
+    end
+    function GtkSourcePrintCompositor(_view::GtkSourceView; kwargs...)
+        obj = G_.PrintCompositor_new_from_view(_view)
+        GLib.setproperties!(obj; kwargs...)
+        obj
+    end
+    function GtkSourceRegion(_buffer::GtkTextBuffer; kwargs...)
+        obj = G_.Region_new(_buffer)
+        GLib.setproperties!(obj; kwargs...)
+        obj
+    end
+    function GtkSourceSearchContext(_buffer::GtkSourceBuffer, _settings::Maybe(GtkSourceSearchSettings); kwargs...)
+        obj = G_.SearchContext_new(_buffer, _settings)
+        GLib.setproperties!(obj; kwargs...)
+        obj
+    end
+    function GtkSourceSearchSettings(; kwargs...)
+        obj = G_.SearchSettings_new()
+        GLib.setproperties!(obj; kwargs...)
+        obj
+    end
+    function GtkSourceSnippet(_trigger::Maybe(Union{AbstractString, Symbol}), _language_id::Maybe(Union{AbstractString, Symbol}); kwargs...)
+        obj = G_.Snippet_new(_trigger, _language_id)
+        GLib.setproperties!(obj; kwargs...)
+        obj
+    end
+    function GtkSourceSnippet(_text::Union{AbstractString, Symbol}; kwargs...)
+        obj = G_.Snippet_new_parsed(_text)
+        GLib.setproperties!(obj; kwargs...)
+        obj
+    end
+    function GtkSourceSnippetChunk(; kwargs...)
+        obj = G_.SnippetChunk_new()
+        GLib.setproperties!(obj; kwargs...)
+        obj
+    end
+    function GtkSourceSnippetContext()
+        G_.SnippetContext_new()
+    end
+    function GtkSourceSpaceDrawer(; kwargs...)
+        obj = G_.SpaceDrawer_new()
+        GLib.setproperties!(obj; kwargs...)
+        obj
+    end
+    function GtkSourceStyleSchemeChooserButton()
+        G_.StyleSchemeChooserButton_new()
+    end
+    function GtkSourceStyleSchemeChooserWidget()
+        G_.StyleSchemeChooserWidget_new()
+    end
+    function GtkSourceStyleSchemeManager(; kwargs...)
+        obj = G_.StyleSchemeManager_new()
+        GLib.setproperties!(obj; kwargs...)
+        obj
+    end
+    function GtkSourceStyleSchemePreview(_scheme::GtkSourceStyleScheme; kwargs...)
+        obj = G_.StyleSchemePreview_new(_scheme)
+        GLib.setproperties!(obj; kwargs...)
+        obj
+    end
+    function GtkSourceTag(_name::Maybe(Union{AbstractString, Symbol}); kwargs...)
+        obj = G_.Tag_new(_name)
+        GLib.setproperties!(obj; kwargs...)
+        obj
+    end
+    function GtkSourceView(; kwargs...)
+        obj = G_.View_new()
+        GLib.setproperties!(obj; kwargs...)
+        obj
+    end
+    function GtkSourceView(_buffer::GtkSourceBuffer; kwargs...)
+        obj = G_.View_new_with_buffer(_buffer)
+        GLib.setproperties!(obj; kwargs...)
+        obj
+    end
+    function GtkSourceVimIMContext(; kwargs...)
+        obj = G_.VimIMContext_new()
+        GLib.setproperties!(obj; kwargs...)
+        obj
+    end
+    mutable struct GtkSourceEncoding <: GBoxed
+        handle::Ptr{GtkSourceEncoding}
+        begin
+            (GLib.g_type(::Type{T}) where T <: GtkSourceEncoding) = begin
+                    ccall(("gtk_source_encoding_get_type", libgtksourceview), GType, ())
+                end
+            function GtkSourceEncoding(ref::Ptr{T}, own::Bool = false) where T <: GBoxed
+                x = new(ref)
+                if own
+                    finalizer(x) do x
+                        GLib.delboxed(x)
+                    end
+                end
+                x
+            end
+            push!(gboxed_types, GtkSourceEncoding)
+        end
+    end
+    begin
+        struct _GtkSourceRegionIter
+            dummy1::Ptr{Nothing}
+            dummy2::UInt32
+            dummy3::Ptr{Nothing}
+        end
+        mutable struct GtkSourceRegionIter
+            handle::Ptr{_GtkSourceRegionIter}
+        end
+        unsafe_convert(::Type{Ptr{_GtkSourceRegionIter}}, box::GtkSourceRegionIter) = begin
+                convert(Ptr{_GtkSourceRegionIter}, box.handle)
+            end
+    end
+    gboxed_cache_init() = begin
+            append!(GLib.gboxed_types, gboxed_types)
+        end
+    function GtkSourceSchedulerCallback(deadline, user_data)
+        f = user_data
+        ret = f(deadline)
+        convert(Cint, ret)
+    end
+    export GtkSourceCompletionProposal, GtkSourceCompletionProvider, GtkSourceHoverProvider, GtkSourceIndenter, GtkSourceStyleSchemeChooser, GtkSourceBuffer, GtkSourceBufferLeaf, GtkSourceCompletion, GtkSourceCompletionLeaf, GtkSourceCompletionCell, GtkSourceCompletionCellLeaf, GtkSourceCompletionContext, GtkSourceCompletionContextLeaf, GtkSourceCompletionSnippets, GtkSourceCompletionSnippetsLeaf, GtkSourceCompletionWords, GtkSourceCompletionWordsLeaf, GtkSourceFile, GtkSourceFileLeaf, GtkSourceFileLoader, GtkSourceFileLoaderLeaf, GtkSourceFileSaver, GtkSourceFileSaverLeaf, GtkSourceGutter, GtkSourceGutterLeaf, GtkSourceGutterLines, GtkSourceGutterLinesLeaf, GtkSourceGutterRenderer, GtkSourceGutterRendererPixbuf, GtkSourceGutterRendererPixbufLeaf, GtkSourceGutterRendererText, GtkSourceGutterRendererTextLeaf, GtkSourceHover, GtkSourceHoverLeaf, GtkSourceHoverContext, GtkSourceHoverContextLeaf, GtkSourceHoverDisplay, GtkSourceHoverDisplayLeaf, GtkSourceLanguage, GtkSourceLanguageLeaf, GtkSourceLanguageManager, GtkSourceLanguageManagerLeaf, GtkSourceMap, GtkSourceMapLeaf, GtkSourceMark, GtkSourceMarkLeaf, GtkSourceMarkAttributes, GtkSourceMarkAttributesLeaf, GtkSourcePrintCompositor, GtkSourcePrintCompositorLeaf, GtkSourceRegion, GtkSourceRegionLeaf, GtkSourceSearchContext, GtkSourceSearchContextLeaf, GtkSourceSearchSettings, GtkSourceSearchSettingsLeaf, GtkSourceSnippet, GtkSourceSnippetLeaf, GtkSourceSnippetChunk, GtkSourceSnippetChunkLeaf, GtkSourceSnippetContext, GtkSourceSnippetContextLeaf, GtkSourceSnippetManager, GtkSourceSnippetManagerLeaf, GtkSourceSpaceDrawer, GtkSourceSpaceDrawerLeaf, GtkSourceStyle, GtkSourceStyleLeaf, GtkSourceStyleScheme, GtkSourceStyleSchemeLeaf, GtkSourceStyleSchemeChooserButton, GtkSourceStyleSchemeChooserButtonLeaf, GtkSourceStyleSchemeChooserWidget, GtkSourceStyleSchemeChooserWidgetLeaf, GtkSourceStyleSchemeManager, GtkSourceStyleSchemeManagerLeaf, GtkSourceStyleSchemePreview, GtkSourceStyleSchemePreviewLeaf, GtkSourceTag, GtkSourceTagLeaf, GtkSourceView, GtkSourceViewLeaf, GtkSourceVimIMContext, GtkSourceVimIMContextLeaf, GtkSourceEncoding, GtkSourceRegionIter, _GtkSourceRegionIter, GtkSourceSchedulerCallback
+end))
+end
