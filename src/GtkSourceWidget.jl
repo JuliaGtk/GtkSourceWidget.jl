@@ -209,16 +209,16 @@ end
 
 ## GtkSourceSearchContext
 
-function search_context_forward(search::GtkSourceSearchContext, iter::_GtkTextIter)
-    found, match_start, match_end, wrapped_around = G_.forward(search, Ref(iter))
-    return (found, match_start, match_end)
+function search_context_forward(search::GtkSourceSearchContext, iter)
+    found, match_start, match_end, wrapped_around = G_.forward(search, iter)
+    return (found, Ref(match_start), Ref(match_end))
 end
 
 function search_context_replace(
     search::GtkSourceSearchContext,
-    match_start::_GtkTextIter, match_end::_GtkTextIter,
+    match_start::GtkTextIterLike, match_end::GtkTextIterLike,
     replace::String)
-    G_.replace(search, Ref(match_start), Ref(match_end), replace, -1)
+    G_.replace(search, match_start, match_end, replace, -1)
 end
 
 function search_context_replace_all(search::GtkSourceSearchContext, replace::String)

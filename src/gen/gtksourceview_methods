@@ -24,7 +24,7 @@ $(Expr(:toplevel, quote
         ret2 = string_or_nothing(ret, true)
         ret2
     end
-    function get_subregion(instance::Union{GtkSourceRegionIter, Ref{_GtkSourceRegionIter}})
+    function get_subregion(instance::GtkSourceRegionIterLike)
         m_start = Ref{_GtkTextIter}()
         m_end = Ref{_GtkTextIter}()
         ret = ccall(("gtk_source_region_iter_get_subregion", libgtksourceview), Cint, (Ptr{_GtkSourceRegionIter}, Ptr{_GtkTextIter}, Ptr{_GtkTextIter}), instance, m_start, m_end)
@@ -33,12 +33,12 @@ $(Expr(:toplevel, quote
         _end = m_end[]
         (ret2, _start, _end)
     end
-    function is_end(instance::Union{GtkSourceRegionIter, Ref{_GtkSourceRegionIter}})
+    function is_end(instance::GtkSourceRegionIterLike)
         ret = ccall(("gtk_source_region_iter_is_end", libgtksourceview), Cint, (Ptr{_GtkSourceRegionIter},), instance)
         ret2 = convert(Bool, ret)
         ret2
     end
-    function next(instance::Union{GtkSourceRegionIter, Ref{_GtkSourceRegionIter}})
+    function next(instance::GtkSourceRegionIterLike)
         ret = ccall(("gtk_source_region_iter_next", libgtksourceview), Cint, (Ptr{_GtkSourceRegionIter},), instance)
         ret2 = convert(Bool, ret)
         ret2
@@ -54,7 +54,7 @@ $(Expr(:toplevel, quote
         ret2 = GtkSourceBufferLeaf(ret, true)
         ret2
     end
-    function backward_iter_to_source_mark(instance::GtkSourceBuffer, _iter::Union{GtkTextIter, Ref{_GtkTextIter}}, _category::Maybe(Union{AbstractString, Symbol}))
+    function backward_iter_to_source_mark(instance::GtkSourceBuffer, _iter::GtkTextIterLike, _category::Maybe(Union{AbstractString, Symbol}))
         m_iter = Ref{_GtkTextIter}()
         m_iter[] = Base.cconvert(_GtkTextIter, _iter)
         _category_maybe = nothing_to_null(_category)
@@ -63,21 +63,21 @@ $(Expr(:toplevel, quote
         _iter = m_iter[]
         (ret2, _iter)
     end
-    function change_case(instance::GtkSourceBuffer, _case_type, _start::Union{GtkTextIter, Ref{_GtkTextIter}}, _end::Union{GtkTextIter, Ref{_GtkTextIter}})
+    function change_case(instance::GtkSourceBuffer, _case_type, _start::GtkTextIterLike, _end::GtkTextIterLike)
         ret = ccall(("gtk_source_buffer_change_case", libgtksourceview), Nothing, (Ptr{GObject}, UInt32, Ptr{_GtkTextIter}, Ptr{_GtkTextIter}), instance, _case_type, _start, _end)
         nothing
     end
-    function create_source_mark(instance::GtkSourceBuffer, _name::Maybe(Union{AbstractString, Symbol}), _category::Union{AbstractString, Symbol}, _where::Union{GtkTextIter, Ref{_GtkTextIter}})
+    function create_source_mark(instance::GtkSourceBuffer, _name::Maybe(Union{AbstractString, Symbol}), _category::Union{AbstractString, Symbol}, _where::GtkTextIterLike)
         _name_maybe = nothing_to_null(_name)
         ret = ccall(("gtk_source_buffer_create_source_mark", libgtksourceview), Ptr{GObject}, (Ptr{GObject}, Cstring, Cstring, Ptr{_GtkTextIter}), instance, _name_maybe, _category, _where)
         ret2 = convert(GtkSourceMark, ret, false)
         ret2
     end
-    function ensure_highlight(instance::GtkSourceBuffer, _start::Union{GtkTextIter, Ref{_GtkTextIter}}, _end::Union{GtkTextIter, Ref{_GtkTextIter}})
+    function ensure_highlight(instance::GtkSourceBuffer, _start::GtkTextIterLike, _end::GtkTextIterLike)
         ret = ccall(("gtk_source_buffer_ensure_highlight", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{_GtkTextIter}, Ptr{_GtkTextIter}), instance, _start, _end)
         nothing
     end
-    function forward_iter_to_source_mark(instance::GtkSourceBuffer, _iter::Union{GtkTextIter, Ref{_GtkTextIter}}, _category::Maybe(Union{AbstractString, Symbol}))
+    function forward_iter_to_source_mark(instance::GtkSourceBuffer, _iter::GtkTextIterLike, _category::Maybe(Union{AbstractString, Symbol}))
         m_iter = Ref{_GtkTextIter}()
         m_iter[] = Base.cconvert(_GtkTextIter, _iter)
         _category_maybe = nothing_to_null(_category)
@@ -86,7 +86,7 @@ $(Expr(:toplevel, quote
         _iter = m_iter[]
         (ret2, _iter)
     end
-    function get_context_classes_at_iter(instance::GtkSourceBuffer, _iter::Union{GtkTextIter, Ref{_GtkTextIter}})
+    function get_context_classes_at_iter(instance::GtkSourceBuffer, _iter::GtkTextIterLike)
         ret = ccall(("gtk_source_buffer_get_context_classes_at_iter", libgtksourceview), Ptr{Cstring}, (Ptr{GObject}, Ptr{_GtkTextIter}), instance, _iter)
         ret2 = begin
                 _len = length_zt(ret)
@@ -121,7 +121,7 @@ $(Expr(:toplevel, quote
         ret2 = convert(Bool, ret)
         ret2
     end
-    function get_source_marks_at_iter(instance::GtkSourceBuffer, _iter::Union{GtkTextIter, Ref{_GtkTextIter}}, _category::Maybe(Union{AbstractString, Symbol}))
+    function get_source_marks_at_iter(instance::GtkSourceBuffer, _iter::GtkTextIterLike, _category::Maybe(Union{AbstractString, Symbol}))
         _category_maybe = nothing_to_null(_category)
         ret = ccall(("gtk_source_buffer_get_source_marks_at_iter", libgtksourceview), Ptr{GLib._GSList{Ptr{GObject}}}, (Ptr{GObject}, Ptr{_GtkTextIter}, Cstring), instance, _iter, _category_maybe)
         ret2 = GLib.GList(ret, false)
@@ -138,7 +138,7 @@ $(Expr(:toplevel, quote
         ret2 = convert_if_not_null(GtkSourceStyleScheme, ret, false)
         ret2
     end
-    function iter_backward_to_context_class_toggle(instance::GtkSourceBuffer, _iter::Union{GtkTextIter, Ref{_GtkTextIter}}, _context_class::Union{AbstractString, Symbol})
+    function iter_backward_to_context_class_toggle(instance::GtkSourceBuffer, _iter::GtkTextIterLike, _context_class::Union{AbstractString, Symbol})
         m_iter = Ref{_GtkTextIter}()
         m_iter[] = Base.cconvert(_GtkTextIter, _iter)
         ret = ccall(("gtk_source_buffer_iter_backward_to_context_class_toggle", libgtksourceview), Cint, (Ptr{GObject}, Ptr{_GtkTextIter}, Cstring), instance, m_iter, _context_class)
@@ -146,7 +146,7 @@ $(Expr(:toplevel, quote
         _iter = m_iter[]
         (ret2, _iter)
     end
-    function iter_forward_to_context_class_toggle(instance::GtkSourceBuffer, _iter::Union{GtkTextIter, Ref{_GtkTextIter}}, _context_class::Union{AbstractString, Symbol})
+    function iter_forward_to_context_class_toggle(instance::GtkSourceBuffer, _iter::GtkTextIterLike, _context_class::Union{AbstractString, Symbol})
         m_iter = Ref{_GtkTextIter}()
         m_iter[] = Base.cconvert(_GtkTextIter, _iter)
         ret = ccall(("gtk_source_buffer_iter_forward_to_context_class_toggle", libgtksourceview), Cint, (Ptr{GObject}, Ptr{_GtkTextIter}, Cstring), instance, m_iter, _context_class)
@@ -154,16 +154,16 @@ $(Expr(:toplevel, quote
         _iter = m_iter[]
         (ret2, _iter)
     end
-    function iter_has_context_class(instance::GtkSourceBuffer, _iter::Union{GtkTextIter, Ref{_GtkTextIter}}, _context_class::Union{AbstractString, Symbol})
+    function iter_has_context_class(instance::GtkSourceBuffer, _iter::GtkTextIterLike, _context_class::Union{AbstractString, Symbol})
         ret = ccall(("gtk_source_buffer_iter_has_context_class", libgtksourceview), Cint, (Ptr{GObject}, Ptr{_GtkTextIter}, Cstring), instance, _iter, _context_class)
         ret2 = convert(Bool, ret)
         ret2
     end
-    function join_lines(instance::GtkSourceBuffer, _start::Union{GtkTextIter, Ref{_GtkTextIter}}, _end::Union{GtkTextIter, Ref{_GtkTextIter}})
+    function join_lines(instance::GtkSourceBuffer, _start::GtkTextIterLike, _end::GtkTextIterLike)
         ret = ccall(("gtk_source_buffer_join_lines", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{_GtkTextIter}, Ptr{_GtkTextIter}), instance, _start, _end)
         nothing
     end
-    function remove_source_marks(instance::GtkSourceBuffer, _start::Union{GtkTextIter, Ref{_GtkTextIter}}, _end::Union{GtkTextIter, Ref{_GtkTextIter}}, _category::Maybe(Union{AbstractString, Symbol}))
+    function remove_source_marks(instance::GtkSourceBuffer, _start::GtkTextIterLike, _end::GtkTextIterLike, _category::Maybe(Union{AbstractString, Symbol}))
         _category_maybe = nothing_to_null(_category)
         ret = ccall(("gtk_source_buffer_remove_source_marks", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{_GtkTextIter}, Ptr{_GtkTextIter}, Cstring), instance, _start, _end, _category_maybe)
         nothing
@@ -190,7 +190,7 @@ $(Expr(:toplevel, quote
         ret = ccall(("gtk_source_buffer_set_style_scheme", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{GObject}), instance, _scheme_maybe)
         nothing
     end
-    function sort_lines(instance::GtkSourceBuffer, _start::Union{GtkTextIter, Ref{_GtkTextIter}}, _end::Union{GtkTextIter, Ref{_GtkTextIter}}, _flags, _column::Integer)
+    function sort_lines(instance::GtkSourceBuffer, _start::GtkTextIterLike, _end::GtkTextIterLike, _flags, _column::Integer)
         ret = ccall(("gtk_source_buffer_sort_lines", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{_GtkTextIter}, Ptr{_GtkTextIter}, UInt32, Int32), instance, _start, _end, _flags, _column)
         nothing
     end
@@ -655,7 +655,7 @@ $(Expr(:toplevel, quote
         ret = ccall(("gtk_source_gutter_lines_remove_qclass", libgtksourceview), Nothing, (Ptr{GObject}, UInt32, UInt32), instance, _line, _qname)
         nothing
     end
-    function activate(instance::GtkSourceGutterRenderer, _iter::Union{GtkTextIter, Ref{_GtkTextIter}}, _area::Union{GdkRectangle, Ref{_GdkRectangle}}, _button::Integer, _state, _n_presses::Integer)
+    function activate(instance::GtkSourceGutterRenderer, _iter::GtkTextIterLike, _area::GdkRectangleLike, _button::Integer, _state, _n_presses::Integer)
         ret = ccall(("gtk_source_gutter_renderer_activate", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{_GtkTextIter}, Ptr{_GdkRectangle}, UInt32, UInt32, Int32), instance, _iter, _area, _button, _state, _n_presses)
         nothing
     end
@@ -698,7 +698,7 @@ $(Expr(:toplevel, quote
         ret = ccall(("gtk_source_gutter_renderer_get_ypad", libgtksourceview), Int32, (Ptr{GObject},), instance)
         ret
     end
-    function query_activatable(instance::GtkSourceGutterRenderer, _iter::Union{GtkTextIter, Ref{_GtkTextIter}}, _area::Union{GdkRectangle, Ref{_GdkRectangle}})
+    function query_activatable(instance::GtkSourceGutterRenderer, _iter::GtkTextIterLike, _area::GdkRectangleLike)
         ret = ccall(("gtk_source_gutter_renderer_query_activatable", libgtksourceview), Cint, (Ptr{GObject}, Ptr{_GtkTextIter}, Ptr{_GdkRectangle}), instance, _iter, _area)
         ret2 = convert(Bool, ret)
         ret2
@@ -826,7 +826,7 @@ $(Expr(:toplevel, quote
         ret2 = convert(GtkSourceBuffer, ret, false)
         ret2
     end
-    function get_iter(instance::GtkSourceHoverContext, _iter::Union{GtkTextIter, Ref{_GtkTextIter}})
+    function get_iter(instance::GtkSourceHoverContext, _iter::GtkTextIterLike)
         ret = ccall(("gtk_source_hover_context_get_iter", libgtksourceview), Cint, (Ptr{GObject}, Ptr{_GtkTextIter}), instance, _iter)
         ret2 = convert(Bool, ret)
         ret2
@@ -1050,7 +1050,7 @@ $(Expr(:toplevel, quote
             end
         ret2
     end
-    function set_background(instance::GtkSourceMarkAttributes, _background::Union{GdkRGBA, Ref{_GdkRGBA}})
+    function set_background(instance::GtkSourceMarkAttributes, _background::GdkRGBALike)
         ret = ccall(("gtk_source_mark_attributes_set_background", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{_GdkRGBA}), instance, _background)
         nothing
     end
@@ -1249,7 +1249,7 @@ $(Expr(:toplevel, quote
         ret = ccall(("gtk_source_region_add_region", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{GObject}), instance, _region_to_add_maybe)
         nothing
     end
-    function add_subregion(instance::GtkSourceRegion, __start::Union{GtkTextIter, Ref{_GtkTextIter}}, __end::Union{GtkTextIter, Ref{_GtkTextIter}})
+    function add_subregion(instance::GtkSourceRegion, __start::GtkTextIterLike, __end::GtkTextIterLike)
         ret = ccall(("gtk_source_region_add_subregion", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{_GtkTextIter}, Ptr{_GtkTextIter}), instance, __start, __end)
         nothing
     end
@@ -1280,7 +1280,7 @@ $(Expr(:toplevel, quote
         ret2 = convert_if_not_null(GtkSourceRegion, ret, true)
         ret2
     end
-    function intersect_subregion(instance::GtkSourceRegion, __start::Union{GtkTextIter, Ref{_GtkTextIter}}, __end::Union{GtkTextIter, Ref{_GtkTextIter}})
+    function intersect_subregion(instance::GtkSourceRegion, __start::GtkTextIterLike, __end::GtkTextIterLike)
         ret = ccall(("gtk_source_region_intersect_subregion", libgtksourceview), Ptr{GObject}, (Ptr{GObject}, Ptr{_GtkTextIter}, Ptr{_GtkTextIter}), instance, __start, __end)
         ret2 = convert_if_not_null(GtkSourceRegion, ret, true)
         ret2
@@ -1295,7 +1295,7 @@ $(Expr(:toplevel, quote
         ret = ccall(("gtk_source_region_subtract_region", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{GObject}), instance, _region_to_subtract_maybe)
         nothing
     end
-    function subtract_subregion(instance::GtkSourceRegion, __start::Union{GtkTextIter, Ref{_GtkTextIter}}, __end::Union{GtkTextIter, Ref{_GtkTextIter}})
+    function subtract_subregion(instance::GtkSourceRegion, __start::GtkTextIterLike, __end::GtkTextIterLike)
         ret = ccall(("gtk_source_region_subtract_subregion", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{_GtkTextIter}, Ptr{_GtkTextIter}), instance, __start, __end)
         nothing
     end
@@ -1310,7 +1310,7 @@ $(Expr(:toplevel, quote
         ret2 = GtkSourceSearchContextLeaf(ret, true)
         ret2
     end
-    function backward(instance::GtkSourceSearchContext, _iter::Union{GtkTextIter, Ref{_GtkTextIter}})
+    function backward(instance::GtkSourceSearchContext, _iter::GtkTextIterLike)
         m_match_start = Ref{_GtkTextIter}()
         m_match_end = Ref{_GtkTextIter}()
         m_has_wrapped_around = Ref{Cint}()
@@ -1322,7 +1322,7 @@ $(Expr(:toplevel, quote
         _has_wrapped_around = convert(Bool, _has_wrapped_around)
         (ret2, _match_start, _match_end, _has_wrapped_around)
     end
-    function backward_async(instance::GtkSourceSearchContext, _iter::Union{GtkTextIter, Ref{_GtkTextIter}}, _cancellable::Maybe(GCancellable), _callback::Maybe(Function))
+    function backward_async(instance::GtkSourceSearchContext, _iter::GtkTextIterLike, _cancellable::Maybe(GCancellable), _callback::Maybe(Function))
         _cancellable_maybe = nothing_to_null(_cancellable)
         if _callback === nothing
             _callback_cfunc = C_NULL
@@ -1348,7 +1348,7 @@ $(Expr(:toplevel, quote
         _has_wrapped_around = convert(Bool, _has_wrapped_around)
         (ret2, _match_start, _match_end, _has_wrapped_around)
     end
-    function forward(instance::GtkSourceSearchContext, _iter::Union{GtkTextIter, Ref{_GtkTextIter}})
+    function forward(instance::GtkSourceSearchContext, _iter::GtkTextIterLike)
         m_match_start = Ref{_GtkTextIter}()
         m_match_end = Ref{_GtkTextIter}()
         m_has_wrapped_around = Ref{Cint}()
@@ -1360,7 +1360,7 @@ $(Expr(:toplevel, quote
         _has_wrapped_around = convert(Bool, _has_wrapped_around)
         (ret2, _match_start, _match_end, _has_wrapped_around)
     end
-    function forward_async(instance::GtkSourceSearchContext, _iter::Union{GtkTextIter, Ref{_GtkTextIter}}, _cancellable::Maybe(GCancellable), _callback::Maybe(Function))
+    function forward_async(instance::GtkSourceSearchContext, _iter::GtkTextIterLike, _cancellable::Maybe(GCancellable), _callback::Maybe(Function))
         _cancellable_maybe = nothing_to_null(_cancellable)
         if _callback === nothing
             _callback_cfunc = C_NULL
@@ -1401,7 +1401,7 @@ $(Expr(:toplevel, quote
         ret2 = convert(GtkSourceStyle, ret, false)
         ret2
     end
-    function get_occurrence_position(instance::GtkSourceSearchContext, _match_start::Union{GtkTextIter, Ref{_GtkTextIter}}, _match_end::Union{GtkTextIter, Ref{_GtkTextIter}})
+    function get_occurrence_position(instance::GtkSourceSearchContext, _match_start::GtkTextIterLike, _match_end::GtkTextIterLike)
         ret = ccall(("gtk_source_search_context_get_occurrence_position", libgtksourceview), Int32, (Ptr{GObject}, Ptr{_GtkTextIter}, Ptr{_GtkTextIter}), instance, _match_start, _match_end)
         ret
     end
@@ -1418,7 +1418,7 @@ $(Expr(:toplevel, quote
         ret2 = convert(GtkSourceSearchSettings, ret, false)
         ret2
     end
-    function replace(instance::GtkSourceSearchContext, _match_start::Union{GtkTextIter, Ref{_GtkTextIter}}, _match_end::Union{GtkTextIter, Ref{_GtkTextIter}}, _replace::Union{AbstractString, Symbol}, _replace_length::Integer)
+    function replace(instance::GtkSourceSearchContext, _match_start::GtkTextIterLike, _match_end::GtkTextIterLike, _replace::Union{AbstractString, Symbol}, _replace_length::Integer)
         err = err_buf()
         ret = ccall(("gtk_source_search_context_replace", libgtksourceview), Cint, (Ptr{GObject}, Ptr{_GtkTextIter}, Ptr{_GtkTextIter}, Cstring, Int32, Ptr{Ptr{GError}}), instance, _match_start, _match_end, _replace, _replace_length, err)
         check_err(err)
@@ -1465,6 +1465,11 @@ $(Expr(:toplevel, quote
         ret2 = string_or_nothing(ret, false)
         ret2
     end
+    function get_visible_only(instance::GtkSourceSearchSettings)
+        ret = ccall(("gtk_source_search_settings_get_visible_only", libgtksourceview), Cint, (Ptr{GObject},), instance)
+        ret2 = convert(Bool, ret)
+        ret2
+    end
     function get_wrap_around(instance::GtkSourceSearchSettings)
         ret = ccall(("gtk_source_search_settings_get_wrap_around", libgtksourceview), Cint, (Ptr{GObject},), instance)
         ret2 = convert(Bool, ret)
@@ -1485,6 +1490,10 @@ $(Expr(:toplevel, quote
     function set_search_text(instance::GtkSourceSearchSettings, _search_text::Maybe(Union{AbstractString, Symbol}))
         _search_text_maybe = nothing_to_null(_search_text)
         ret = ccall(("gtk_source_search_settings_set_search_text", libgtksourceview), Nothing, (Ptr{GObject}, Cstring), instance, _search_text_maybe)
+        nothing
+    end
+    function set_visible_only(instance::GtkSourceSearchSettings, _visible_only::Bool)
+        ret = ccall(("gtk_source_search_settings_set_visible_only", libgtksourceview), Nothing, (Ptr{GObject}, Cint), instance, _visible_only)
         nothing
     end
     function set_wrap_around(instance::GtkSourceSearchSettings, _wrap_around::Bool)
@@ -1982,15 +1991,15 @@ $(Expr(:toplevel, quote
         ret = ccall(("gtk_source_view_get_tab_width", libgtksourceview), UInt32, (Ptr{GObject},), instance)
         ret
     end
-    function get_visual_column(instance::GtkSourceView, _iter::Union{GtkTextIter, Ref{_GtkTextIter}})
+    function get_visual_column(instance::GtkSourceView, _iter::GtkTextIterLike)
         ret = ccall(("gtk_source_view_get_visual_column", libgtksourceview), UInt32, (Ptr{GObject}, Ptr{_GtkTextIter}), instance, _iter)
         ret
     end
-    function indent_lines(instance::GtkSourceView, _start::Union{GtkTextIter, Ref{_GtkTextIter}}, _end::Union{GtkTextIter, Ref{_GtkTextIter}})
+    function indent_lines(instance::GtkSourceView, _start::GtkTextIterLike, _end::GtkTextIterLike)
         ret = ccall(("gtk_source_view_indent_lines", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{_GtkTextIter}, Ptr{_GtkTextIter}), instance, _start, _end)
         nothing
     end
-    function push_snippet(instance::GtkSourceView, _snippet::GtkSourceSnippet, _location::Maybe(Union{GtkTextIter, Ref{_GtkTextIter}}))
+    function push_snippet(instance::GtkSourceView, _snippet::GtkSourceSnippet, _location::Maybe(GtkTextIterLike))
         _location_maybe = nothing_to_null(_location)
         ret = ccall(("gtk_source_view_push_snippet", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{GObject}, Ptr{_GtkTextIter}), instance, _snippet, _location_maybe)
         nothing
@@ -2060,7 +2069,7 @@ $(Expr(:toplevel, quote
         ret = ccall(("gtk_source_view_set_tab_width", libgtksourceview), Nothing, (Ptr{GObject}, UInt32), instance, _width)
         nothing
     end
-    function unindent_lines(instance::GtkSourceView, _start::Union{GtkTextIter, Ref{_GtkTextIter}}, _end::Union{GtkTextIter, Ref{_GtkTextIter}})
+    function unindent_lines(instance::GtkSourceView, _start::GtkTextIterLike, _end::GtkTextIterLike)
         ret = ccall(("gtk_source_view_unindent_lines", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{_GtkTextIter}, Ptr{_GtkTextIter}), instance, _start, _end)
         nothing
     end
@@ -2105,7 +2114,7 @@ $(Expr(:toplevel, quote
         ret2 = string_or_nothing(ret, true)
         ret2
     end
-    function is_trigger(instance::GtkSourceCompletionProvider, _iter::Union{GtkTextIter, Ref{_GtkTextIter}}, _ch)
+    function is_trigger(instance::GtkSourceCompletionProvider, _iter::GtkTextIterLike, _ch)
         ret = ccall(("gtk_source_completion_provider_is_trigger", libgtksourceview), Cint, (Ptr{GObject}, Ptr{_GtkTextIter}, Nothing), instance, _iter, _ch)
         ret2 = convert(Bool, ret)
         ret2
@@ -2164,14 +2173,14 @@ $(Expr(:toplevel, quote
         ret2 = convert(Bool, ret)
         ret2
     end
-    function indent(instance::GtkSourceIndenter, _view::GtkSourceView, _iter::Union{GtkTextIter, Ref{_GtkTextIter}})
+    function indent(instance::GtkSourceIndenter, _view::GtkSourceView, _iter::GtkTextIterLike)
         m_iter = Ref{_GtkTextIter}()
         m_iter[] = Base.cconvert(_GtkTextIter, _iter)
         ret = ccall(("gtk_source_indenter_indent", libgtksourceview), Nothing, (Ptr{GObject}, Ptr{GObject}, Ptr{_GtkTextIter}), instance, _view, m_iter)
         _iter = m_iter[]
         _iter
     end
-    function is_trigger(instance::GtkSourceIndenter, _view::GtkSourceView, _location::Union{GtkTextIter, Ref{_GtkTextIter}}, _state, _keyval::Integer)
+    function is_trigger(instance::GtkSourceIndenter, _view::GtkSourceView, _location::GtkTextIterLike, _state, _keyval::Integer)
         ret = ccall(("gtk_source_indenter_is_trigger", libgtksourceview), Cint, (Ptr{GObject}, Ptr{GObject}, Ptr{_GtkTextIter}, UInt32, UInt32), instance, _view, _location, _state, _keyval)
         ret2 = convert(Bool, ret)
         ret2
