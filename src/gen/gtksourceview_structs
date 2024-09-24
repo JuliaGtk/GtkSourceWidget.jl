@@ -1,6 +1,6 @@
 quote
 $(Expr(:toplevel, quote
-    gboxed_types = Any[]
+    const gboxed_types = Any[]
     struct GtkSourceCompletionProposal <: GInterface
         handle::Ptr{GObject}
         gc::Any
@@ -58,7 +58,7 @@ $(Expr(:toplevel, quote
         function GLib.signalnames(::Type{GtkSourceBuffer})
             vcat([:bracket_matched, :cursor_moved, :highlight_updated, :source_mark_updated], signalnames(supertype(GtkSourceBuffer)))
         end
-        let d = Dict{Symbol, Tuple{Any, Any}}(:notify => (:Nothing, Any[:(Ptr{GParamSpec})]), :undo => (:Nothing, Any[]), :remove_tag => (:Nothing, Any[:(Ptr{GObject}), :_GtkTextIter, :_GtkTextIter]), :insert_child_anchor => (:Nothing, Any[:_GtkTextIter, :(Ptr{GObject})]), :source_mark_updated => (:Nothing, Any[:(Ptr{GObject})]), :cursor_moved => (:Nothing, Any[]), :redo => (:Nothing, Any[]), :begin_user_action => (:Nothing, Any[]), :highlight_updated => (:Nothing, Any[:_GtkTextIter, :_GtkTextIter]), :delete_range => (:Nothing, Any[:_GtkTextIter, :_GtkTextIter]), :bracket_matched => (:Nothing, Any[:_GtkTextIter, :UInt32]), :mark_deleted => (:Nothing, Any[:(Ptr{GObject})]), :end_user_action => (:Nothing, Any[]), :modified_changed => (:Nothing, Any[]), :mark_set => (:Nothing, Any[:_GtkTextIter, :(Ptr{GObject})]), :insert_paintable => (:Nothing, Any[:_GtkTextIter, :(Ptr{GObject})]), :apply_tag => (:Nothing, Any[:(Ptr{GObject}), :_GtkTextIter, :_GtkTextIter]), :changed => (:Nothing, Any[]), :insert_text => (:Nothing, Any[:_GtkTextIter, :Cstring, :Int32]), :paste_done => (:Nothing, Any[:(Ptr{GObject})]))
+        let d = Dict{Symbol, Tuple{Any, Any}}(:notify => (:Nothing, Any[:(Ptr{GParamSpec})]), :undo => (:Nothing, Any[]), :remove_tag => (:Nothing, Any[:(Ptr{GObject}), :_GtkTextIter, :_GtkTextIter]), :insert_child_anchor => (:Nothing, Any[:_GtkTextIter, :(Ptr{GObject})]), :source_mark_updated => (:Nothing, Expr[:(Ptr{GObject})]), :cursor_moved => (:Nothing, Any[]), :redo => (:Nothing, Any[]), :begin_user_action => (:Nothing, Any[]), :highlight_updated => (:Nothing, [:_GtkTextIter, :_GtkTextIter]), :delete_range => (:Nothing, [:_GtkTextIter, :_GtkTextIter]), :bracket_matched => (:Nothing, [:_GtkTextIter, :UInt32]), :mark_deleted => (:Nothing, Expr[:(Ptr{GObject})]), :end_user_action => (:Nothing, Any[]), :modified_changed => (:Nothing, Any[]), :mark_set => (:Nothing, Any[:_GtkTextIter, :(Ptr{GObject})]), :insert_paintable => (:Nothing, Any[:_GtkTextIter, :(Ptr{GObject})]), :apply_tag => (:Nothing, Any[:(Ptr{GObject}), :_GtkTextIter, :_GtkTextIter]), :changed => (:Nothing, Any[]), :insert_text => (:Nothing, [:_GtkTextIter, :Cstring, :Int32]), :paste_done => (:Nothing, Expr[:(Ptr{GObject})]))
             function GLib.signal_return_type(::Type{T}, name::Symbol) where T <: GtkSourceBuffer
                 eval((d[name])[1])
             end
@@ -88,7 +88,7 @@ $(Expr(:toplevel, quote
         function GLib.signalnames(::Type{GtkSourceCompletion})
             vcat([:hide, :provider_added, :provider_removed, :show], signalnames(supertype(GtkSourceCompletion)))
         end
-        let d = Dict{Symbol, Tuple{Any, Any}}(:notify => (:Nothing, Any[:(Ptr{GParamSpec})]), :show => (:Nothing, Any[]), :hide => (:Nothing, Any[]), :provider_removed => (:Nothing, Any[:(Ptr{GObject})]), :provider_added => (:Nothing, Any[:(Ptr{GObject})]))
+        let d = Dict{Symbol, Tuple{Any, Any}}(:notify => (:Nothing, Any[:(Ptr{GParamSpec})]), :show => (:Nothing, Any[]), :hide => (:Nothing, Any[]), :provider_removed => (:Nothing, Expr[:(Ptr{GObject})]), :provider_added => (:Nothing, Expr[:(Ptr{GObject})]))
             function GLib.signal_return_type(::Type{T}, name::Symbol) where T <: GtkSourceCompletion
                 eval((d[name])[1])
             end
@@ -140,7 +140,7 @@ $(Expr(:toplevel, quote
         function GLib.signalnames(::Type{GtkSourceCompletionContext})
             vcat([:provider_model_changed, :items_changed], signalnames(supertype(GtkSourceCompletionContext)))
         end
-        let d = Dict{Symbol, Tuple{Any, Any}}(:notify => (:Nothing, Any[:(Ptr{GParamSpec})]), :provider_model_changed => (:Nothing, Any[:(Ptr{GObject}), :(Ptr{GObject})]))
+        let d = Dict{Symbol, Tuple{Any, Any}}(:notify => (:Nothing, Any[:(Ptr{GParamSpec})]), :provider_model_changed => (:Nothing, Expr[:(Ptr{GObject}), :(Ptr{GObject})]))
             function GLib.signal_return_type(::Type{T}, name::Symbol) where T <: GtkSourceCompletionContext
                 eval((d[name])[1])
             end
@@ -324,7 +324,7 @@ $(Expr(:toplevel, quote
         function GLib.signalnames(::Type{GtkSourceGutterRenderer})
             vcat([:activate, :query_activatable, :query_data], signalnames(supertype(GtkSourceGutterRenderer)))
         end
-        let d = Dict{Symbol, Tuple{Any, Any}}(:notify => (:Nothing, Any[:(Ptr{GParamSpec})]), :state_flags_changed => (:Nothing, Any[:UInt32]), :map => (:Nothing, Any[]), :query_activatable => (:Cint, Any[:_GtkTextIter, :_GdkRectangle]), :unrealize => (:Nothing, Any[]), :show => (:Nothing, Any[]), :unmap => (:Nothing, Any[]), :hide => (:Nothing, Any[]), :query_tooltip => (:Cint, Any[:Int32, :Int32, :Cint, :(Ptr{GObject})]), :query_data => (:Nothing, Any[:(Ptr{GObject}), :UInt32]), :move_focus => (:Nothing, Any[:UInt32]), :mnemonic_activate => (:Cint, Any[:Cint]), :direction_changed => (:Nothing, Any[:UInt32]), :activate => (:Nothing, Any[:_GtkTextIter, :_GdkRectangle, :UInt32, :UInt32, :Int32]), :destroy => (:Nothing, Any[]), :keynav_failed => (:Cint, Any[:UInt32]), :realize => (:Nothing, Any[]))
+        let d = Dict{Symbol, Tuple{Any, Any}}(:notify => (:Nothing, Any[:(Ptr{GParamSpec})]), :state_flags_changed => (:Nothing, [:UInt32]), :map => (:Nothing, Any[]), :query_activatable => (:Cint, [:_GtkTextIter, :_GdkRectangle]), :unrealize => (:Nothing, Any[]), :show => (:Nothing, Any[]), :unmap => (:Nothing, Any[]), :hide => (:Nothing, Any[]), :query_tooltip => (:Cint, Any[:Int32, :Int32, :Cint, :(Ptr{GObject})]), :query_data => (:Nothing, Any[:(Ptr{GObject}), :UInt32]), :move_focus => (:Nothing, [:UInt32]), :mnemonic_activate => (:Cint, [:Cint]), :direction_changed => (:Nothing, [:UInt32]), :activate => (:Nothing, [:_GtkTextIter, :_GdkRectangle, :UInt32, :UInt32, :Int32]), :destroy => (:Nothing, Any[]), :keynav_failed => (:Cint, [:UInt32]), :realize => (:Nothing, Any[]))
             function GLib.signal_return_type(::Type{T}, name::Symbol) where T <: GtkSourceGutterRenderer
                 eval((d[name])[1])
             end
@@ -508,7 +508,7 @@ $(Expr(:toplevel, quote
         function GLib.signalnames(::Type{GtkSourceView})
             vcat([:change_case, :change_number, :join_lines, :line_mark_activated, :move_lines, :move_to_matching_bracket, :move_words, :push_snippet, :show_completion, :smart_home_end], signalnames(supertype(GtkSourceView)))
         end
-        let d = Dict{Symbol, Tuple{Any, Any}}(:notify => (:Nothing, Any[:(Ptr{GParamSpec})]), :insert_at_cursor => (:Nothing, Any[:Cstring]), :map => (:Nothing, Any[]), :change_case => (:Nothing, Any[:UInt32]), :preedit_changed => (:Nothing, Any[:Cstring]), :line_mark_activated => (:Nothing, Any[:_GtkTextIter, :UInt32, :UInt32, :Int32]), :push_snippet => (:Nothing, Any[:(Ptr{GObject}), :_GtkTextIter]), :move_to_matching_bracket => (:Nothing, Any[:Cint]), :move_words => (:Nothing, Any[:Int32]), :cut_clipboard => (:Nothing, Any[]), :show_completion => (:Nothing, Any[]), :insert_emoji => (:Nothing, Any[]), :toggle_cursor_visible => (:Nothing, Any[]), :smart_home_end => (:Nothing, Any[:_GtkTextIter, :Int32]), :move_focus => (:Nothing, Any[:UInt32]), :direction_changed => (:Nothing, Any[:UInt32]), :join_lines => (:Nothing, Any[]), :state_flags_changed => (:Nothing, Any[:UInt32]), :select_all => (:Nothing, Any[:Cint]), :extend_selection => (:Cint, Any[:UInt32, :_GtkTextIter, :_GtkTextIter, :_GtkTextIter]), :move_lines => (:Nothing, Any[:Cint]), :delete_from_cursor => (:Nothing, Any[:UInt32, :Int32]), :unrealize => (:Nothing, Any[]), :set_anchor => (:Nothing, Any[]), :toggle_overwrite => (:Nothing, Any[]), :backspace => (:Nothing, Any[]), :move_viewport => (:Nothing, Any[:UInt32, :Int32]), :move_cursor => (:Nothing, Any[:UInt32, :Int32, :Cint]), :paste_clipboard => (:Nothing, Any[]), :show => (:Nothing, Any[]), :unmap => (:Nothing, Any[]), :copy_clipboard => (:Nothing, Any[]), :hide => (:Nothing, Any[]), :query_tooltip => (:Cint, Any[:Int32, :Int32, :Cint, :(Ptr{GObject})]), :change_number => (:Nothing, Any[:Int32]), :mnemonic_activate => (:Cint, Any[:Cint]), :destroy => (:Nothing, Any[]), :keynav_failed => (:Cint, Any[:UInt32]), :realize => (:Nothing, Any[]))
+        let d = Dict{Symbol, Tuple{Any, Any}}(:notify => (:Nothing, Any[:(Ptr{GParamSpec})]), :insert_at_cursor => (:Nothing, [:Cstring]), :map => (:Nothing, Any[]), :change_case => (:Nothing, [:UInt32]), :preedit_changed => (:Nothing, [:Cstring]), :line_mark_activated => (:Nothing, [:_GtkTextIter, :UInt32, :UInt32, :Int32]), :push_snippet => (:Nothing, Any[:(Ptr{GObject}), :_GtkTextIter]), :move_to_matching_bracket => (:Nothing, [:Cint]), :move_words => (:Nothing, [:Int32]), :cut_clipboard => (:Nothing, Any[]), :show_completion => (:Nothing, Any[]), :insert_emoji => (:Nothing, Any[]), :toggle_cursor_visible => (:Nothing, Any[]), :smart_home_end => (:Nothing, [:_GtkTextIter, :Int32]), :move_focus => (:Nothing, [:UInt32]), :direction_changed => (:Nothing, [:UInt32]), :join_lines => (:Nothing, Any[]), :state_flags_changed => (:Nothing, [:UInt32]), :select_all => (:Nothing, [:Cint]), :extend_selection => (:Cint, [:UInt32, :_GtkTextIter, :_GtkTextIter, :_GtkTextIter]), :move_lines => (:Nothing, [:Cint]), :delete_from_cursor => (:Nothing, [:UInt32, :Int32]), :unrealize => (:Nothing, Any[]), :set_anchor => (:Nothing, Any[]), :toggle_overwrite => (:Nothing, Any[]), :backspace => (:Nothing, Any[]), :move_viewport => (:Nothing, [:UInt32, :Int32]), :move_cursor => (:Nothing, [:UInt32, :Int32, :Cint]), :paste_clipboard => (:Nothing, Any[]), :show => (:Nothing, Any[]), :unmap => (:Nothing, Any[]), :copy_clipboard => (:Nothing, Any[]), :hide => (:Nothing, Any[]), :query_tooltip => (:Cint, Any[:Int32, :Int32, :Cint, :(Ptr{GObject})]), :change_number => (:Nothing, [:Int32]), :mnemonic_activate => (:Cint, [:Cint]), :destroy => (:Nothing, Any[]), :keynav_failed => (:Cint, [:UInt32]), :realize => (:Nothing, Any[]))
             function GLib.signal_return_type(::Type{T}, name::Symbol) where T <: GtkSourceView
                 eval((d[name])[1])
             end
@@ -582,7 +582,7 @@ $(Expr(:toplevel, quote
         function GLib.signalnames(::Type{GtkSourceMarkAttributes})
             vcat([:query_tooltip_markup, :query_tooltip_text], signalnames(supertype(GtkSourceMarkAttributes)))
         end
-        let d = Dict{Symbol, Tuple{Any, Any}}(:notify => (:Nothing, Any[:(Ptr{GParamSpec})]), :query_tooltip_markup => (:Cstring, Any[:(Ptr{GObject})]), :query_tooltip_text => (:Cstring, Any[:(Ptr{GObject})]))
+        let d = Dict{Symbol, Tuple{Any, Any}}(:notify => (:Nothing, Any[:(Ptr{GParamSpec})]), :query_tooltip_markup => (:Cstring, Expr[:(Ptr{GObject})]), :query_tooltip_text => (:Cstring, Expr[:(Ptr{GObject})]))
             function GLib.signal_return_type(::Type{T}, name::Symbol) where T <: GtkSourceMarkAttributes
                 eval((d[name])[1])
             end
@@ -928,7 +928,7 @@ $(Expr(:toplevel, quote
         function GLib.signalnames(::Type{GtkSourceStyleSchemePreview})
             vcat([:activate], signalnames(supertype(GtkSourceStyleSchemePreview)))
         end
-        let d = Dict{Symbol, Tuple{Any, Any}}(:notify => (:Nothing, Any[:(Ptr{GParamSpec})]), :state_flags_changed => (:Nothing, Any[:UInt32]), :map => (:Nothing, Any[]), :unrealize => (:Nothing, Any[]), :show => (:Nothing, Any[]), :unmap => (:Nothing, Any[]), :hide => (:Nothing, Any[]), :query_tooltip => (:Cint, Any[:Int32, :Int32, :Cint, :(Ptr{GObject})]), :move_focus => (:Nothing, Any[:UInt32]), :mnemonic_activate => (:Cint, Any[:Cint]), :direction_changed => (:Nothing, Any[:UInt32]), :activate => (:Nothing, Any[]), :destroy => (:Nothing, Any[]), :keynav_failed => (:Cint, Any[:UInt32]), :realize => (:Nothing, Any[]))
+        let d = Dict{Symbol, Tuple{Any, Any}}(:notify => (:Nothing, Any[:(Ptr{GParamSpec})]), :state_flags_changed => (:Nothing, [:UInt32]), :map => (:Nothing, Any[]), :unrealize => (:Nothing, Any[]), :show => (:Nothing, Any[]), :unmap => (:Nothing, Any[]), :hide => (:Nothing, Any[]), :query_tooltip => (:Cint, Any[:Int32, :Int32, :Cint, :(Ptr{GObject})]), :move_focus => (:Nothing, [:UInt32]), :mnemonic_activate => (:Cint, [:Cint]), :direction_changed => (:Nothing, [:UInt32]), :activate => (:Nothing, Any[]), :destroy => (:Nothing, Any[]), :keynav_failed => (:Cint, [:UInt32]), :realize => (:Nothing, Any[]))
             function GLib.signal_return_type(::Type{T}, name::Symbol) where T <: GtkSourceStyleSchemePreview
                 eval((d[name])[1])
             end
@@ -980,7 +980,7 @@ $(Expr(:toplevel, quote
         function GLib.signalnames(::Type{GtkSourceVimIMContext})
             vcat([:edit, :execute_command, :format_text, :write], signalnames(supertype(GtkSourceVimIMContext)))
         end
-        let d = Dict{Symbol, Tuple{Any, Any}}(:notify => (:Nothing, Any[:(Ptr{GParamSpec})]), :format_text => (:Nothing, Any[:_GtkTextIter, :_GtkTextIter]), :preedit_changed => (:Nothing, Any[]), :write => (:Nothing, Any[:(Ptr{GObject}), :Cstring]), :preedit_start => (:Nothing, Any[]), :edit => (:Nothing, Any[:(Ptr{GObject}), :Cstring]), :commit => (:Nothing, Any[:Cstring]), :execute_command => (:Cint, Any[:Cstring]), :delete_surrounding => (:Cint, Any[:Int32, :Int32]), :preedit_end => (:Nothing, Any[]), :retrieve_surrounding => (:Cint, Any[]))
+        let d = Dict{Symbol, Tuple{Any, Any}}(:notify => (:Nothing, Any[:(Ptr{GParamSpec})]), :format_text => (:Nothing, [:_GtkTextIter, :_GtkTextIter]), :preedit_changed => (:Nothing, Any[]), :write => (:Nothing, Any[:(Ptr{GObject}), :Cstring]), :preedit_start => (:Nothing, Any[]), :edit => (:Nothing, Any[:(Ptr{GObject}), :Cstring]), :commit => (:Nothing, [:Cstring]), :execute_command => (:Cint, [:Cstring]), :delete_surrounding => (:Cint, [:Int32, :Int32]), :preedit_end => (:Nothing, Any[]), :retrieve_surrounding => (:Cint, Any[]))
             function GLib.signal_return_type(::Type{T}, name::Symbol) where T <: GtkSourceVimIMContext
                 eval((d[name])[1])
             end
@@ -1153,23 +1153,26 @@ $(Expr(:toplevel, quote
         GLib.setproperties!(obj; kwargs...)
         obj
     end
-    mutable struct GtkSourceEncoding <: GBoxed
-        handle::Ptr{GtkSourceEncoding}
-        begin
-            (GLib.g_type(::Type{T}) where T <: GtkSourceEncoding) = begin
-                    ccall(("gtk_source_encoding_get_type", libgtksourceview), GType, ())
-                end
-            function GtkSourceEncoding(ref::Ptr{T}, own::Bool = false) where T <: GBoxed
-                x = new(ref)
-                if own
-                    finalizer(x) do x
-                        GLib.delboxed(x)
+    begin
+        mutable struct GtkSourceEncoding <: GBoxed
+            handle::Ptr{GtkSourceEncoding}
+            begin
+                (GLib.g_type(::Type{T}) where T <: GtkSourceEncoding) = begin
+                        ccall(("gtk_source_encoding_get_type", libgtksourceview), GType, ())
                     end
+                function GtkSourceEncoding(ref::Ptr{T}, own::Bool = false) where T <: GBoxed
+                    x = new(ref)
+                    if own
+                        finalizer(x) do x
+                            GLib.delboxed(x)
+                        end
+                    end
+                    x
                 end
-                x
+                push!(gboxed_types, GtkSourceEncoding)
             end
-            push!(gboxed_types, GtkSourceEncoding)
         end
+        const GtkSourceEncodingLike = GtkSourceEncoding
     end
     begin
         struct _GtkSourceRegionIter
@@ -1180,9 +1183,15 @@ $(Expr(:toplevel, quote
         mutable struct GtkSourceRegionIter
             handle::Ptr{_GtkSourceRegionIter}
         end
-        unsafe_convert(::Type{Ptr{_GtkSourceRegionIter}}, box::GtkSourceRegionIter) = begin
-                convert(Ptr{_GtkSourceRegionIter}, box.handle)
-            end
+        begin
+            unsafe_convert(::Type{Ptr{_GtkSourceRegionIter}}, box::GtkSourceRegionIter) = begin
+                    convert(Ptr{_GtkSourceRegionIter}, box.handle)
+                end
+            convert(::Type{GtkSourceRegionIter}, p::Ptr{_GtkSourceRegionIter}, owns = false) = begin
+                    GtkSourceRegionIter(p, owns)
+                end
+            const GtkSourceRegionIterLike = Union{Ref{_GtkSourceRegionIter}, GtkSourceRegionIter}
+        end
     end
     gboxed_cache_init() = begin
             append!(GLib.gboxed_types, gboxed_types)
@@ -1192,6 +1201,6 @@ $(Expr(:toplevel, quote
         ret = f(deadline)
         convert(Cint, ret)
     end
-    export GtkSourceCompletionProposal, GtkSourceCompletionProvider, GtkSourceHoverProvider, GtkSourceIndenter, GtkSourceStyleSchemeChooser, GtkSourceBuffer, GtkSourceBufferLeaf, GtkSourceCompletion, GtkSourceCompletionLeaf, GtkSourceCompletionCell, GtkSourceCompletionCellLeaf, GtkSourceCompletionContext, GtkSourceCompletionContextLeaf, GtkSourceCompletionSnippets, GtkSourceCompletionSnippetsLeaf, GtkSourceCompletionWords, GtkSourceCompletionWordsLeaf, GtkSourceFile, GtkSourceFileLeaf, GtkSourceFileLoader, GtkSourceFileLoaderLeaf, GtkSourceFileSaver, GtkSourceFileSaverLeaf, GtkSourceGutter, GtkSourceGutterLeaf, GtkSourceGutterLines, GtkSourceGutterLinesLeaf, GtkSourceGutterRenderer, GtkSourceGutterRendererPixbuf, GtkSourceGutterRendererPixbufLeaf, GtkSourceGutterRendererText, GtkSourceGutterRendererTextLeaf, GtkSourceHover, GtkSourceHoverLeaf, GtkSourceHoverContext, GtkSourceHoverContextLeaf, GtkSourceHoverDisplay, GtkSourceHoverDisplayLeaf, GtkSourceLanguage, GtkSourceLanguageLeaf, GtkSourceLanguageManager, GtkSourceLanguageManagerLeaf, GtkSourceMap, GtkSourceMapLeaf, GtkSourceMark, GtkSourceMarkLeaf, GtkSourceMarkAttributes, GtkSourceMarkAttributesLeaf, GtkSourcePrintCompositor, GtkSourcePrintCompositorLeaf, GtkSourceRegion, GtkSourceRegionLeaf, GtkSourceSearchContext, GtkSourceSearchContextLeaf, GtkSourceSearchSettings, GtkSourceSearchSettingsLeaf, GtkSourceSnippet, GtkSourceSnippetLeaf, GtkSourceSnippetChunk, GtkSourceSnippetChunkLeaf, GtkSourceSnippetContext, GtkSourceSnippetContextLeaf, GtkSourceSnippetManager, GtkSourceSnippetManagerLeaf, GtkSourceSpaceDrawer, GtkSourceSpaceDrawerLeaf, GtkSourceStyle, GtkSourceStyleLeaf, GtkSourceStyleScheme, GtkSourceStyleSchemeLeaf, GtkSourceStyleSchemeChooserButton, GtkSourceStyleSchemeChooserButtonLeaf, GtkSourceStyleSchemeChooserWidget, GtkSourceStyleSchemeChooserWidgetLeaf, GtkSourceStyleSchemeManager, GtkSourceStyleSchemeManagerLeaf, GtkSourceStyleSchemePreview, GtkSourceStyleSchemePreviewLeaf, GtkSourceTag, GtkSourceTagLeaf, GtkSourceView, GtkSourceViewLeaf, GtkSourceVimIMContext, GtkSourceVimIMContextLeaf, GtkSourceEncoding, GtkSourceRegionIter, _GtkSourceRegionIter, GtkSourceSchedulerCallback
+    export GtkSourceCompletionProposal, GtkSourceCompletionProvider, GtkSourceHoverProvider, GtkSourceIndenter, GtkSourceStyleSchemeChooser, GtkSourceBuffer, GtkSourceBufferLeaf, GtkSourceCompletion, GtkSourceCompletionLeaf, GtkSourceCompletionCell, GtkSourceCompletionCellLeaf, GtkSourceCompletionContext, GtkSourceCompletionContextLeaf, GtkSourceCompletionSnippets, GtkSourceCompletionSnippetsLeaf, GtkSourceCompletionWords, GtkSourceCompletionWordsLeaf, GtkSourceFile, GtkSourceFileLeaf, GtkSourceFileLoader, GtkSourceFileLoaderLeaf, GtkSourceFileSaver, GtkSourceFileSaverLeaf, GtkSourceGutter, GtkSourceGutterLeaf, GtkSourceGutterLines, GtkSourceGutterLinesLeaf, GtkSourceGutterRenderer, GtkSourceGutterRendererPixbuf, GtkSourceGutterRendererPixbufLeaf, GtkSourceGutterRendererText, GtkSourceGutterRendererTextLeaf, GtkSourceHover, GtkSourceHoverLeaf, GtkSourceHoverContext, GtkSourceHoverContextLeaf, GtkSourceHoverDisplay, GtkSourceHoverDisplayLeaf, GtkSourceLanguage, GtkSourceLanguageLeaf, GtkSourceLanguageManager, GtkSourceLanguageManagerLeaf, GtkSourceMap, GtkSourceMapLeaf, GtkSourceMark, GtkSourceMarkLeaf, GtkSourceMarkAttributes, GtkSourceMarkAttributesLeaf, GtkSourcePrintCompositor, GtkSourcePrintCompositorLeaf, GtkSourceRegion, GtkSourceRegionLeaf, GtkSourceSearchContext, GtkSourceSearchContextLeaf, GtkSourceSearchSettings, GtkSourceSearchSettingsLeaf, GtkSourceSnippet, GtkSourceSnippetLeaf, GtkSourceSnippetChunk, GtkSourceSnippetChunkLeaf, GtkSourceSnippetContext, GtkSourceSnippetContextLeaf, GtkSourceSnippetManager, GtkSourceSnippetManagerLeaf, GtkSourceSpaceDrawer, GtkSourceSpaceDrawerLeaf, GtkSourceStyle, GtkSourceStyleLeaf, GtkSourceStyleScheme, GtkSourceStyleSchemeLeaf, GtkSourceStyleSchemeChooserButton, GtkSourceStyleSchemeChooserButtonLeaf, GtkSourceStyleSchemeChooserWidget, GtkSourceStyleSchemeChooserWidgetLeaf, GtkSourceStyleSchemeManager, GtkSourceStyleSchemeManagerLeaf, GtkSourceStyleSchemePreview, GtkSourceStyleSchemePreviewLeaf, GtkSourceTag, GtkSourceTagLeaf, GtkSourceView, GtkSourceViewLeaf, GtkSourceVimIMContext, GtkSourceVimIMContextLeaf, GtkSourceEncoding, GtkSourceRegionIter, GtkSourceRegionIterLike, _GtkSourceRegionIter, GtkSourceSchedulerCallback
 end))
 end

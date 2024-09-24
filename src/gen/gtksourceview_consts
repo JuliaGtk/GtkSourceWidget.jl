@@ -2,8 +2,8 @@ quote
 $(Expr(:toplevel, quote
     begin
         const MAJOR_VERSION = 5
-        const MICRO_VERSION = 0
-        const MINOR_VERSION = 10
+        const MICRO_VERSION = 1
+        const MINOR_VERSION = 12
         begin
             @cenum BackgroundPatternType::Int32 BackgroundPatternType_NONE = 0 BackgroundPatternType_GRID = 1
             (GLib.g_type(::Type{T}) where T <: BackgroundPatternType) = begin
