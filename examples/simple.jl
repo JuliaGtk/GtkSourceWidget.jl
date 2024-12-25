@@ -5,8 +5,7 @@ sv = GtkSourceView()
 win[] = sv
 
 buff = sv.buffer
-langman = GtkSourceLanguageManager()
-lang = GtkSourceWidget.language(langman,"julia")
+lang = GtkSourceWidget.language(GtkSourceWidget.sourceLanguageManager,"julia1_10")
 buff.text = open("simple.jl","r") do f
     read(f,String)
 end

@@ -265,8 +265,9 @@ function __init__()
     gboxed_cache_init()
     
     global sourceLanguageManager = GtkSourceLanguageManager()
-    GtkSourceWidget.set_search_path(sourceLanguageManager,
-      Any[joinpath(GtkSourceView_jll.artifact_dir, "share", "gtksourceview-5", "language-specs"), C_NULL])
+    set_search_path(sourceLanguageManager,
+      Any[ joinpath(GtkSourceView_jll.artifact_dir, "share", "gtksourceview-5", "language-specs"), @__DIR__, C_NULL])
+    set_search_path(GtkSourceStyleSchemeManagerLeaf(), Any[ joinpath(GtkSourceView_jll.artifact_dir, "share", "gtksourceview-5", "styles"), C_NULL] )
 end
 
 end # module
